@@ -54,5 +54,4 @@ export async function engramRequest(
 	}
 }
 
-// Re-export axios for cases where direct HTTP might be needed (not for Engram API)
-export { engramApi } from "./engramApiDirect";
+

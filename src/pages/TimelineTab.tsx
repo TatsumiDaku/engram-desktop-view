@@ -4,20 +4,10 @@ import { TypeBadge } from "@/components/atoms/TypeBadge";
 import { MarkdownPanel } from "@/components/molecules/MarkdownPanel";
 import { useTimeline } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
+import { TYPE_COLORS } from "@/types/constants";
 import type { Observation } from "@/types/engram";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-
-const TYPE_COLORS = {
-	bugfix: "bg-red-500",
-	decision: "bg-purple-500",
-	architecture: "bg-blue-500",
-	discovery: "bg-yellow-500",
-	pattern: "bg-green-500",
-	config: "bg-gray-500",
-	preference: "bg-pink-500",
-	learning: "bg-cyan-500",
-};
 
 function formatDate(dateStr: string): string {
 	const date = new Date(dateStr);

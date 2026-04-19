@@ -13,19 +13,6 @@ import type {
 	Session,
 } from "@/types/engram";
 
-// FTS5 broad terms to surface most observations
-const BROAD_TERMS = [
-	"the",
-	"is",
-	"to",
-	"in",
-	"a",
-	"of",
-	"and",
-	"project",
-	"agent",
-];
-
 function mapObservation(apiObs: any): Observation {
 	return {
 		id: apiObs.id,
@@ -41,29 +28,15 @@ function mapObservation(apiObs: any): Observation {
 	};
 }
 
-// Get ALL observations via multiple broad FTS searches
+// Get ALL observations via single broad search
 export const getAllObservations = async (): Promise<Observation[]> => {
-	const results = await Promise.allSettled(
-		BROAD_TERMS.map((q) =>
-			engramGet<any[]>(`/search?q=${encodeURIComponent(q)}&limit=1000`).then(
-				(arr) => (arr ?? []).map(mapObservation),
-			),
-		),
-	);
-
-	const seen = new Set<number>();
-	const all: Observation[] = [];
-	for (const r of results) {
-		if (r.status === "fulfilled") {
-			for (const obs of r.value) {
-				if (!seen.has(obs.id)) {
-					seen.add(obs.id);
-					all.push(obs);
-				}
-			}
-		}
+	try {
+		const data = await engramGet<any[]>("/search?q=*&limit=1000");
+		return ((data as any[]) || []).map(mapObservation);
+	} catch (error) {
+		console.error("[engramService] getAllObservations failed:", error);
+		return [];
 	}
-	return all;
 };
 
 // Derive sessions from observations grouped by session_id
