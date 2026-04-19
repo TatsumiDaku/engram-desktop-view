@@ -35,6 +35,7 @@ export interface Session {
 
 export interface Prompt {
   id: number;
+  sessionId: string;
   project: string;
   content: string;
   createdAt: string;
