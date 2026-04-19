@@ -3,12 +3,7 @@
   "productName": "EngramDesktopView",
   "version": "1.0.0",
   "identifier": "com.engram.desktopview",
-  "build": {
-    "beforeDevCommand": "npm run dev",
-    "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm run build",
-    "frontendDist": "../dist"
-  },
+  "build": {},
   "app": {
     "withGlobalTauri": false,
     "trayIcon": {
@@ -26,7 +21,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://127.0.0.1:7437; img-src 'self' data:"
     }
   },
   "bundle": {

@@ -8,6 +8,22 @@ export const engramApi = axios.create({
   },
 });
 
+engramApi.interceptors.request.use(req => {
+  console.log('[AXIOS REQUEST]', req.method, req.url);
+  return req;
+});
+
+engramApi.interceptors.response.use(
+  res => {
+    console.log('[AXIOS RESPONSE]', res.status, res.config.url);
+    return res;
+  },
+  err => {
+    console.log('[AXIOS ERROR]', err.message, err.config?.url);
+    return Promise.reject(err);
+  }
+);
+
 // Health check helper
 export const checkHealth = async (): Promise<boolean> => {
   try {
