@@ -30,13 +30,18 @@ function mapObservation(apiObs: any): Observation {
 
 export const getAllObservations = async (): Promise<Observation[]> => {
 	const endpoints = [
-		{ path: "/observations", fallback: true },
-		{ path: "/search?q=*", fallback: false },
+		{ method: "POST", path: "/observations/search", body: { q: "*" }, fallback: true },
+		{ method: "POST", path: "/observations/search", body: {}, fallback: false },
 	];
 
 	for (const endpoint of endpoints) {
 		try {
-			const data = await engramGet<any>(endpoint.path);
+			let data: any;
+			if (endpoint.method === "POST") {
+				data = await engramPost<any>(endpoint.path, endpoint.body);
+			} else {
+				data = await engramGet<any>(endpoint.path);
+			}
 			if (!data) continue;
 
 			let arr: any[] = [];
@@ -48,6 +53,8 @@ export const getAllObservations = async (): Promise<Observation[]> => {
 				arr = data.data;
 			} else if (Array.isArray(data.items)) {
 				arr = data.items;
+			} else if (data.results && Array.isArray(data.results)) {
+				arr = data.results;
 			} else {
 				continue;
 			}
@@ -56,7 +63,7 @@ export const getAllObservations = async (): Promise<Observation[]> => {
 				return arr.map(mapObservation);
 			}
 		} catch (error) {
-			console.warn(`[engramService] ${endpoint.path} failed:`, error);
+			console.warn(`[engramService] ${endpoint.method} ${endpoint.path} failed:`, error);
 			if (endpoint.fallback) continue;
 		}
 	}
