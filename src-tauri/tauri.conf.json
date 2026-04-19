@@ -3,7 +3,9 @@
   "productName": "EngramDesktopView",
   "version": "1.0.0",
   "identifier": "com.engram.desktopview",
-  "build": {},
+  "build": {
+    "frontendDist": "../dist"
+  },
   "app": {
     "withGlobalTauri": false,
     "trayIcon": {
