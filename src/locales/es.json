@@ -33,7 +33,7 @@
 		"error": "Error al cargar sesiones vacías"
 	},
 	"home": {
-		"heroTitle": "🧔‍♂️ Creado para la Comunidad Gentleman",
+		"heroTitle": "🧔‍♂️🎩 Creado para la Comunidad Gentleman",
 		"heroSubtitle": "EngramDesktopView - Monitoreo de memoria para agentes de IA. Rastrea, busca y explora las observaciones de memoria de tu agente en tiempo real.",
 		"neuralDashboard": "✨ Panel de Memoria Neural",
 		"developedBy": "Desarrollado por",
@@ -73,6 +73,20 @@
 		},
 		"topic": "Tema",
 		"observations": "observaciones"
+	},
+	"timeline": {
+		"title": "Línea de Tiempo",
+		"searchPlaceholder": "Buscar en timeline...",
+		"filters": {
+			"today": "Hoy",
+			"thisWeek": "Esta Semana",
+			"thisMonth": "Este Mes",
+			"specificDate": "Fecha Específica"
+		},
+		"empty": {
+			"title": "Sin observaciones aún",
+			"description": "Tu línea de tiempo aparecerá aquí cuando crees observaciones"
+		}
 	},
 	"settings": {
 		"title": "Configuración",

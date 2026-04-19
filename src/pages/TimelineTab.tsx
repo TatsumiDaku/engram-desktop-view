@@ -5,6 +5,7 @@ import { MarkdownPanel } from "@/components/molecules/MarkdownPanel";
 import { useTimeline } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
 import type { Observation } from "@/types/engram";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 const TYPE_COLORS = {
@@ -49,15 +50,33 @@ function groupByDay(
 }
 
 export function TimelineTab() {
+	const { t } = useTranslation();
 	const { data, isLoading } = useTimeline();
 	const projectFilter = useUIStore((s) => s.projectFilter);
 	const [search, setSearch] = useState("");
+	const [dateFilter, setDateFilter] = useState<"today" | "week" | "month" | "specific">("month");
+	const [specificDate, setSpecificDate] = useState("");
 	const [selectedObservation, setSelectedObservation] =
 		useState<Observation | null>(null);
 
 	const observations = data?.timeline || [];
 	const filteredObservations = observations.filter((obs) => {
 		if (projectFilter && obs.project !== projectFilter) return false;
+
+		const obsDate = new Date(obs.createdAt);
+		const now = new Date();
+		if (dateFilter === "today") {
+			if (obsDate.toDateString() !== now.toDateString()) return false;
+		} else if (dateFilter === "week") {
+			const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+			if (obsDate < weekAgo) return false;
+		} else if (dateFilter === "month") {
+			const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+			if (obsDate < monthAgo) return false;
+		} else if (dateFilter === "specific") {
+			if (specificDate && obsDate.toDateString() !== new Date(specificDate).toDateString()) return false;
+		}
+
 		if (search) {
 			const searchLower = search.toLowerCase();
 			return (
@@ -84,16 +103,67 @@ export function TimelineTab() {
 			{/* Left panel - Timeline */}
 			<div className="flex-1 space-y-4">
 				<SearchInput
-					placeholder="Search timeline..."
+					placeholder={t("timeline.searchPlaceholder")}
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					onClear={() => setSearch("")}
 				/>
 
+				<div className="flex gap-2 flex-wrap">
+					<button
+						onClick={() => setDateFilter("today")}
+						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+							dateFilter === "today"
+								? "bg-[hsl(263,70%,58%)] text-white"
+								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+						}`}
+					>
+						{t("timeline.filters.today")}
+					</button>
+					<button
+						onClick={() => setDateFilter("week")}
+						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+							dateFilter === "week"
+								? "bg-[hsl(263,70%,58%)] text-white"
+								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+						}`}
+					>
+						{t("timeline.filters.thisWeek")}
+					</button>
+					<button
+						onClick={() => setDateFilter("month")}
+						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+							dateFilter === "month"
+								? "bg-[hsl(263,70%,58%)] text-white"
+								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+						}`}
+					>
+						{t("timeline.filters.thisMonth")}
+					</button>
+					<button
+						onClick={() => setDateFilter("specific")}
+						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+							dateFilter === "specific"
+								? "bg-[hsl(263,70%,58%)] text-white"
+								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+						}`}
+					>
+						{t("timeline.filters.specificDate")}
+					</button>
+					{dateFilter === "specific" && (
+						<input
+							type="date"
+							value={specificDate}
+							onChange={(e) => setSpecificDate(e.target.value)}
+							className="px-3 py-1 rounded text-sm border border-[hsl(263,30%,20%)] bg-[hsl(263,30%,15%)] text-[hsl(263,20%,95%)]"
+						/>
+					)}
+				</div>
+
 				{days.length === 0 ? (
 					<EmptyState
-						title="No observations yet"
-						description="Your timeline will appear here as you create observations"
+						title={t("timeline.empty.title")}
+						description={t("timeline.empty.description")}
 						icon={
 							<svg
 								className="h-12 w-12"

@@ -202,22 +202,22 @@ export function EmptySessionsTab() {
 								className={`group flex items-center justify-between rounded-lg border p-4 transition-colors ${
 									selectedIds.includes(session.id)
 										? "border-[hsl(263,70%,58%)] bg-[hsl(263,70%,58%)]/10"
-										: "border-[hsl(263,30%,20%)] hover:border-[hsl(263,30%,30%)]"
+										: "border-[var(--border)] hover:border-[hsl(263,30%,30%)]"
 								}`}
 							>
 								<input
 									type="checkbox"
 									checked={selectedIds.includes(session.id)}
 									onChange={() => toggleSelect(session.id)}
-									className="h-4 w-4 rounded border-[hsl(263,30%,20%)] bg-[hsl(263,30%,15%)] text-[hsl(263,70%,58%)] focus:ring-[hsl(263,70%,58%)]"
+									className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-[var(--primary)]"
 								/>
 								<div className="flex-1 overflow-hidden ml-3">
-									<p className="font-medium text-[hsl(263,20%,95%)]">
+									<p className="font-medium text-[var(--foreground)]">
 										{session.latestTitle ||
 											session.agentName ||
 											"Untitled Session"}
 									</p>
-									<div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-[hsl(263,20%,60%)]">
+									<div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-[var(--muted-foreground)]">
 										<span className="font-mono text-xs bg-[hsl(263,30%,15%)] px-1.5 py-0.5 rounded">
 											{session.id.length > 40
 												? session.id.slice(0, 40) + "..."

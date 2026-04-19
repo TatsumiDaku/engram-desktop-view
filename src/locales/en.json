@@ -24,7 +24,7 @@
 		"error": "Failed to load empty sessions"
 	},
 	"home": {
-		"heroTitle": "🧔‍♂️ Built for the Gentleman Community",
+		"heroTitle": "🧔‍♂️🎩 Built for the Gentleman Community",
 		"heroSubtitle": "EngramDesktopView - Memory monitoring for AI agents. Track, search, and explore your agent's memory observations in real-time.",
 		"neuralDashboard": "✨ Neural Memory Dashboard",
 		"developedBy": "Developed by",
@@ -64,6 +64,20 @@
 		},
 		"topic": "Topic",
 		"observations": "observations"
+	},
+	"timeline": {
+		"title": "Timeline",
+		"searchPlaceholder": "Search timeline...",
+		"filters": {
+			"today": "Today",
+			"thisWeek": "This Week",
+			"thisMonth": "This Month",
+			"specificDate": "Specific Date"
+		},
+		"empty": {
+			"title": "No observations yet",
+			"description": "Your timeline will appear here as you create observations"
+		}
 	},
 	"settings": {
 		"title": "Settings",
