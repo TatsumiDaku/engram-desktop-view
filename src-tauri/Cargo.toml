@@ -1,0 +1,28 @@
+[package]
+name = "engram-desktop-view"
+version = "1.0.0"
+description = "A Tauri desktop app for monitoring Engram memory events"
+authors = ["Tatsu"]
+edition = "2021"
+
+[lib]
+name = "engram_desktop_view_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+log = "0.4"
+env_logger = "0.11"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
