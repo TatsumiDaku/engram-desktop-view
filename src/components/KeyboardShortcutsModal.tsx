@@ -9,7 +9,7 @@ const SHORTCUTS = [
 ];
 
 export function KeyboardShortcutsModal() {
-  const { t } = useTranslation();
+  useTranslation();
   const shortcutsModalOpen = useUIStore((s) => s.shortcutsModalOpen);
   const setShortcutsModalOpen = useUIStore((s) => s.setShortcutsModalOpen);
 

@@ -51,11 +51,33 @@ export function SessionsTab() {
 
 	if (sessionsLoading) {
 		return (
-			<div className="flex items-center justify-center py-12">
-				<div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--primary)] border-t-transparent" />
+			<div className="space-y-4">
+				<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+					{[...Array(4)].map((_, i) => (
+						<div key={i} className="rounded-lg border p-4">
+							<div className="h-4 w-20 rounded bg-muted animate-pulse mb-2" />
+							<div className="h-8 w-12 rounded bg-muted animate-pulse" />
+						</div>
+					))}
+				</div>
+				<div className="h-10 w-full rounded-md bg-muted animate-pulse" />
+				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+					{[...Array(6)].map((_, i) => (
+						<div key={i} className="rounded-lg border p-4 space-y-3">
+							<div className="h-5 w-3/4 rounded bg-muted animate-pulse" />
+							<div className="h-4 w-1/2 rounded bg-muted animate-pulse" />
+							<div className="flex justify-between">
+								<div className="h-4 w-16 rounded bg-muted animate-pulse" />
+								<div className="h-4 w-20 rounded bg-muted animate-pulse" />
+							</div>
+						</div>
+					))}
+				</div>
 			</div>
 		);
 	}
+
+	const hasFilters = !!(search || dateFilter !== "all");
 
 	return (
 		<div className="space-y-4">
@@ -123,7 +145,24 @@ export function SessionsTab() {
 			</div>
 
 			{/* Sessions Grid */}
-			{filteredSessions.length === 0 ? (
+			{filteredSessions.length === 0 && hasFilters ? (
+				<EmptyState
+					title="No results found"
+					description="Try adjusting your search or date filter"
+					icon={
+						<svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+						</svg>
+					}
+				>
+					<button
+						onClick={() => { setSearch(""); setDateFilter("all"); }}
+						className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+					>
+						Clear filters
+					</button>
+				</EmptyState>
+			) : filteredSessions.length === 0 ? (
 				<EmptyState
 					title={t("sessions.empty.title")}
 					description={t("sessions.empty.description")}

@@ -1,8 +1,8 @@
 import { Button } from "@/components/atoms/Button";
-import { useMergeProjects } from "@/hooks/useEngram";
-import { useToast } from "@/hooks/useToast";
+import { useMergeProjects, useSessions } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
 import { useState } from "react";
+import { useToast } from "@/hooks/useToast";
 
 export function MergeProjectsModal() {
 	const mergeProjectsModalOpen = useUIStore((s) => s.mergeProjectsModalOpen);
@@ -10,42 +10,57 @@ export function MergeProjectsModal() {
 		(s) => s.setMergeProjectsModalOpen,
 	);
 	const mergeProjects = useMergeProjects();
+	const { data: sessionsData } = useSessions();
+	const { success, error, warning } = useToast();
+
 	const [source, setSource] = useState("");
 	const [target, setTarget] = useState("");
-	const toast = useToast();
 
 	if (!mergeProjectsModalOpen) return null;
 
+	const projects = Array.from(
+		new Set(
+			(sessionsData?.sessions || [])
+				.map((s) => s.project)
+				.filter((p): p is string => !!p),
+		),
+	).sort();
+
+	const sourceCount = (sessionsData?.sessions || []).filter(
+		(s) => s.project === source,
+	).length;
+
+	const validationError =
+		!source || !target
+			? "Please select both projects"
+			: source === target
+				? "Source and target must be different"
+				: null;
+
 	const handleMerge = async () => {
-		if (!source || !target) {
-			toast.error("Please select both source and target projects");
-			return;
-		}
-		if (source === target) {
-			toast.error("Source and target must be different");
+		if (validationError) {
+			warning(validationError);
 			return;
 		}
 
 		try {
 			await mergeProjects.mutateAsync({ source, target });
-			toast.success("Projects merged successfully!");
+			success(`Merged ${sourceCount} sessions from "${source}" to "${target}"`);
 			setMergeProjectsModalOpen(false);
 			setSource("");
 			setTarget("");
 		} catch {
-			toast.error("Failed to merge projects");
+			error("Failed to merge projects");
 		}
 	};
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center">
-			{/* Backdrop */}
 			<div
 				className="absolute inset-0 bg-black/50"
 				onClick={() => setMergeProjectsModalOpen(false)}
 			/>
 
-			{/* Modal */}
 			<div className="relative z-10 w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
 				<div className="mb-4 flex items-center justify-between">
 					<h2 className="text-lg font-semibold">Merge Projects</h2>
@@ -75,13 +90,18 @@ export function MergeProjectsModal() {
 						<label className="mb-1 block text-sm font-medium">
 							Source Project
 						</label>
-						<input
-							type="text"
+						<select
 							value={source}
 							onChange={(e) => setSource(e.target.value)}
-							placeholder="Project to merge from"
 							className="w-full rounded-md border px-3 py-2 text-sm"
-						/>
+						>
+							<option value="">Select project...</option>
+							{projects.map((p) => (
+								<option key={p} value={p}>
+									{p}
+								</option>
+							))}
+						</select>
 						<p className="mt-1 text-xs text-muted-foreground">
 							Observations will be moved FROM this project
 						</p>
@@ -91,17 +111,46 @@ export function MergeProjectsModal() {
 						<label className="mb-1 block text-sm font-medium">
 							Target Project
 						</label>
-						<input
-							type="text"
+						<select
 							value={target}
 							onChange={(e) => setTarget(e.target.value)}
-							placeholder="Project to merge to"
 							className="w-full rounded-md border px-3 py-2 text-sm"
-						/>
+						>
+							<option value="">Select project...</option>
+							{projects.map((p) => (
+								<option key={p} value={p} disabled={p === source}>
+									{p}
+								</option>
+							))}
+						</select>
 						<p className="mt-1 text-xs text-muted-foreground">
 							Observations will be moved TO this project
 						</p>
 					</div>
+
+					{source && target && source !== target && (
+						<div className="rounded-lg bg-muted p-3 text-sm">
+							<p className="font-medium">Preview:</p>
+							<ul className="mt-1 space-y-1 text-muted-foreground">
+								<li>
+									{sourceCount} session{sourceCount !== 1 ? "s" : ""} will be moved from{" "}
+									<span className="font-medium text-foreground">"{source}"</span>
+								</li>
+								<li>
+									to <span className="font-medium text-foreground">"{target}"</span>
+								</li>
+								<li className="text-xs">
+									Note: Session metadata (not observations) will be migrated
+								</li>
+							</ul>
+						</div>
+					)}
+
+					{validationError && source && target && source === target && (
+						<div className="rounded-lg bg-red-500/10 p-3 text-sm text-red-500">
+							{validationError}
+						</div>
+					)}
 
 					<div className="flex justify-end gap-2">
 						<Button
@@ -112,7 +161,7 @@ export function MergeProjectsModal() {
 						</Button>
 						<Button
 							onClick={handleMerge}
-							disabled={mergeProjects.isPending || !source || !target}
+							disabled={mergeProjects.isPending || !!validationError}
 						>
 							{mergeProjects.isPending ? "Merging..." : "Merge Projects"}
 						</Button>

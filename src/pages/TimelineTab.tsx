@@ -1,5 +1,6 @@
 import { EmptyState } from "@/components/atoms/EmptyState";
 import { SearchInput } from "@/components/atoms/SearchInput";
+import { SkeletonRow } from "@/components/atoms/Skeleton";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
 import { MarkdownPanel } from "@/components/molecules/MarkdownPanel";
 import { useTimeline } from "@/hooks/useEngram";
@@ -50,6 +51,8 @@ export function TimelineTab() {
 		useState<Observation | null>(null);
 
 	const observations = data?.timeline || [];
+	const hasFilters = !!(search || projectFilter || dateFilter !== "month" || specificDate);
+
 	const filteredObservations = observations.filter((obs) => {
 		if (projectFilter && obs.project !== projectFilter) return false;
 
@@ -88,11 +91,33 @@ export function TimelineTab() {
 
 	if (isLoading) {
 		return (
-			<div className="flex items-center justify-center py-12">
-				<div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+			<div className="flex gap-4">
+				<div className="flex-1 space-y-4">
+					<div className="h-10 w-full rounded-md bg-muted animate-pulse" />
+					<div className="flex gap-2">
+						{[...Array(4)].map((_, i) => (
+							<div key={i} className="h-8 w-20 rounded bg-muted animate-pulse" />
+						))}
+					</div>
+					<div className="space-y-4">
+						{[...Array(3)].map((_, i) => (
+							<div key={i} className="space-y-3">
+								<div className="flex items-center gap-2">
+									<div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+									<div className="h-4 w-32 rounded bg-muted animate-pulse" />
+								</div>
+								<SkeletonRow />
+								<SkeletonRow />
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 		);
 	}
+
+	const showNoResults = days.length === 0 && hasFilters;
+	const showNoData = days.length === 0 && !hasFilters;
 
 	return (
 		<div className="flex gap-4">
@@ -156,7 +181,24 @@ export function TimelineTab() {
 					)}
 				</div>
 
-				{days.length === 0 ? (
+				{showNoResults ? (
+					<EmptyState
+						title="No results found"
+						description="Try adjusting your search or date filter"
+						icon={
+							<svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+							</svg>
+						}
+					>
+						<button
+							onClick={() => { setSearch(""); setDateFilter("month"); setSpecificDate(""); }}
+							className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+						>
+							Clear filters
+						</button>
+					</EmptyState>
+				) : showNoData ? (
 					<EmptyState
 						title={t("timeline.empty.title")}
 						description={t("timeline.empty.description")}

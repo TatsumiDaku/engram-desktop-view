@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { type InputHTMLAttributes, forwardRef } from "react";
+import { type InputHTMLAttributes, forwardRef, useRef } from "react";
 
 export interface SearchInputProps
 	extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,6 +8,16 @@ export interface SearchInputProps
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
 	({ className, value, onClear, ...props }, ref) => {
+		const innerRef = useRef<HTMLInputElement | null>(null);
+
+		const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+			if (e.key === "/" && !value) {
+				e.preventDefault();
+				innerRef.current?.focus();
+			}
+			props.onKeyDown?.(e);
+		};
+
 		return (
 			<div className="relative">
 				<svg
@@ -24,15 +34,25 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
 					/>
 				</svg>
 				<input
-					ref={ref}
+					ref={(node) => {
+						innerRef.current = node;
+						if (typeof ref === "function") ref(node);
+						else if (ref) ref.current = node;
+					}}
 					value={value}
 					onChange={props.onChange}
+					onKeyDown={handleKeyDown}
 					className={clsx(
 						"flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
 						className,
 					)}
 					{...props}
 				/>
+				{!value && (
+					<div className="absolute right-3 top-1/2 -translate-y-1/2">
+						<kbd className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">/</kbd>
+					</div>
+				)}
 				{value && onClear && (
 					<button
 						type="button"

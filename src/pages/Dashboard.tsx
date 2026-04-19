@@ -1,5 +1,8 @@
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { KeyboardShortcutsModal } from "@/components/KeyboardShortcutsModal";
 import { TabBar } from "@/components/molecules/TabBar";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { useUIStore } from "@/stores/uiStore";
 import type { TabType } from "@/types/engram";
 import { useState } from "react";
 import { EmptySessionsTab } from "./EmptySessionsTab";
@@ -12,6 +15,23 @@ import { TopicsTab } from "./TopicsTab";
 
 export function Dashboard() {
 	const [activeTab, setActiveTab] = useState<TabType>("home");
+	const setShortcutsModalOpen = useUIStore((s) => s.setShortcutsModalOpen);
+	const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
+	const shortcutsModalOpen = useUIStore((s) => s.shortcutsModalOpen);
+
+	useKeyboardShortcuts([
+		{
+			key: "?",
+			action: () => setShortcutsModalOpen(true),
+		},
+		{
+			key: "Escape",
+			action: () => {
+				if (shortcutsModalOpen) setShortcutsModalOpen(false);
+				else setSettingsModalOpen(false);
+			},
+		},
+	]);
 
 	return (
 		<div className="flex flex-1 flex-col overflow-hidden">
@@ -28,6 +48,8 @@ export function Dashboard() {
 				{activeTab === "prompts" && <ErrorBoundary><PromptsTab /></ErrorBoundary>}
 				{activeTab === "empty-sessions" && <ErrorBoundary><EmptySessionsTab /></ErrorBoundary>}
 			</div>
+
+			<KeyboardShortcutsModal />
 
 			<footer className="text-center text-sm text-[var(--muted-foreground)] py-4 border-t border-[var(--border)]">
 				EngramDesktopView v1.0.0

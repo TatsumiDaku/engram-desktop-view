@@ -26,11 +26,25 @@ export function PromptsTab() {
 
 	if (isLoading) {
 		return (
-			<div className="flex items-center justify-center py-12">
-				<div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+			<div className="space-y-4">
+				<div className="h-10 w-full rounded-md bg-muted animate-pulse" />
+				<div className="space-y-2">
+					{[...Array(4)].map((_, i) => (
+						<div key={i} className="rounded-lg border p-4 space-y-2">
+							<div className="h-4 w-full rounded bg-muted animate-pulse" />
+							<div className="h-4 w-2/3 rounded bg-muted animate-pulse" />
+							<div className="flex gap-2">
+								<div className="h-3 w-20 rounded bg-muted animate-pulse" />
+								<div className="h-3 w-16 rounded bg-muted animate-pulse" />
+							</div>
+						</div>
+					))}
+				</div>
 			</div>
 		);
 	}
+
+	const hasSearch = !!search;
 
 	return (
 		<div className="space-y-4">
@@ -41,7 +55,25 @@ export function PromptsTab() {
 				onClear={() => setSearch("")}
 			/>
 
-			{filteredPrompts.length === 0 ? (
+			{filteredPrompts.length === 0 && hasSearch ? (
+				<EmptyState
+					title="No results found"
+					description="Try adjusting your search"
+					icon={
+						<svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+						</svg>
+					}
+					action={
+						<button
+							onClick={() => setSearch("")}
+							className="mt-4 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+						>
+							Clear search
+						</button>
+					}
+				/>
+			) : filteredPrompts.length === 0 ? (
 				<EmptyState
 					title="No prompts saved"
 					description="Your prompts will appear here when you save them"

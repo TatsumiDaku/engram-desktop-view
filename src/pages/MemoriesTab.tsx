@@ -1,5 +1,6 @@
 import { EmptyState } from "@/components/atoms/EmptyState";
 import { SearchInput } from "@/components/atoms/SearchInput";
+import { SkeletonRow } from "@/components/atoms/Skeleton";
 import { MarkdownPanel } from "@/components/molecules/MarkdownPanel";
 import { ObservationRow } from "@/components/molecules/ObservationRow";
 import { useMemories, useUpdateObservation } from "@/hooks/useEngram";
@@ -59,8 +60,20 @@ export function MemoriesTab() {
 
 	if (isLoading) {
 		return (
-			<div className="flex items-center justify-center py-12">
-				<div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+			<div className="flex gap-4">
+				<div className="flex-1 space-y-4">
+					<div className="h-10 w-full rounded-md bg-muted animate-pulse" />
+					<div className="flex gap-2 flex-wrap">
+						{[...Array(5)].map((_, i) => (
+							<div key={i} className="h-8 w-20 rounded bg-muted animate-pulse" />
+						))}
+					</div>
+					<div className="space-y-2">
+						{[...Array(5)].map((_, i) => (
+							<SkeletonRow key={i} />
+						))}
+					</div>
+				</div>
 			</div>
 		);
 	}
@@ -90,6 +103,12 @@ export function MemoriesTab() {
 							{filter.emoji} {t(`memories.filters.${filter.label}`)}
 						</button>
 					))}
+				</div>
+
+				<div className="flex items-center justify-between">
+					<span className="text-sm text-muted-foreground">
+						Showing {filteredObservations.length} of {observations.length} observations
+					</span>
 				</div>
 
 				{filteredObservations.length === 0 ? (

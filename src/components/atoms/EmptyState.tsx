@@ -1,10 +1,11 @@
 import { clsx } from "clsx";
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 
 export interface EmptyStateProps extends HTMLAttributes<HTMLDivElement> {
-	icon?: React.ReactNode;
+	icon?: ReactNode;
 	title: string;
 	description?: string;
+	action?: ReactNode;
 }
 
 export function EmptyState({
@@ -12,6 +13,7 @@ export function EmptyState({
 	icon,
 	title,
 	description,
+	action,
 	...props
 }: EmptyStateProps) {
 	return (
@@ -27,6 +29,7 @@ export function EmptyState({
 			{description && (
 				<p className="mt-2 text-sm text-muted-foreground">{description}</p>
 			)}
+			{action && <div className="mt-4">{action}</div>}
 		</div>
 	);
 }

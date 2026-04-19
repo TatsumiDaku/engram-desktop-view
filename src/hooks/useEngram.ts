@@ -16,6 +16,7 @@ import {
 	updateObservation,
 } from "@/services/engramService";
 import type { FilterState } from "@/types/engram";
+import { useUIStore } from "@/stores/uiStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Sessions hooks
@@ -116,10 +117,11 @@ export const useDeletePrompt = () => {
 
 // Health hook
 export const useHealth = () => {
+	const autoRefresh = useUIStore.getState().autoRefresh;
 	return useQuery({
 		queryKey: ["health"],
 		queryFn: getHealth,
-		refetchInterval: 10000,
+		refetchInterval: autoRefresh ? 10000 : false,
 	});
 };
 

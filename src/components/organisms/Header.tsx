@@ -1,15 +1,30 @@
 import { Button } from "@/components/atoms/Button";
-import { useHealth } from "@/hooks/useEngram";
+import { useHealth, useSessions } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
 import { clsx } from "clsx";
+import { useState } from "react";
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function Header({ className, ...props }: HeaderProps) {
 	const { data: health } = useHealth();
 	const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
+	const autoRefresh = useUIStore((s) => s.autoRefresh);
+	const setAutoRefresh = useUIStore((s) => s.setAutoRefresh);
+	const projectFilter = useUIStore((s) => s.projectFilter);
+	const setProjectFilter = useUIStore((s) => s.setProjectFilter);
+	const { data: sessionsData } = useSessions();
+	const [dropdownOpen, setDropdownOpen] = useState(false);
 
 	const isOnline = health?.status === "online";
+
+	const projects = Array.from(
+		new Set(
+			(sessionsData?.sessions || [])
+				.map((s) => s.project)
+				.filter((p): p is string => !!p),
+		),
+	).sort();
 
 	return (
 		<header
@@ -35,11 +50,98 @@ export function Header({ className, ...props }: HeaderProps) {
 							isOnline ? "bg-green-500" : "bg-red-500",
 						)}
 					/>
-					{isOnline ? "Engram Online" : "Engram Offline"}
+					{isOnline ? "Online" : "Offline"}
+				</div>
+
+				<div className="relative">
+					<Button
+						size="sm"
+						variant={projectFilter ? "primary" : "ghost"}
+						onClick={() => setDropdownOpen(!dropdownOpen)}
+					>
+						<svg
+							className="mr-1.5 h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+							/>
+						</svg>
+						{projectFilter || "All Projects"}
+						<svg className="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+						</svg>
+					</Button>
+
+					{dropdownOpen && (
+						<>
+							<div className="fixed inset-0" onClick={() => setDropdownOpen(false)} />
+							<div className="absolute left-0 top-full z-50 mt-1 w-56 rounded-md border bg-background py-1 shadow-lg">
+								<button
+									className={clsx(
+										"flex w-full items-center px-3 py-2 text-sm hover:bg-accent",
+										!projectFilter && "bg-accent",
+									)}
+									onClick={() => {
+										setProjectFilter(null);
+										setDropdownOpen(false);
+									}}
+								>
+									All Projects
+								</button>
+								{projects.map((project) => (
+									<button
+										key={project}
+										className={clsx(
+											"flex w-full items-center px-3 py-2 text-sm hover:bg-accent",
+											projectFilter === project && "bg-accent",
+										)}
+										onClick={() => {
+											setProjectFilter(project);
+											setDropdownOpen(false);
+										}}
+									>
+										{project}
+									</button>
+								))}
+								{projects.length === 0 && (
+									<div className="px-3 py-2 text-sm text-muted-foreground">
+										No projects found
+									</div>
+								)}
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 
 			<div className="flex items-center gap-2">
+				<Button
+					size="sm"
+					variant={autoRefresh ? "primary" : "ghost"}
+					onClick={() => setAutoRefresh(!autoRefresh)}
+					title={autoRefresh ? "Auto-refresh enabled" : "Auto-refresh disabled"}
+				>
+					<svg
+						className={clsx("h-4 w-4", autoRefresh && "animate-pulse")}
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+						/>
+					</svg>
+				</Button>
+
 				<Button
 					size="sm"
 					variant="ghost"

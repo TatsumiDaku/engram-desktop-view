@@ -15,6 +15,7 @@ export function TopicsTab() {
 
 	const topics = data || {};
 	const topicKeys = Object.keys(topics);
+	const hasSearch = !!search;
 
 	const filteredTopics = topicKeys.filter((key) => {
 		if (search) {
@@ -25,11 +26,26 @@ export function TopicsTab() {
 
 	if (isLoading) {
 		return (
-			<div className="flex items-center justify-center py-12">
-				<div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+			<div className="flex gap-4">
+				<div className="flex-1 space-y-4">
+					<div className="h-10 w-full rounded-md bg-muted animate-pulse" />
+					<div className="space-y-2">
+						{[...Array(4)].map((_, i) => (
+							<div key={i} className="rounded-lg border p-4">
+								<div className="flex items-center justify-between">
+									<div className="h-5 w-32 rounded bg-muted animate-pulse" />
+									<div className="h-5 w-8 rounded-full bg-muted animate-pulse" />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 		);
 	}
+
+	const showNoResults = filteredTopics.length === 0 && hasSearch;
+	const showNoData = filteredTopics.length === 0 && !hasSearch;
 
 	return (
 		<div className="flex gap-4">
@@ -42,7 +58,24 @@ export function TopicsTab() {
 					onClear={() => setSearch("")}
 				/>
 
-				{filteredTopics.length === 0 ? (
+				{showNoResults ? (
+					<EmptyState
+						title="No results found"
+						description="Try adjusting your search"
+						icon={
+							<svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+							</svg>
+						}
+					>
+						<button
+							onClick={() => setSearch("")}
+							className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+						>
+							Clear search
+						</button>
+					</EmptyState>
+				) : showNoData ? (
 					<EmptyState
 						title="No topics found"
 						description="Observations with topic keys will appear here"
