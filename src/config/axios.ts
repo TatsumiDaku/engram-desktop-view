@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const engramApi = axios.create({
-  baseURL: "/engram-api",
+  baseURL: "http://127.0.0.1:7437",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
