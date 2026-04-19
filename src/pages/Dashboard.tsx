@@ -1,3 +1,4 @@
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { TabBar } from "@/components/molecules/TabBar";
 import type { TabType } from "@/types/engram";
 import { useState } from "react";
@@ -19,13 +20,13 @@ export function Dashboard() {
 			</div>
 
 			<div className="flex-1 overflow-auto p-4">
-				{activeTab === "home" && <HomeTab />}
-				{activeTab === "sessions" && <SessionsTab />}
-				{activeTab === "memories" && <MemoriesTab />}
-				{activeTab === "topics" && <TopicsTab />}
-				{activeTab === "timeline" && <TimelineTab />}
-				{activeTab === "prompts" && <PromptsTab />}
-				{activeTab === "empty-sessions" && <EmptySessionsTab />}
+				{activeTab === "home" && <ErrorBoundary><HomeTab /></ErrorBoundary>}
+				{activeTab === "sessions" && <ErrorBoundary><SessionsTab /></ErrorBoundary>}
+				{activeTab === "memories" && <ErrorBoundary><MemoriesTab /></ErrorBoundary>}
+				{activeTab === "topics" && <ErrorBoundary><TopicsTab /></ErrorBoundary>}
+				{activeTab === "timeline" && <ErrorBoundary><TimelineTab /></ErrorBoundary>}
+				{activeTab === "prompts" && <ErrorBoundary><PromptsTab /></ErrorBoundary>}
+				{activeTab === "empty-sessions" && <ErrorBoundary><EmptySessionsTab /></ErrorBoundary>}
 			</div>
 
 			<footer className="text-center text-sm text-[var(--muted-foreground)] py-4 border-t border-[var(--border)]">

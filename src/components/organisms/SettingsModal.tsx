@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button";
 import { useExportData, useImportData } from "@/hooks/useEngram";
+import { useToast } from "@/hooks/useToast";
 import { useUIStore } from "@/stores/uiStore";
 
 export function SettingsModal() {
@@ -10,6 +11,7 @@ export function SettingsModal() {
 	);
 	const exportData = useExportData();
 	const importData = useImportData();
+	const toast = useToast();
 
 	if (!settingsModalOpen) return null;
 
@@ -23,8 +25,9 @@ export function SettingsModal() {
 			a.download = `engram-export-${new Date().toISOString().split("T")[0]}.json`;
 			a.click();
 			URL.revokeObjectURL(url);
+			toast.success("Data exported successfully");
 		} catch (error) {
-			alert("Failed to export data");
+			toast.error("Failed to export data");
 		}
 	};
 
@@ -41,9 +44,9 @@ export function SettingsModal() {
 				try {
 					const content = e.target?.result as string;
 					await importData.mutateAsync(content);
-					alert("Data imported successfully!");
+					toast.success("Data imported successfully!");
 				} catch {
-					alert("Failed to import data");
+					toast.error("Failed to import data");
 				}
 			};
 			reader.readAsText(file);

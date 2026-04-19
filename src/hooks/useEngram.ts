@@ -119,7 +119,7 @@ export const useHealth = () => {
 	return useQuery({
 		queryKey: ["health"],
 		queryFn: getHealth,
-		refetchInterval: 2000,
+		refetchInterval: 10000,
 	});
 };
 

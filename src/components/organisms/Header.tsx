@@ -35,7 +35,7 @@ export function Header({ className, ...props }: HeaderProps) {
 							isOnline ? "bg-green-500" : "bg-red-500",
 						)}
 					/>
-					{isOnline ? "Online" : "Offline"}
+					{isOnline ? "Engram Online" : "Engram Offline"}
 				</div>
 			</div>
 

@@ -25,7 +25,8 @@ export function MemoriesTab() {
 	const { data, isLoading } = useMemories({ limit: 100 });
 	const updateObservation = useUpdateObservation();
 	const [search, setSearch] = useState("");
-	const [typeFilter, setTypeFilter] = useState<string | null>(null);
+	const typeFilter = useUIStore((s) => s.typeFilter);
+	const setTypeFilter = useUIStore((s) => s.setTypeFilter);
 	const [selectedObservation, setSelectedObservation] =
 		useState<Observation | null>(null);
 	const projectFilter = useUIStore((s) => s.projectFilter);

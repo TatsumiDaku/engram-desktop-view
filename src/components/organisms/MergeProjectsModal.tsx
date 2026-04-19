@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button";
 import { useMergeProjects } from "@/hooks/useEngram";
+import { useToast } from "@/hooks/useToast";
 import { useUIStore } from "@/stores/uiStore";
 import { useState } from "react";
 
@@ -11,27 +12,28 @@ export function MergeProjectsModal() {
 	const mergeProjects = useMergeProjects();
 	const [source, setSource] = useState("");
 	const [target, setTarget] = useState("");
+	const toast = useToast();
 
 	if (!mergeProjectsModalOpen) return null;
 
 	const handleMerge = async () => {
 		if (!source || !target) {
-			alert("Please select both source and target projects");
+			toast.error("Please select both source and target projects");
 			return;
 		}
 		if (source === target) {
-			alert("Source and target must be different");
+			toast.error("Source and target must be different");
 			return;
 		}
 
 		try {
 			await mergeProjects.mutateAsync({ source, target });
-			alert("Projects merged successfully!");
+			toast.success("Projects merged successfully!");
 			setMergeProjectsModalOpen(false);
 			setSource("");
 			setTarget("");
 		} catch {
-			alert("Failed to merge projects");
+			toast.error("Failed to merge projects");
 		}
 	};
 
