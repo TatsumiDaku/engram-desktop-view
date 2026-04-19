@@ -31,6 +31,72 @@ npm run tauri build
 
 ---
 
+## 🐧 Linux
+
+### Option 1: Build from Source
+
+```bash
+# Install Rust (if not installed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Install system dependencies
+# Ubuntu/Debian:
+sudo apt update
+sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+# Fedora:
+sudo dnf install webkit2gtk4.1-devel libappindicator-gtk3-devel librsvg2-devel patchelf
+
+# Clone and build
+git clone https://github.com/TatsumiDaku/engram-desktop-view.git
+cd engram-desktop-view
+npm install
+npm run tauri build
+
+# Find the AppImage in:
+# src-tauri/target/release/bundle/appimage/
+```
+
+### Option 2: Build an AppImage
+
+```bash
+# Install appimagetool
+wget "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
+chmod +x appimagetool-x86_64.AppImage
+sudo mv appimagetool-x86_64.AppImage /usr/local/bin/appimagetool
+
+# Create AppImage (from src-tauri/target/release/bundle/appimage/)
+appimagetool your-app.AppDir appname-x86_64.AppImage
+```
+
+### System Requirements (Linux)
+
+| Requirement | Minimum |
+|-------------|---------|
+| OS | Ubuntu 20.04+ / Fedora 34+ / equivalent |
+| RAM | 4 GB |
+| Disk Space | 200 MB |
+| GTK | 3.24+ |
+
+### Troubleshooting (Linux)
+
+**"WebKit not found" error:**
+```bash
+sudo apt install libwebkit2gtk-4.1-dev
+```
+
+**"AppIndicator not found" error:**
+```bash
+sudo apt install libappindicator3-dev
+```
+
+**Flatpak alternative:**
+```bash
+flatpak install flathub io.github.TatsumiDaku.EngramDesktopView
+```
+
+---
+
 ## System Requirements
 
 | Requirement | Minimum |
