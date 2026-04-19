@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTopics } from "@/hooks/useEngram";
-import { useUIStore } from "@/stores/uiStore";
 import { SearchInput } from "@/components/atoms/SearchInput";
 import { EmptyState } from "@/components/atoms/EmptyState";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
@@ -9,7 +8,6 @@ import type { Observation } from "@/types/engram";
 
 export function TopicsTab() {
   const { data, isLoading } = useTopics();
-  const projectFilter = useUIStore((s) => s.projectFilter);
   const [search, setSearch] = useState("");
   const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
   const [selectedObservation, setSelectedObservation] = useState<Observation | null>(null);

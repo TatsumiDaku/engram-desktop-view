@@ -1,10 +1,9 @@
-import { type HTMLAttributes } from "react";
 import { clsx } from "clsx";
 import { Button } from "@/components/atoms/Button";
 import { useHealth } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
 
-export interface HeaderProps extends HTMLAttributes<HTMLHeaderElement> {}
+export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function Header({ className, ...props }: HeaderProps) {
   const { data: health } = useHealth();
