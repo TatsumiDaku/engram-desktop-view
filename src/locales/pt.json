@@ -82,14 +82,14 @@
 		"searchPlaceholder": "Buscar memórias...",
 		"filters": {
 			"all": "Tudo",
-			"bugfix": "Bugfix",
-			"decision": "Decisão",
-			"architecture": "Arquitetura",
-			"discovery": "Descoberta",
-			"pattern": "Padrão",
-			"config": "Config",
-			"preference": "Preferência",
-			"learning": "Aprendizado"
+			"bugfix": "🐛 Bugfix",
+			"decision": "📋 Decisão",
+			"architecture": "🏗️ Arquitetura",
+			"discovery": "💡 Descoberta",
+			"pattern": "♻️ Padrão",
+			"config": "⚙️ Config",
+			"preference": "❤️ Preferência",
+			"learning": "📚 Aprendizado"
 		}
 	},
 	"timeline": {

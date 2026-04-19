@@ -1,5 +1,5 @@
 import { type LogEntry, type LogLevel, useLogStore } from "@/stores/logStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const levelColors: Record<LogLevel, string> = {
 	request: "text-blue-400",
@@ -7,11 +7,40 @@ const levelColors: Record<LogLevel, string> = {
 	error: "text-red-400",
 };
 
+const levelBgColors: Record<LogLevel, string> = {
+	request: "bg-blue-500/20",
+	response: "bg-green-500/20",
+	error: "bg-red-500/20",
+};
+
 const levelIcons: Record<LogLevel, string> = {
 	request: "→",
 	response: "←",
 	error: "✕",
 };
+
+const methodColors: Record<string, string> = {
+	GET: "text-green-400",
+	POST: "text-yellow-400",
+	PATCH: "text-orange-400",
+	DELETE: "text-red-400",
+	PUT: "text-orange-400",
+};
+
+function StatusBadge({ status }: { status: number }) {
+	const color =
+		status >= 200 && status < 300
+			? "text-green-400 bg-green-500/20"
+			: status >= 400
+				? "text-red-400 bg-red-500/20"
+				: "text-yellow-400 bg-yellow-500/20";
+
+	return (
+		<span className={`shrink-0 rounded px-1.5 py-0.5 text-xs font-medium ${color}`}>
+			{status}
+		</span>
+	);
+}
 
 function LogEntryRow({ entry }: { entry: LogEntry }) {
 	const timeStr =
@@ -24,37 +53,38 @@ function LogEntryRow({ entry }: { entry: LogEntry }) {
 		"." +
 		entry.timestamp.getMilliseconds().toString().padStart(3, "0");
 
+	const duration = entry.duration;
+
 	return (
-		<div className="flex items-start gap-2 border-b border-gray-800 py-2 text-xs font-mono">
-			<span className="text-gray-500 shrink-0">{timeStr}</span>
-			<span className={`shrink-0 w-4 text-center ${levelColors[entry.level]}`}>
+		<div className={`flex flex-wrap items-start gap-x-3 gap-y-1 border-b border-gray-800/50 py-2 text-xs font-mono ${levelBgColors[entry.level]}`}>
+			<span className="text-gray-500 shrink-0 w-20">{timeStr}</span>
+			<span className={`shrink-0 w-5 text-center ${levelColors[entry.level]}`}>
 				{levelIcons[entry.level]}
 			</span>
 			{entry.method && (
-				<span className="shrink-0 text-yellow-400">{entry.method}</span>
+				<span className={`shrink-0 font-semibold ${methodColors[entry.method] || "text-gray-400"}`}>
+					{entry.method}
+				</span>
 			)}
 			{entry.url && (
-				<span className="truncate text-gray-300 flex-1 min-w-0">
+				<span className="min-w-0 flex-1 truncate text-gray-300">
 					{entry.url}
 				</span>
 			)}
-			{entry.status && (
-				<span
-					className={`shrink-0 ${
-						entry.status >= 200 && entry.status < 300
-							? "text-green-400"
-							: "text-red-400"
-					}`}
-				>
-					{entry.status}
+			{entry.status && <StatusBadge status={entry.status} />}
+			{duration !== undefined && (
+				<span className="shrink-0 text-gray-500">
+					{duration}ms
 				</span>
 			)}
 			{entry.dataPreview && (
-				<span className="text-gray-500 truncate max-w-xs">
+				<span className="w-full text-gray-600 truncate pl-24">
 					{entry.dataPreview}
 				</span>
 			)}
-			<span className="text-gray-400 shrink-0">{entry.message}</span>
+			{entry.message && (
+				<span className="text-gray-400 shrink-0">{entry.message}</span>
+			)}
 		</div>
 	);
 }
@@ -62,13 +92,13 @@ function LogEntryRow({ entry }: { entry: LogEntry }) {
 export function LogPanel() {
 	const { logs, isVisible, toggleVisibility, clearLogs } = useLogStore();
 	const scrollRef = useRef<HTMLDivElement>(null);
+	const [isExpanded, setIsExpanded] = useState(true);
 
-	// Auto-scroll to top when new logs come in
 	useEffect(() => {
-		if (scrollRef.current) {
+		if (scrollRef.current && isExpanded) {
 			scrollRef.current.scrollTop = 0;
 		}
-	}, [logs]);
+	}, [logs, isExpanded]);
 
 	if (!isVisible) {
 		return (
@@ -89,10 +119,19 @@ export function LogPanel() {
 	}
 
 	return (
-		<div className="fixed bottom-4 right-4 z-50 w-[600px] max-w-[90vw] rounded-lg bg-gray-900 shadow-2xl border border-gray-700">
+		<div className="fixed bottom-4 right-4 z-50 w-[650px] max-w-[90vw] rounded-lg bg-gray-900 shadow-2xl border border-gray-700">
 			{/* Header */}
 			<div className="flex items-center justify-between border-b border-gray-700 px-3 py-2">
 				<div className="flex items-center gap-2">
+					<button
+						onClick={() => setIsExpanded(!isExpanded)}
+						className="text-gray-400 hover:text-gray-200 transition-colors"
+						title={isExpanded ? "Collapse" : "Expand"}
+					>
+						<span className={`text-sm transition-transform ${isExpanded ? "rotate-90" : ""}`}>
+							▶
+						</span>
+					</button>
 					<span className="text-base text-blue-400">⬡</span>
 					<h3 className="text-sm font-medium text-gray-200">API Logs</h3>
 					{logs.length > 0 && (
@@ -100,6 +139,7 @@ export function LogPanel() {
 							{logs.length}
 						</span>
 					)}
+					<span className="text-xs text-gray-500">/100 max</span>
 				</div>
 				<div className="flex items-center gap-2">
 					<button
@@ -120,30 +160,39 @@ export function LogPanel() {
 			</div>
 
 			{/* Log List */}
-			<div
-				ref={scrollRef}
-				className="max-h-[400px] min-h-[200px] overflow-y-auto bg-gray-950 p-2"
-			>
-				{logs.length === 0 ? (
-					<div className="flex h-[200px] items-center justify-center text-gray-500 text-sm">
-						No API activity yet...
-					</div>
-				) : (
-					<div className="space-y-0">
-						{logs.map((log) => (
-							<LogEntryRow key={log.id} entry={log} />
-						))}
-					</div>
-				)}
-			</div>
+			{isExpanded && (
+				<div
+					ref={scrollRef}
+					className="max-h-[400px] min-h-[200px] overflow-y-auto bg-gray-950 p-2"
+				>
+					{logs.length === 0 ? (
+						<div className="flex h-[200px] items-center justify-center text-gray-500 text-sm">
+							No API activity yet...
+						</div>
+					) : (
+						<div className="space-y-0">
+							{logs.map((log) => (
+								<LogEntryRow key={log.id} entry={log} />
+							))}
+						</div>
+					)}
+				</div>
+			)}
 
 			{/* Footer hint */}
-			<div className="border-t border-gray-700 px-3 py-1.5 text-xs text-gray-500">
-				<span className="text-gray-600">Legend:</span>{" "}
-				<span className="text-blue-400">→ request</span>{" "}
-				<span className="text-green-400">← response</span>{" "}
-				<span className="text-red-400">✕ error</span>
-			</div>
+			{isExpanded && (
+				<div className="border-t border-gray-700 px-3 py-1.5 text-xs text-gray-500">
+					<span className="text-gray-600">Legend:</span>{" "}
+					<span className="text-blue-400">→ request</span>{" "}
+					<span className="text-green-400">← response</span>{" "}
+					<span className="text-red-400">✕ error</span>
+					<span className="ml-2 text-gray-600">|</span>
+					<span className="ml-2 text-green-400">GET</span>{" "}
+					<span className="text-yellow-400">POST</span>{" "}
+					<span className="text-orange-400">PATCH/PUT</span>{" "}
+					<span className="text-red-400">DELETE</span>
+				</div>
+			)}
 		</div>
 	);
 }

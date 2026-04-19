@@ -12,18 +12,18 @@ import { useState } from "react";
 const TYPE_FILTERS = [
 	{ type: null, label: "all", emoji: "" },
 	{ type: "bugfix", label: "bugfix", emoji: "🐛" },
-	{ type: "decision", label: "decision", emoji: "" },
-	{ type: "architecture", label: "architecture", emoji: "" },
-	{ type: "discovery", label: "discovery", emoji: "" },
-	{ type: "pattern", label: "pattern", emoji: "" },
-	{ type: "config", label: "config", emoji: "" },
-	{ type: "preference", label: "preference", emoji: "" },
-	{ type: "learning", label: "learning", emoji: "" },
+	{ type: "decision", label: "decision", emoji: "📋" },
+	{ type: "architecture", label: "architecture", emoji: "🏗️" },
+	{ type: "discovery", label: "discovery", emoji: "💡" },
+	{ type: "pattern", label: "pattern", emoji: "♻️" },
+	{ type: "config", label: "config", emoji: "⚙️" },
+	{ type: "preference", label: "preference", emoji: "❤️" },
+	{ type: "learning", label: "learning", emoji: "📚" },
 ];
 
 export function MemoriesTab() {
 	const { t } = useTranslation();
-	const { data, isLoading } = useMemories({ limit: 100 });
+	const { data, isLoading, refetch } = useMemories({ limit: 100 });
 	const updateObservation = useUpdateObservation();
 	const [search, setSearch] = useState("");
 	const typeFilter = useUIStore((s) => s.typeFilter);
@@ -82,12 +82,21 @@ export function MemoriesTab() {
 		<div className="flex gap-4">
 			{/* Left panel - List */}
 			<div className="flex-1 space-y-4">
-				<SearchInput
-					placeholder={t("memories.searchPlaceholder")}
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					onClear={() => setSearch("")}
-				/>
+				<div className="flex items-center gap-2">
+					<SearchInput
+						placeholder={t("memories.searchPlaceholder")}
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						onClear={() => setSearch("")}
+					/>
+					<button
+						onClick={() => refetch()}
+						className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+						title="Refresh memories"
+					>
+						🔄
+					</button>
+				</div>
 
 				<div className="flex gap-2 flex-wrap">
 					{TYPE_FILTERS.map((filter) => (

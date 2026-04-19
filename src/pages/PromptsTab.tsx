@@ -5,7 +5,7 @@ import { useDeletePrompt, usePrompts } from "@/hooks/useEngram";
 import { useState } from "react";
 
 export function PromptsTab() {
-	const { data, isLoading } = usePrompts();
+	const { data, isLoading, refetch } = usePrompts();
 	const deletePrompt = useDeletePrompt();
 	const [search, setSearch] = useState("");
 
@@ -48,12 +48,21 @@ export function PromptsTab() {
 
 	return (
 		<div className="space-y-4">
-			<SearchInput
-				placeholder="Search prompts..."
-				value={search}
-				onChange={(e) => setSearch(e.target.value)}
-				onClear={() => setSearch("")}
-			/>
+			<div className="flex items-center gap-2">
+				<SearchInput
+					placeholder="Search prompts..."
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+					onClear={() => setSearch("")}
+				/>
+				<button
+					onClick={() => refetch()}
+					className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+					title="Refresh prompts"
+				>
+					🔄
+				</button>
+			</div>
 
 			{filteredPrompts.length === 0 && hasSearch ? (
 				<EmptyState

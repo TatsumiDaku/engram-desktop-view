@@ -38,7 +38,7 @@ export function Header({ className, ...props }: HeaderProps) {
 				<h1 className="text-lg font-semibold">EngramDesktopView</h1>
 				<div
 					className={clsx(
-						"flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium",
+						"flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium transition-all",
 						isOnline
 							? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
 							: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
@@ -46,11 +46,11 @@ export function Header({ className, ...props }: HeaderProps) {
 				>
 					<span
 						className={clsx(
-							"h-2 w-2 rounded-full",
-							isOnline ? "bg-green-500" : "bg-red-500",
+							"h-2.5 w-2.5 rounded-full",
+							isOnline ? "bg-green-500 animate-pulse" : "bg-red-500",
 						)}
 					/>
-					{isOnline ? "Online" : "Offline"}
+					{isOnline ? "Engram Online" : "Engram Offline"}
 				</div>
 
 				<div className="relative">

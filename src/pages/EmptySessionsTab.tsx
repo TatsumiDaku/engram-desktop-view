@@ -168,6 +168,15 @@ export function EmptySessionsTab() {
 				onChange={(e) => setSearch(e.target.value)}
 				onClear={() => setSearch("")}
 			/>
+			<div className="flex items-center gap-2">
+				<button
+					onClick={() => refetch()}
+					className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+					title="Refresh"
+				>
+					🔄
+				</button>
+			</div>
 
 			{filteredSessions.length === 0 ? (
 				<EmptyState

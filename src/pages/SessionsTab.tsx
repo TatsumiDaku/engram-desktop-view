@@ -2,19 +2,26 @@ import { EmptyState } from "@/components/atoms/EmptyState";
 import { SearchInput } from "@/components/atoms/SearchInput";
 import { StatCard } from "@/components/atoms/StatCard";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
-import { useSessions, useStats } from "@/hooks/useEngram";
+import { ObservationRow } from "@/components/molecules/ObservationRow";
+import { useSession, useSessions, useStats } from "@/hooks/useEngram";
+import type { Observation, Session } from "@/types/engram";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 export function SessionsTab() {
 	const { t } = useTranslation();
-	const { data: sessionsData, isLoading: sessionsLoading } = useSessions();
+	const { data: sessionsData, isLoading: sessionsLoading, refetch } = useSessions();
 	const { data: statsData } = useStats();
 	const [search, setSearch] = useState("");
 	const [dateFilter, setDateFilter] = useState<
 		"today" | "week" | "month" | "all"
 	>("all");
 	const [visibleCount, setVisibleCount] = useState(9);
+	const [selectedSession, setSelectedSession] = useState<Session | null>(null);
+	const [sessionSearch, setSessionSearch] = useState("");
+	const [sessionTypeFilter, setSessionTypeFilter] = useState<string | null>(null);
+
+	const { data: sessionData, isLoading: sessionLoading } = useSession(selectedSession?.id || "");
 
 	const sessions = sessionsData?.sessions || [];
 
@@ -93,12 +100,21 @@ export function SessionsTab() {
 			</div>
 
 			{/* Search */}
-			<SearchInput
-				placeholder={t("sessions.searchPlaceholder")}
-				value={search}
-				onChange={(e) => setSearch(e.target.value)}
-				onClear={() => setSearch("")}
-			/>
+			<div className="flex items-center gap-2">
+				<SearchInput
+					placeholder={t("sessions.searchPlaceholder")}
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+					onClear={() => setSearch("")}
+				/>
+				<button
+					onClick={() => refetch()}
+					className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+					title="Refresh sessions"
+				>
+					🔄
+				</button>
+			</div>
 
 			{/* Date Filters */}
 			<div className="flex gap-2">
@@ -188,6 +204,7 @@ export function SessionsTab() {
 					{filteredSessions.slice(0, visibleCount).map((session) => (
 						<div
 							key={session.id}
+							onClick={() => setSelectedSession(session)}
 							className="cursor-pointer rounded-lg border border-[hsl(263,30%,20%)] p-4 transition-all hover:border-[hsl(263,70%,58%)] hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
 						>
 							<div className="flex items-start justify-between">
@@ -224,6 +241,100 @@ export function SessionsTab() {
 					</button>
 				)}
 				</>
+			)}
+
+			{/* Session Detail Panel */}
+			{selectedSession && (
+				<div className="fixed inset-0 z-50 flex justify-end bg-black/50" onClick={() => setSelectedSession(null)}>
+					<div
+						className="h-full w-1/2 overflow-y-auto border-l border-[hsl(263,30%,20%)] bg-[hsl(263,30%,8%)] p-6"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<div className="flex items-center justify-between mb-6">
+							<div>
+								<h2 className="text-xl font-bold">
+									{selectedSession.latestTitle || selectedSession.agentName || "Session"}
+								</h2>
+								<p className="text-sm text-[hsl(263,20%,60%)]">
+									{selectedSession.agentName} • {selectedSession.project}
+								</p>
+							</div>
+							<button
+								onClick={() => setSelectedSession(null)}
+								className="rounded-lg border border-[hsl(263,30%,20%)] p-2 hover:bg-[hsl(263,30%,15%)]"
+							>
+								<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+								</svg>
+							</button>
+						</div>
+
+						<SearchInput
+							placeholder="Search observations..."
+							value={sessionSearch}
+							onChange={(e) => setSessionSearch(e.target.value)}
+							onClear={() => setSessionSearch("")}
+						/>
+
+						<div className="flex gap-2 flex-wrap mt-4 mb-4">
+							<button
+								onClick={() => setSessionTypeFilter(null)}
+								className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+									sessionTypeFilter === null
+										? "bg-[hsl(263,70%,58%)] text-white"
+										: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+								}`}
+							>
+								All
+							</button>
+							{["bugfix", "decision", "architecture", "discovery", "pattern", "config", "preference", "learning"].map((type) => (
+								<button
+									key={type}
+									onClick={() => setSessionTypeFilter(type)}
+									className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+										sessionTypeFilter === type
+											? "bg-[hsl(263,70%,58%)] text-white"
+											: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+									}`}
+								>
+									{type}
+								</button>
+							))}
+						</div>
+
+						{sessionLoading ? (
+							<div className="space-y-2">
+								{[...Array(3)].map((_, i) => (
+									<div key={i} className="h-16 rounded-lg bg-[hsl(263,30%,12%)] animate-pulse" />
+								))}
+							</div>
+						) : (
+							<div className="space-y-2">
+								{sessionData?.observations
+									.filter((obs: Observation) => {
+										if (sessionTypeFilter && obs.type !== sessionTypeFilter) return false;
+										if (sessionSearch) {
+											const searchLower = sessionSearch.toLowerCase();
+											return (
+												obs.title.toLowerCase().includes(searchLower) ||
+												obs.content.toLowerCase().includes(searchLower)
+											);
+										}
+										return true;
+									})
+									.map((observation) => (
+										<ObservationRow
+											key={observation.id}
+											observation={observation}
+										/>
+									))}
+								{(!sessionData?.observations || sessionData.observations.length === 0) && (
+									<p className="text-center text-[hsl(263,20%,60%)] py-8">No observations in this session</p>
+								)}
+							</div>
+						)}
+					</div>
+				</div>
 			)}
 		</div>
 	);

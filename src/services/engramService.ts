@@ -28,11 +28,23 @@ function mapObservation(apiObs: any): Observation {
 	};
 }
 
-// Get ALL observations via single broad search
 export const getAllObservations = async (): Promise<Observation[]> => {
 	try {
-		const data = await engramGet<any[]>("/search?q=*&limit=1000");
-		return ((data as any[]) || []).map(mapObservation);
+		let data: any = null;
+		try {
+			data = await engramGet<any[]>("/search?q=*&limit=1000");
+		} catch {
+			try {
+				data = await engramGet<any[]>("/observations?limit=1000");
+			} catch {
+				return [];
+			}
+		}
+		if (!data) return [];
+		if (Array.isArray(data)) return data.map(mapObservation);
+		if (Array.isArray((data as any).data)) return (data as any).data.map(mapObservation);
+		if (Array.isArray((data as any).observations)) return (data as any).observations.map(mapObservation);
+		return [];
 	} catch (error) {
 		console.error("[engramService] getAllObservations failed:", error);
 		return [];

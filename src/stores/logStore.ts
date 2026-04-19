@@ -11,6 +11,7 @@ export interface LogEntry {
 	status?: number;
 	message: string;
 	dataPreview?: string;
+	duration?: number;
 }
 
 interface LogState {

@@ -18,14 +18,14 @@
 		"searchPlaceholder": "Search memories...",
 		"filters": {
 			"all": "All",
-			"bugfix": "Bugfix",
-			"decision": "Decision",
-			"architecture": "Architecture",
-			"discovery": "Discovery",
-			"pattern": "Pattern",
-			"config": "Config",
-			"preference": "Preference",
-			"learning": "Learning"
+			"bugfix": "🐛 Bugfix",
+			"decision": "📋 Decision",
+			"architecture": "🏗️ Architecture",
+			"discovery": "💡 Discovery",
+			"pattern": "♻️ Pattern",
+			"config": "⚙️ Config",
+			"preference": "❤️ Preference",
+			"learning": "📚 Learning"
 		}
 	},
 	"emptySessions": {

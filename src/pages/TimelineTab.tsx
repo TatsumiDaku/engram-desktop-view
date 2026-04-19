@@ -42,7 +42,7 @@ function groupByDay(
 
 export function TimelineTab() {
 	const { t } = useTranslation();
-	const { data, isLoading } = useTimeline();
+	const { data, isLoading, refetch } = useTimeline();
 	const projectFilter = useUIStore((s) => s.projectFilter);
 	const [search, setSearch] = useState("");
 	const [dateFilter, setDateFilter] = useState<"today" | "week" | "month" | "specific">("month");
@@ -123,12 +123,21 @@ export function TimelineTab() {
 		<div className="flex gap-4">
 			{/* Left panel - Timeline */}
 			<div className="flex-1 space-y-4">
-				<SearchInput
-					placeholder={t("timeline.searchPlaceholder")}
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					onClear={() => setSearch("")}
-				/>
+				<div className="flex items-center gap-2">
+					<SearchInput
+						placeholder={t("timeline.searchPlaceholder")}
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						onClear={() => setSearch("")}
+					/>
+					<button
+						onClick={() => refetch()}
+						className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+						title="Refresh timeline"
+					>
+						🔄
+					</button>
+				</div>
 
 				<div className="flex gap-2 flex-wrap">
 					<button

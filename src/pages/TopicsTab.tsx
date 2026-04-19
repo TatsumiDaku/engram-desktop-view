@@ -7,7 +7,7 @@ import type { Observation } from "@/types/engram";
 import { useState } from "react";
 
 export function TopicsTab() {
-	const { data, isLoading } = useTopics();
+	const { data, isLoading, refetch } = useTopics();
 	const [search, setSearch] = useState("");
 	const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
 	const [selectedObservation, setSelectedObservation] =
@@ -51,12 +51,21 @@ export function TopicsTab() {
 		<div className="flex gap-4">
 			{/* Left panel - Topics list */}
 			<div className="flex-1 space-y-4">
-				<SearchInput
-					placeholder="Search topics..."
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					onClear={() => setSearch("")}
-				/>
+				<div className="flex items-center gap-2">
+					<SearchInput
+						placeholder="Search topics..."
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						onClear={() => setSearch("")}
+					/>
+					<button
+						onClick={() => refetch()}
+						className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+						title="Refresh topics"
+					>
+						🔄
+					</button>
+				</div>
 
 				{showNoResults ? (
 					<EmptyState
