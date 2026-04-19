@@ -1,15 +1,15 @@
-# 📥 Guia de Instalacion
+# 📥 Installation Guide
 
 ## Windows
 
-### Opcion 1: Descargar el .exe (Recomendado)
+### Option 1: Download the Binary (Recommended)
 
-1. Descarga `EngramDesktopView-1.0.0-win.zip` desde [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
-2. Extrae el ZIP en cualquier carpeta
-3. Abre `EngramDesktopView.exe`
-4. Listo!
+1. Download `EngramDesktopView-1.0.0-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+2. Extract the ZIP to any folder
+3. Run `EngramDesktopView.exe`
+4. Done!
 
-### Opcion 2: Compilar tu mismo
+### Option 2: Build from Source
 
 ```bash
 git clone https://github.com/TatsumiDaku/engram-desktop-view.git
@@ -18,19 +18,19 @@ npm install
 npm run tauri build
 ```
 
-El .exe estará en `src-tauri/target/release/bundle/`
+The executable will be in `src-tauri/target/release/bundle/`
 
 ---
 
 ## 🐧 Linux
 
-### Compilar desde codigo
+### Build from Source
 
 ```bash
-# Instala Rust
+# Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# Dependencias del sistema
+# System dependencies
 # Ubuntu/Debian:
 sudo apt update
 sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
@@ -38,57 +38,59 @@ sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchel
 # Fedora:
 sudo dnf install webkit2gtk4.1-devel libappindicator-gtk3-devel librsvg2-devel patchelf
 
-# Compila
+# Build
 git clone https://github.com/TatsumiDaku/engram-desktop-view.git
 cd engram-desktop-view
 npm install
 npm run tauri build
 ```
 
-El AppImage estará en `src-tauri/target/release/bundle/appimage/`
+The AppImage will be in `src-tauri/target/release/bundle/appimage/`
 
 ---
 
-## ✅ Requisitos
+## ✅ Requirements
 
-| Requisito | Minimo |
-|-----------|--------|
+| Requirement | Minimum |
+|-------------|---------|
 | OS | Windows 10+ / Ubuntu 20.04+ / Fedora 34+ |
 | RAM | 4 GB |
-| Espacio | 100 MB |
-| Engram | Corriendo en localhost:7437 |
+| Disk Space | 100 MB |
+| Engram | Running at localhost:7437 |
 
 ---
 
-## 🚀 Primer inicio
+## 🚀 First Launch
 
-1. Asegurate de que Engram esté corriendo: `npx engram`
-2. Abre `EngramDesktopView.exe`
-3. Listo!
-
----
-
-## ❓ Problemas?
-
-- **"Engram esta offline"** - Verifica que Engram esté corriendo en `localhost:7437`
-- **La app no abre** - Espera unos segundos, es normal
-- **UI rota** - Descarga la ultima version
+1. Make sure Engram is running: `npx engram`
+2. Open `EngramDesktopView.exe`
+3. Done!
 
 ---
 
-## 🔄 Actualizar
+## ❓ Troubleshooting
 
-1. Descarga el nuevo release
-2. Cierra la app
-3. Reemplaza los archivos viejos
-4. Listo!
+- **"Engram is offline"** - Verify Engram is running at `localhost:7437`
+- **App doesn't open** - Wait a few seconds, it's normal
+- **UI looks broken** - Download the latest release
 
-## 🗑️ Desinstalar
+---
 
-Borra la carpeta. No modifica nada del sistema.
+## 🔄 Updating
+
+1. Download the new release
+2. Close the app
+3. Replace the old files
+4. Done!
+
+---
+
+## 🗑️ Uninstalling
+
+Simply delete the folder. No system modifications are made.
 
 ---
 
 <p align="center">
-🧔‍♂️ EngramDesktopView • TatsumiDaku
+🧔 EngramDesktopView • TatsumiDaku
 </p>
