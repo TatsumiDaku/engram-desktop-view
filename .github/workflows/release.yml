@@ -1,0 +1,90 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'ubuntu-22.04'
+            args: '--target x86_64-unknown-linux-gnu'
+          - platform: 'macos-14'
+            args: '--target aarch64-apple-darwin'
+          - platform: 'windows-latest'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Rust
+        uses: dtolnay/rust-action@stable
+        with:
+          targets: ${{ matrix.platform == 'ubuntu-22.04' && 'x86_64-unknown-linux-gnu' || matrix.platform == 'macos-14' && 'aarch64-apple-darwin' || '' }}
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v__VERSION__
+          releaseName: 'EngramDesktopView v__VERSION__'
+          releaseBody: |
+            ## Descarga
+
+            Descarga la versión para tu sistema operativo.
+
+            Para Windows: Busca el archivo `.exe` en los assets.
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.platform == 'windows-latest' && '--bundles nsis' || matrix.platform == 'macos-14' && '--bundles dmg' || '--bundles deb' }}
+
+  create-zip:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download exe
+        uses: actions/download-artifact@v4
+        with:
+          name: tauri-app
+          path: src-tauri/target/release/bundle/nsis
+
+      - name: Create ZIP
+        run: |
+          Copy "src-tauri\target\release\bundle\nsis\EngramDesktopView_1.0.0_x64-setup.exe" "EngramDesktopView.exe"
+          Copy "README.md" "."
+          Copy "INSTALL.md" "."
+          Compress-Archive -Path * -DestinationPath "EngramDesktopView-1.0.0-win.zip"
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: EngramDesktopView-1.0.0-win.zip
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
