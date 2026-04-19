@@ -25,7 +25,7 @@
 
 ### 1. Descarga el .exe
 
-Descarga `EngramDesktopView-1.0.0-win.zip` desde [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+Descarga `EngramDesktopView-1.0.0-win.zip` desde [Releases/tag](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 
 ### 2. Extrae y ejecuta
 
