@@ -8,6 +8,12 @@ export default function HomeTab() {
 	return (
 		<div className="flex flex-col items-center justify-center min-h-[80vh] space-y-12">
 			<div className="text-center space-y-6 max-w-3xl">
+				{/* Hero Image */}
+				<img
+					src="https://raw.githubusercontent.com/TatsumiDaku/engram-desktop-view/main/src-tauri/icons/BannerEngramDesktop.png"
+					alt="EngramDesktopView"
+					className="mx-auto max-w-[500px] h-auto rounded-lg shadow-[0_0_40px_rgba(168,85,247,0.4)]"
+				/>
 				<h1 className="text-6xl font-bold text-red-600 tracking-tight">
 					{t("home.heroTitle")}
 				</h1>

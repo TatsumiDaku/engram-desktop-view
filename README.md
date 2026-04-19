@@ -1,4 +1,4 @@
-<img src=".github/banner.png" alt="EngramDesktopView" width="100%" />
+<img src=".github/BannerEngramDesktop.png" alt="EngramDesktopView" width="100%" />
 
 # 🎩 EngramDesktopView
 

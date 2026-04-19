@@ -51,5 +51,4 @@ skills-lock.json
 *.tmp
 *.temp
 create-*.ps1
-BannerEngramDesktop*.png
-BannerEngramDesktop*.svg
+BannerEngramDesktop-bg.png
