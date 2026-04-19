@@ -29,26 +29,40 @@ function mapObservation(apiObs: any): Observation {
 }
 
 export const getAllObservations = async (): Promise<Observation[]> => {
-	try {
-		let data: any = null;
+	const endpoints = [
+		{ path: "/observations", fallback: true },
+		{ path: "/search?q=*", fallback: false },
+	];
+
+	for (const endpoint of endpoints) {
 		try {
-			data = await engramGet<any[]>("/search?q=*&limit=1000");
-		} catch {
-			try {
-				data = await engramGet<any[]>("/observations?limit=1000");
-			} catch {
-				return [];
+			const data = await engramGet<any>(endpoint.path);
+			if (!data) continue;
+
+			let arr: any[] = [];
+			if (Array.isArray(data)) {
+				arr = data;
+			} else if (Array.isArray(data.observations)) {
+				arr = data.observations;
+			} else if (Array.isArray(data.data)) {
+				arr = data.data;
+			} else if (Array.isArray(data.items)) {
+				arr = data.items;
+			} else {
+				continue;
 			}
+
+			if (arr.length > 0) {
+				return arr.map(mapObservation);
+			}
+		} catch (error) {
+			console.warn(`[engramService] ${endpoint.path} failed:`, error);
+			if (endpoint.fallback) continue;
 		}
-		if (!data) return [];
-		if (Array.isArray(data)) return data.map(mapObservation);
-		if (Array.isArray((data as any).data)) return (data as any).data.map(mapObservation);
-		if (Array.isArray((data as any).observations)) return (data as any).observations.map(mapObservation);
-		return [];
-	} catch (error) {
-		console.error("[engramService] getAllObservations failed:", error);
-		return [];
 	}
+
+	console.warn("[engramService] getAllObservations: all endpoints failed, returning empty array");
+	return [];
 };
 
 // Derive sessions from observations grouped by session_id

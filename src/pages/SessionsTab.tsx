@@ -203,36 +203,133 @@ export function SessionsTab() {
 				<>
 				<div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 					{filteredSessions.slice(0, visibleCount).map((session) => (
-						<div
-							key={session.id}
-							onClick={() => setSelectedSession(session)}
-							className="cursor-pointer rounded-lg border border-[hsl(263,30%,20%)] p-4 transition-all hover:border-[hsl(263,70%,58%)] hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-						>
-							<div className="flex items-start justify-between">
-								<div className="overflow-hidden">
-									<p className="truncate font-medium">
-										{session.latestTitle ||
-											session.agentName ||
-											t("sessions.empty.untitled")}
-									</p>
-									<p className="mt-1 text-xs text-[hsl(263,20%,60%)]">
-										<div className="flex items-center gap-1.5">
-											<div className={`inline-block w-2 h-2 rounded-full ${getProjectColor(session.project)}`} />
-											<span>{session.agentName}</span>
-											<span>•</span>
-											<span>{session.project}</span>
-										</div>
-									</p>
+						<div key={session.id}>
+							<div
+								onClick={() => setSelectedSession(selectedSession?.id === session.id ? null : session)}
+								className={`cursor-pointer rounded-lg border p-4 transition-all ${
+									selectedSession?.id === session.id
+										? "border-[hsl(263,70%,58%)] bg-[hsl(263,30%,15%)] shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+										: "border-[hsl(263,30%,20%)] hover:border-[hsl(263,70%,58%)] hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+								}`}
+							>
+								<div className="flex items-start justify-between">
+									<div className="overflow-hidden">
+										<p className="truncate font-medium">
+											{session.latestTitle ||
+												session.agentName ||
+												t("sessions.empty.untitled")}
+										</p>
+										<p className="mt-1 text-xs text-[hsl(263,20%,60%)]">
+											<div className="flex items-center gap-1.5">
+												<div className={`inline-block w-2 h-2 rounded-full ${getProjectColor(session.project)}`} />
+												<span>{session.agentName}</span>
+												<span>•</span>
+												<span>{session.project}</span>
+											</div>
+										</p>
+									</div>
+									<div className="flex items-center gap-2">
+										<TypeBadge type={session.type as "learning"} />
+										<svg
+											className={`h-4 w-4 transition-transform ${selectedSession?.id === session.id ? "rotate-180" : ""}`}
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+										</svg>
+									</div>
 								</div>
-								<TypeBadge type={session.type as "learning"} />
+								<div className="mt-3 flex items-center justify-between text-xs text-[hsl(263,20%,60%)]">
+									<span>{session.observationCount} {t("sessions.observations")}</span>
+									<span>{new Date(session.createdAt).toLocaleDateString()}</span>
+								</div>
+								{session.topicKey && (
+									<div className="mt-2 text-xs text-[hsl(263,70%,58%)]">
+										{t("sessions.topic")}: {session.topicKey}
+									</div>
+								)}
 							</div>
-							<div className="mt-3 flex items-center justify-between text-xs text-[hsl(263,20%,60%)]">
-								<span>{session.observationCount} {t("sessions.observations")}</span>
-								<span>{new Date(session.createdAt).toLocaleDateString()}</span>
-							</div>
-							{session.topicKey && (
-								<div className="mt-2 text-xs text-[hsl(263,70%,58%)]">
-									{t("sessions.topic")}: {session.topicKey}
+
+							{/* Expanded Session Detail - Accordion Style */}
+							{selectedSession?.id === session.id && (
+								<div className="mt-2 rounded-lg border border-[hsl(263,30%,20%)] bg-[hsl(263,30%,10%)] p-4">
+									<div className="mb-4 flex items-center justify-between">
+										<h3 className="font-medium text-[hsl(263,20%,90%)]">
+											Observations ({sessionData?.observations?.length || 0})
+										</h3>
+										<button
+											onClick={() => setSelectedSession(null)}
+											className="text-xs text-[hsl(263,20%,60%)] hover:text-[hsl(263,20%,90%)]"
+										>
+											Close
+										</button>
+									</div>
+
+									<SearchInput
+										placeholder="Search observations..."
+										value={sessionSearch}
+										onChange={(e) => setSessionSearch(e.target.value)}
+										onClear={() => setSessionSearch("")}
+									/>
+
+									<div className="flex gap-2 flex-wrap mt-3 mb-3">
+										<button
+											onClick={() => setSessionTypeFilter(null)}
+											className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+												sessionTypeFilter === null
+													? "bg-[hsl(263,70%,58%)] text-white"
+													: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+											}`}
+										>
+											All
+										</button>
+										{["bugfix", "decision", "architecture", "discovery", "pattern", "config", "preference", "learning"].map((type) => (
+											<button
+												key={type}
+												onClick={() => setSessionTypeFilter(type)}
+												className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+													sessionTypeFilter === type
+														? "bg-[hsl(263,70%,58%)] text-white"
+														: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+												}`}
+											>
+												{type}
+											</button>
+										))}
+									</div>
+
+									{sessionLoading ? (
+										<div className="space-y-2">
+											{[...Array(3)].map((_, i) => (
+												<div key={i} className="h-12 rounded bg-[hsl(263,30%,12%)] animate-pulse" />
+											))}
+										</div>
+									) : (
+										<div className="space-y-2 max-h-[300px] overflow-y-auto">
+											{sessionData?.observations
+												.filter((obs: Observation) => {
+													if (sessionTypeFilter && obs.type !== sessionTypeFilter) return false;
+													if (sessionSearch) {
+														const searchLower = sessionSearch.toLowerCase();
+														return (
+															obs.title.toLowerCase().includes(searchLower) ||
+															obs.content.toLowerCase().includes(searchLower)
+														);
+													}
+													return true;
+												})
+												.map((observation) => (
+													<ObservationRow
+														key={observation.id}
+														observation={observation}
+													/>
+												))}
+											{(!sessionData?.observations || sessionData.observations.length === 0) && (
+												<p className="text-center text-[hsl(263,20%,60%)] py-4 text-sm">No observations in this session</p>
+											)}
+										</div>
+									)}
 								</div>
 							)}
 						</div>
@@ -247,100 +344,6 @@ export function SessionsTab() {
 					</button>
 				)}
 				</>
-			)}
-
-			{/* Session Detail Panel */}
-			{selectedSession && (
-				<div className="fixed inset-0 z-50 flex justify-end bg-black/50" onClick={() => setSelectedSession(null)}>
-					<div
-						className="h-full w-full md:w-1/2 overflow-y-auto border-l border-[hsl(263,30%,20%)] bg-[hsl(263,30%,8%)] p-6"
-						onClick={(e) => e.stopPropagation()}
-					>
-						<div className="flex items-center justify-between mb-6">
-							<div>
-								<h2 className="text-xl font-bold">
-									{selectedSession.latestTitle || selectedSession.agentName || "Session"}
-								</h2>
-								<p className="text-sm text-[hsl(263,20%,60%)]">
-									{selectedSession.agentName} • {selectedSession.project}
-								</p>
-							</div>
-							<button
-								onClick={() => setSelectedSession(null)}
-								className="rounded-lg border border-[hsl(263,30%,20%)] p-2 hover:bg-[hsl(263,30%,15%)]"
-							>
-								<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-								</svg>
-							</button>
-						</div>
-
-						<SearchInput
-							placeholder="Search observations..."
-							value={sessionSearch}
-							onChange={(e) => setSessionSearch(e.target.value)}
-							onClear={() => setSessionSearch("")}
-						/>
-
-						<div className="flex gap-2 flex-wrap mt-4 mb-4">
-							<button
-								onClick={() => setSessionTypeFilter(null)}
-								className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-									sessionTypeFilter === null
-										? "bg-[hsl(263,70%,58%)] text-white"
-										: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
-								}`}
-							>
-								All
-							</button>
-							{["bugfix", "decision", "architecture", "discovery", "pattern", "config", "preference", "learning"].map((type) => (
-								<button
-									key={type}
-									onClick={() => setSessionTypeFilter(type)}
-									className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-										sessionTypeFilter === type
-											? "bg-[hsl(263,70%,58%)] text-white"
-											: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
-									}`}
-								>
-									{type}
-								</button>
-							))}
-						</div>
-
-						{sessionLoading ? (
-							<div className="space-y-2">
-								{[...Array(3)].map((_, i) => (
-									<div key={i} className="h-16 rounded-lg bg-[hsl(263,30%,12%)] animate-pulse" />
-								))}
-							</div>
-						) : (
-							<div className="space-y-2">
-								{sessionData?.observations
-									.filter((obs: Observation) => {
-										if (sessionTypeFilter && obs.type !== sessionTypeFilter) return false;
-										if (sessionSearch) {
-											const searchLower = sessionSearch.toLowerCase();
-											return (
-												obs.title.toLowerCase().includes(searchLower) ||
-												obs.content.toLowerCase().includes(searchLower)
-											);
-										}
-										return true;
-									})
-									.map((observation) => (
-										<ObservationRow
-											key={observation.id}
-											observation={observation}
-										/>
-									))}
-								{(!sessionData?.observations || sessionData.observations.length === 0) && (
-									<p className="text-center text-[hsl(263,20%,60%)] py-8">No observations in this session</p>
-								)}
-							</div>
-						)}
-					</div>
-				</div>
 			)}
 		</div>
 	);
