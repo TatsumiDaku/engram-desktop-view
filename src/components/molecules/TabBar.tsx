@@ -44,8 +44,8 @@ export function TabBar({
 						className={clsx(
 							"shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
 							activeTab === tab.id
-								? "bg-[hsl(263,70%,58%)] text-white shadow-[0_0_20px_rgba(168,85,247,0.5)]"
-								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)] hover:text-[hsl(263,20%,95%)]",
+								? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+								: "bg-[var(--muted)] text-[var(--muted-foreground)] hover:bg-[var(--border)] hover:text-[var(--foreground)]",
 						)}
 					>
 						{t(tab.labelKey)}

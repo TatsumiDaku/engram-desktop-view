@@ -12,6 +12,26 @@
 		"prompts": "Prompts",
 		"emptySessions": "Sesiones Vacías"
 	},
+	"emptySessions": {
+		"title": "Sesiones Vacías",
+		"searchPlaceholder": "Buscar por ID de sesión, título o proyecto...",
+		"empty": {
+			"title": "Sin sesiones vacías",
+			"description": "Todas tus sesiones tienen observaciones"
+		},
+		"buttons": {
+			"verify": "Verificando...",
+			"verifyIcon": "🔍 Verificar",
+			"selectAll": "Seleccionar Todo",
+			"deselectAll": "Deseleccionar Todo",
+			"delete": "🗑️ Eliminar"
+		},
+		"selected": "seleccionadas",
+		"observations": "observaciones",
+		"notEmpty": "(NO VACÍA)",
+		"noProject": "sin proyecto",
+		"error": "Error al cargar sesiones vacías"
+	},
 	"home": {
 		"heroTitle": "🧔‍♂️ Creado para la Comunidad Gentleman",
 		"heroSubtitle": "EngramDesktopView - Monitoreo de memoria para agentes de IA. Rastrea, busca y explora las observaciones de memoria de tu agente en tiempo real.",
@@ -45,7 +65,14 @@
 			"observations": "Observaciones",
 			"projects": "Proyectos",
 			"prompts": "Prompts"
-		}
+		},
+		"empty": {
+			"title": "Sin sesiones",
+			"description": "Inicia una nueva sesión con Engram para verla aquí",
+			"untitled": "Sesión sin título"
+		},
+		"topic": "Tema",
+		"observations": "observaciones"
 	},
 	"settings": {
 		"title": "Configuración",

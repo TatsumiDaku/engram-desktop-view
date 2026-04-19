@@ -3,14 +3,25 @@
 		"name": "EngramDesktopView",
 		"version": "Version"
 	},
-	"tabs": {
-		"home": "Home",
-		"sessions": "Sessions",
-		"memories": "Memories",
-		"topics": "Topics",
-		"timeline": "Timeline",
-		"prompts": "Prompts",
-		"emptySessions": "Empty Sessions"
+	"emptySessions": {
+		"title": "Empty Sessions",
+		"searchPlaceholder": "Search by session ID, title, or project...",
+		"empty": {
+			"title": "No empty sessions",
+			"description": "All your sessions have observations"
+		},
+		"buttons": {
+			"verify": "Verifying...",
+			"verifyIcon": "🔍 Verify",
+			"selectAll": "Select All",
+			"deselectAll": "Deselect All",
+			"delete": "🗑️ Delete"
+		},
+		"selected": "selected",
+		"observations": "observations",
+		"notEmpty": "(NOT EMPTY)",
+		"noProject": "no project",
+		"error": "Failed to load empty sessions"
 	},
 	"home": {
 		"heroTitle": "🧔‍♂️ Built for the Gentleman Community",
@@ -45,7 +56,14 @@
 			"observations": "Observations",
 			"projects": "Projects",
 			"prompts": "Prompts"
-		}
+		},
+		"empty": {
+			"title": "No sessions found",
+			"description": "Start a new session with Engram to see it here",
+			"untitled": "Untitled Session"
+		},
+		"topic": "Topic",
+		"observations": "observations"
 	},
 	"settings": {
 		"title": "Settings",

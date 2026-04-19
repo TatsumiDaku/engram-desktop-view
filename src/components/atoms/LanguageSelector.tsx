@@ -22,8 +22,8 @@ export function LanguageSelector() {
 					onClick={() => changeLanguage(lang.code)}
 					className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
 						i18n.language === lang.code
-							? "bg-[hsl(263,70%,58%)] text-white"
-							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+							: "bg-[var(--muted)] text-[var(--muted-foreground)] hover:bg-[var(--border)]"
 					}`}
 				>
 					{lang.label}

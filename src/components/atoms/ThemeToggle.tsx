@@ -6,7 +6,7 @@ export function ThemeToggle() {
 	return (
 		<button
 			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-			className="p-2 rounded-lg bg-[hsl(263,30%,15%)] hover:bg-[hsl(263,30%,20%)] transition-colors"
+			className="p-2 rounded-lg bg-[var(--muted)] hover:bg-[var(--border)] transition-colors"
 			title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
 		>
 			{theme === "dark" ? (
@@ -25,7 +25,7 @@ export function ThemeToggle() {
 				</svg>
 			) : (
 				<svg
-					className="h-5 w-5 text-[hsl(263,70%,58%)]"
+					className="h-5 w-5 text-[var(--primary)]"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"

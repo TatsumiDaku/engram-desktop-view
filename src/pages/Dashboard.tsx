@@ -14,7 +14,7 @@ export function Dashboard() {
 
 	return (
 		<div className="flex flex-1 flex-col overflow-hidden">
-			<div className="border-b border-[hsl(263,30%,20%)] px-4 py-2">
+			<div className="border-b border-[var(--border)] px-4 py-2">
 				<TabBar activeTab={activeTab} onTabChange={setActiveTab} />
 			</div>
 
@@ -28,7 +28,7 @@ export function Dashboard() {
 				{activeTab === "empty-sessions" && <EmptySessionsTab />}
 			</div>
 
-			<footer className="text-center text-sm text-[hsl(263,20%,60%)] py-4 border-t border-[hsl(263,30%,20%)]">
+			<footer className="text-center text-sm text-[var(--muted-foreground)] py-4 border-t border-[var(--border)]">
 				EngramDesktopView v1.0.0
 			</footer>
 		</div>

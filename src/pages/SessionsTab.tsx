@@ -3,9 +3,11 @@ import { SearchInput } from "@/components/atoms/SearchInput";
 import { StatCard } from "@/components/atoms/StatCard";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
 import { useSessions, useStats } from "@/hooks/useEngram";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 export function SessionsTab() {
+	const { t } = useTranslation();
 	const { data: sessionsData, isLoading: sessionsLoading } = useSessions();
 	const { data: statsData } = useStats();
 	const [search, setSearch] = useState("");
@@ -43,7 +45,7 @@ export function SessionsTab() {
 	if (sessionsLoading) {
 		return (
 			<div className="flex items-center justify-center py-12">
-				<div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+				<div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--primary)] border-t-transparent" />
 			</div>
 		);
 	}
@@ -52,18 +54,18 @@ export function SessionsTab() {
 		<div className="space-y-4">
 			{/* Stats */}
 			<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-				<StatCard label="Sessions" value={statsData?.sessionCount || 0} />
+				<StatCard label={t("sessions.stats.sessions")} value={statsData?.sessionCount || 0} />
 				<StatCard
-					label="Observations"
+					label={t("sessions.stats.observations")}
 					value={statsData?.observationCount || 0}
 				/>
-				<StatCard label="Projects" value={statsData?.projectCount || 0} />
-				<StatCard label="Prompts" value={statsData?.promptCount || 0} />
+				<StatCard label={t("sessions.stats.projects")} value={statsData?.projectCount || 0} />
+				<StatCard label={t("sessions.stats.prompts")} value={statsData?.promptCount || 0} />
 			</div>
 
 			{/* Search */}
 			<SearchInput
-				placeholder="Search sessions..."
+				placeholder={t("sessions.searchPlaceholder")}
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
 				onClear={() => setSearch("")}
@@ -79,7 +81,7 @@ export function SessionsTab() {
 							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
 					}`}
 				>
-					Today
+					{t("sessions.filters.today")}
 				</button>
 				<button
 					onClick={() => setDateFilter("week")}
@@ -89,7 +91,7 @@ export function SessionsTab() {
 							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
 					}`}
 				>
-					This Week
+					{t("sessions.filters.thisWeek")}
 				</button>
 				<button
 					onClick={() => setDateFilter("month")}
@@ -99,7 +101,7 @@ export function SessionsTab() {
 							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
 					}`}
 				>
-					This Month
+					{t("sessions.filters.thisMonth")}
 				</button>
 				<button
 					onClick={() => setDateFilter("all")}
@@ -109,15 +111,15 @@ export function SessionsTab() {
 							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
 					}`}
 				>
-					All Time
+					{t("sessions.filters.allTime")}
 				</button>
 			</div>
 
 			{/* Sessions Grid */}
 			{filteredSessions.length === 0 ? (
 				<EmptyState
-					title="No sessions found"
-					description="Start a new session with Engram to see it here"
+					title={t("sessions.empty.title")}
+					description={t("sessions.empty.description")}
 					icon={
 						<svg
 							className="h-12 w-12"
@@ -146,7 +148,7 @@ export function SessionsTab() {
 									<p className="truncate font-medium">
 										{session.latestTitle ||
 											session.agentName ||
-											"Untitled Session"}
+											t("sessions.empty.untitled")}
 									</p>
 									<p className="mt-1 text-xs text-[hsl(263,20%,60%)]">
 										{session.agentName} • {session.project}
@@ -155,12 +157,12 @@ export function SessionsTab() {
 								<TypeBadge type={session.type as "learning"} />
 							</div>
 							<div className="mt-3 flex items-center justify-between text-xs text-[hsl(263,20%,60%)]">
-								<span>{session.observationCount} observations</span>
+								<span>{session.observationCount} {t("sessions.observations")}</span>
 								<span>{new Date(session.createdAt).toLocaleDateString()}</span>
 							</div>
 							{session.topicKey && (
 								<div className="mt-2 text-xs text-[hsl(263,70%,58%)]">
-									Topic: {session.topicKey}
+									{t("sessions.topic")}: {session.topicKey}
 								</div>
 							)}
 						</div>

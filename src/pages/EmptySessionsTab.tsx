@@ -1,9 +1,11 @@
 import { EmptyState } from "@/components/atoms/EmptyState";
 import { SearchInput } from "@/components/atoms/SearchInput";
 import { useDeleteEmptySession, useEmptySessions } from "@/hooks/useEngram";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 export function EmptySessionsTab() {
+	const { t } = useTranslation();
 	const { data, isLoading, refetch, isError, error } = useEmptySessions();
 	const deleteSession = useDeleteEmptySession();
 	const [search, setSearch] = useState("");
@@ -99,7 +101,7 @@ export function EmptySessionsTab() {
 	if (isLoading) {
 		return (
 			<div className="flex items-center justify-center py-12">
-				<div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+				<div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--primary)] border-t-transparent" />
 			</div>
 		);
 	}
@@ -116,7 +118,7 @@ export function EmptySessionsTab() {
 
 			{isError && (
 				<div className="rounded-lg border border-red-500/50 bg-red-500/10 p-4 text-red-400">
-					<p className="font-semibold">⚠️ Failed to load empty sessions</p>
+					<p className="font-semibold">⚠️ {t("sessions.error")}</p>
 					<p className="text-sm mt-1">
 						{error instanceof Error ? error.message : String(error)}
 					</p>
@@ -125,10 +127,10 @@ export function EmptySessionsTab() {
 
 			<div className="flex justify-between items-center">
 				<h2 className="text-lg font-semibold text-[hsl(263,20%,95%)]">
-					Empty Sessions ({sessions.length})
+					{t("emptySessions.title")} ({sessions.length})
 					{selectedIds.length > 0 && (
 						<span className="ml-2 text-sm text-[hsl(263,70%,58%)]">
-							({selectedIds.length} selected)
+							({selectedIds.length} {t("emptySessions.selected")})
 						</span>
 					)}
 				</h2>
@@ -138,7 +140,7 @@ export function EmptySessionsTab() {
 						disabled={verifying || sessions.length === 0}
 						className="px-3 py-1 rounded text-sm font-medium bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)] transition-colors disabled:opacity-50"
 					>
-						{verifying ? "Verifying..." : "🔍 Verify"}
+						{verifying ? t("emptySessions.buttons.verify") : t("emptySessions.buttons.verifyIcon")}
 					</button>
 					<button
 						onClick={selectAll}
@@ -147,21 +149,21 @@ export function EmptySessionsTab() {
 					>
 						{selectedIds.length === filteredSessions.length &&
 						filteredSessions.length > 0
-							? "Deselect All"
-							: "Select All"}
+							? t("emptySessions.buttons.deselectAll")
+							: t("emptySessions.buttons.selectAll")}
 					</button>
 					<button
 						onClick={deleteSelected}
 						disabled={selectedIds.length === 0}
 						className="px-3 py-1 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 					>
-						🗑️ Delete ({selectedIds.length})
+						{t("emptySessions.buttons.delete")} ({selectedIds.length})
 					</button>
 				</div>
 			</div>
 
 			<SearchInput
-				placeholder="Search by session ID, title, or project..."
+				placeholder={t("emptySessions.searchPlaceholder")}
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
 				onClear={() => setSearch("")}
@@ -169,8 +171,8 @@ export function EmptySessionsTab() {
 
 			{filteredSessions.length === 0 ? (
 				<EmptyState
-					title="No empty sessions"
-					description="All your sessions have observations"
+					title={t("emptySessions.empty.title")}
+					description={t("emptySessions.empty.description")}
 					icon={
 						<svg
 							className="h-12 w-12"
@@ -222,7 +224,7 @@ export function EmptySessionsTab() {
 												: session.id}
 										</span>
 										<span>•</span>
-										<span>{session.project || "no project"}</span>
+										<span>{session.project || t("emptySessions.noProject")}</span>
 										<span>•</span>
 										<span>
 											{new Date(session.createdAt).toLocaleDateString()}
@@ -234,8 +236,8 @@ export function EmptySessionsTab() {
 													isActuallyEmpty ? "text-green-400" : "text-yellow-400"
 												}
 											>
-												{obsCount} observation{obsCount !== 1 ? "s" : ""}
-												{!isActuallyEmpty && " (NOT EMPTY)"}
+												{obsCount} {t("emptySessions.observations")}
+												{!isActuallyEmpty && " " + t("emptySessions.notEmpty")}
 											</span>
 										)}
 									</div>
