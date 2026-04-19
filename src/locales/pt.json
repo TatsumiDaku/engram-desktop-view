@@ -72,7 +72,24 @@
 			"untitled": "Sessão sem título"
 		},
 		"topic": "Tópico",
-		"observations": "observações"
+		"observations": "observações",
+		"showMore": "Mostrar mais",
+		"remaining": "restantes"
+	},
+	"memories": {
+		"title": "Memórias",
+		"searchPlaceholder": "Buscar memórias...",
+		"filters": {
+			"all": "Tudo",
+			"bugfix": "Bugfix",
+			"decision": "Decisão",
+			"architecture": "Arquitetura",
+			"discovery": "Descoberta",
+			"pattern": "Padrão",
+			"config": "Config",
+			"preference": "Preferência",
+			"learning": "Aprendizado"
+		}
 	},
 	"timeline": {
 		"title": "Linha do Tempo",

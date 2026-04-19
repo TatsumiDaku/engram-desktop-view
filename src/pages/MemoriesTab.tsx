@@ -5,12 +5,27 @@ import { ObservationRow } from "@/components/molecules/ObservationRow";
 import { useMemories, useUpdateObservation } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
 import type { Observation } from "@/types/engram";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
+const TYPE_FILTERS = [
+	{ type: null, label: "all", emoji: "" },
+	{ type: "bugfix", label: "bugfix", emoji: "🐛" },
+	{ type: "decision", label: "decision", emoji: "" },
+	{ type: "architecture", label: "architecture", emoji: "" },
+	{ type: "discovery", label: "discovery", emoji: "" },
+	{ type: "pattern", label: "pattern", emoji: "" },
+	{ type: "config", label: "config", emoji: "" },
+	{ type: "preference", label: "preference", emoji: "" },
+	{ type: "learning", label: "learning", emoji: "" },
+];
+
 export function MemoriesTab() {
+	const { t } = useTranslation();
 	const { data, isLoading } = useMemories({ limit: 100 });
 	const updateObservation = useUpdateObservation();
 	const [search, setSearch] = useState("");
+	const [typeFilter, setTypeFilter] = useState<string | null>(null);
 	const [selectedObservation, setSelectedObservation] =
 		useState<Observation | null>(null);
 	const projectFilter = useUIStore((s) => s.projectFilter);
@@ -19,6 +34,7 @@ export function MemoriesTab() {
 
 	const filteredObservations = observations.filter((obs) => {
 		if (projectFilter && obs.project !== projectFilter) return false;
+		if (typeFilter && obs.type !== typeFilter) return false;
 		if (search) {
 			const searchLower = search.toLowerCase();
 			return (
@@ -53,11 +69,27 @@ export function MemoriesTab() {
 			{/* Left panel - List */}
 			<div className="flex-1 space-y-4">
 				<SearchInput
-					placeholder="Search memories..."
+					placeholder={t("memories.searchPlaceholder")}
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					onClear={() => setSearch("")}
 				/>
+
+				<div className="flex gap-2 flex-wrap">
+					{TYPE_FILTERS.map((filter) => (
+						<button
+							key={filter.label}
+							onClick={() => setTypeFilter(filter.type)}
+							className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+								typeFilter === filter.type
+									? "bg-[hsl(263,70%,58%)] text-white"
+									: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							}`}
+						>
+							{filter.emoji} {t(`memories.filters.${filter.label}`)}
+						</button>
+					))}
+				</div>
 
 				{filteredObservations.length === 0 ? (
 					<EmptyState

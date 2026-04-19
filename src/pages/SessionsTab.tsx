@@ -14,6 +14,7 @@ export function SessionsTab() {
 	const [dateFilter, setDateFilter] = useState<
 		"today" | "week" | "month" | "all"
 	>("all");
+	const [visibleCount, setVisibleCount] = useState(9);
 
 	const sessions = sessionsData?.sessions || [];
 
@@ -41,6 +42,12 @@ export function SessionsTab() {
 		}
 		return true;
 	});
+
+	if (dateFilter === "week" || dateFilter === "month") {
+		filteredSessions.sort((a, b) =>
+			new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+		);
+	}
 
 	if (sessionsLoading) {
 		return (
@@ -137,8 +144,9 @@ export function SessionsTab() {
 					}
 				/>
 			) : (
+				<>
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{filteredSessions.map((session) => (
+					{filteredSessions.slice(0, visibleCount).map((session) => (
 						<div
 							key={session.id}
 							className="cursor-pointer rounded-lg border border-[hsl(263,30%,20%)] p-4 transition-all hover:border-[hsl(263,70%,58%)] hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
@@ -168,6 +176,15 @@ export function SessionsTab() {
 						</div>
 					))}
 				</div>
+				{visibleCount < filteredSessions.length && (
+					<button
+						onClick={() => setVisibleCount(prev => prev + 9)}
+						className="w-full mt-4 py-3 rounded-lg bg-red-600 text-white font-medium hover:bg-red-500 transition-colors"
+					>
+						{t("sessions.showMore")} ({filteredSessions.length - visibleCount} {t("sessions.remaining")})
+					</button>
+				)}
+				</>
 			)}
 		</div>
 	);

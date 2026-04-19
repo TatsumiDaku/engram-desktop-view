@@ -87,6 +87,12 @@ export function TimelineTab() {
 		return true;
 	});
 
+	if (dateFilter === "week" || dateFilter === "month") {
+		filteredObservations.sort((a, b) =>
+			new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+		);
+	}
+
 	const groupedByDay = groupByDay(filteredObservations);
 	const days = Object.keys(groupedByDay);
 
@@ -210,8 +216,8 @@ export function TimelineTab() {
 												<div className="min-w-0 flex-1">
 													<div className="flex items-center gap-2">
 														<TypeBadge type={obs.type} />
-														<span className="text-xs text-muted-foreground">
-															{new Date(obs.createdAt).toLocaleTimeString()}
+														<span className="text-xs text-[var(--muted-foreground)]">
+															{new Date(obs.createdAt).toLocaleDateString()} {new Date(obs.createdAt).toLocaleTimeString()}
 														</span>
 													</div>
 													<p className="mt-1 truncate font-medium">

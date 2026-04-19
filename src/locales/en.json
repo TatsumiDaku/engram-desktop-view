@@ -3,6 +3,30 @@
 		"name": "EngramDesktopView",
 		"version": "Version"
 	},
+	"tabs": {
+		"home": "Home",
+		"sessions": "Sessions",
+		"memories": "Memories",
+		"topics": "Topics",
+		"timeline": "Timeline",
+		"prompts": "Prompts",
+		"emptySessions": "Empty Sessions"
+	},
+	"memories": {
+		"title": "Memories",
+		"searchPlaceholder": "Search memories...",
+		"filters": {
+			"all": "All",
+			"bugfix": "Bugfix",
+			"decision": "Decision",
+			"architecture": "Architecture",
+			"discovery": "Discovery",
+			"pattern": "Pattern",
+			"config": "Config",
+			"preference": "Preference",
+			"learning": "Learning"
+		}
+	},
 	"emptySessions": {
 		"title": "Empty Sessions",
 		"searchPlaceholder": "Search by session ID, title, or project...",
@@ -63,7 +87,9 @@
 			"untitled": "Untitled Session"
 		},
 		"topic": "Topic",
-		"observations": "observations"
+		"observations": "observations",
+		"showMore": "Show more",
+		"remaining": "remaining"
 	},
 	"timeline": {
 		"title": "Timeline",
