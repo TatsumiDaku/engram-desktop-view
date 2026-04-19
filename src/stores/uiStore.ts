@@ -1,56 +1,65 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { TabType } from "@/types/engram";
 
 interface UIState {
-  // Theme
-  theme: "light" | "dark" | "system";
-  setTheme: (theme: "light" | "dark" | "system") => void;
+	theme: "light" | "dark";
+	setTheme: (theme: "light" | "dark") => void;
 
-  // Modals
-  settingsModalOpen: boolean;
-  mergeProjectsModalOpen: boolean;
-  setSettingsModalOpen: (open: boolean) => void;
-  setMergeProjectsModalOpen: (open: boolean) => void;
+	language: "es" | "en" | "pt";
+	setLanguage: (lang: "es" | "en" | "pt") => void;
 
-  // Active tab
-  activeTab: TabType;
-  setActiveTab: (tab: TabType) => void;
+	settingsModalOpen: boolean;
+	mergeProjectsModalOpen: boolean;
+	setSettingsModalOpen: (open: boolean) => void;
+	setMergeProjectsModalOpen: (open: boolean) => void;
 
-  // Filters
-  projectFilter: string | null;
-  typeFilter: string | null;
-  setProjectFilter: (project: string | null) => void;
-  setTypeFilter: (type: string | null) => void;
-  clearFilters: () => void;
+	projectFilter: string | null;
+	typeFilter: string | null;
+	setProjectFilter: (project: string | null) => void;
+	setTypeFilter: (type: string | null) => void;
+	clearFilters: () => void;
 }
 
 export const useUIStore = create<UIState>()(
-  persist(
-    (set) => ({
-      // Theme
-      theme: "system",
-      setTheme: (theme) => set({ theme }),
+	persist(
+		(set) => ({
+			theme: "dark",
+			setTheme: (theme) => {
+				set({ theme });
+				if (theme === "dark") {
+					document.documentElement.classList.add("dark");
+				} else {
+					document.documentElement.classList.remove("dark");
+				}
+			},
 
-      // Modals
-      settingsModalOpen: false,
-      mergeProjectsModalOpen: false,
-      setSettingsModalOpen: (open) => set({ settingsModalOpen: open }),
-      setMergeProjectsModalOpen: (open) => set({ mergeProjectsModalOpen: open }),
+			language: "es",
+			setLanguage: (language) => {
+				set({ language });
+				localStorage.setItem("engram-language", language);
+			},
 
-      // Active tab
-      activeTab: "sessions",
-      setActiveTab: (tab) => set({ activeTab: tab }),
+			settingsModalOpen: false,
+			mergeProjectsModalOpen: false,
+			setSettingsModalOpen: (open) => set({ settingsModalOpen: open }),
+			setMergeProjectsModalOpen: (open) =>
+				set({ mergeProjectsModalOpen: open }),
 
-      // Filters
-      projectFilter: null,
-      typeFilter: null,
-      setProjectFilter: (project) => set({ projectFilter: project }),
-      setTypeFilter: (type) => set({ typeFilter: type }),
-      clearFilters: () => set({ projectFilter: null, typeFilter: null }),
-    }),
-    {
-      name: "engram-desktop-ui",
-    }
-  )
+			projectFilter: null,
+			typeFilter: null,
+			setProjectFilter: (project) => set({ projectFilter: project }),
+			setTypeFilter: (type) => set({ typeFilter: type }),
+			clearFilters: () => set({ projectFilter: null, typeFilter: null }),
+		}),
+		{
+			name: "engram-desktop-ui",
+			onRehydrateStorage: () => (state) => {
+				if (state && state.theme === "dark") {
+					document.documentElement.classList.add("dark");
+				} else {
+					document.documentElement.classList.remove("dark");
+				}
+			},
+		},
+	),
 );

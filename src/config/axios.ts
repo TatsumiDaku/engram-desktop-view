@@ -1,35 +1,58 @@
-import axios from "axios";
+import { useLogStore } from "@/stores/logStore";
+import { invoke } from "@tauri-apps/api/core";
 
-export const engramApi = axios.create({
-  baseURL: "http://127.0.0.1:7437",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+export interface EngramResponse {
+	success: boolean;
+	data?: string;
+	error?: string;
+}
 
-engramApi.interceptors.request.use(req => {
-  console.log('[AXIOS REQUEST]', req.method, req.url);
-  return req;
-});
+/**
+ * Make HTTP request to Engram via Tauri backend to avoid CORS
+ */
+export async function engramRequest(
+	method: "GET" | "POST" | "PATCH" | "DELETE",
+	path: string,
+	body?: object | null,
+): Promise<string> {
+	const bodyStr = body ? JSON.stringify(body) : null;
 
-engramApi.interceptors.response.use(
-  res => {
-    console.log('[AXIOS RESPONSE]', res.status, res.config.url);
-    return res;
-  },
-  err => {
-    console.log('[AXIOS ERROR]', err.message, err.config?.url);
-    return Promise.reject(err);
-  }
-);
+	useLogStore.getState().addLog({
+		level: "request",
+		method,
+		url: path,
+		message: `Tauri invoke: ${method} ${path}`,
+	});
 
-// Health check helper
-export const checkHealth = async (): Promise<boolean> => {
-  try {
-    await engramApi.get("/health");
-    return true;
-  } catch {
-    return false;
-  }
-};
+	try {
+		const result = await invoke<string>("engram_request", {
+			method,
+			path,
+			body: bodyStr,
+		});
+
+		const dataPreview = result ? result.slice(0, 100) : undefined;
+		useLogStore.getState().addLog({
+			level: "response",
+			method,
+			url: path,
+			status: 200,
+			message: "Response received",
+			dataPreview,
+		});
+
+		return result;
+	} catch (error) {
+		const errorMsg = error instanceof Error ? error.message : String(error);
+		useLogStore.getState().addLog({
+			level: "error",
+			method,
+			url: path,
+			message: `ERROR: ${errorMsg}`,
+		});
+		throw error;
+	}
+}
+
+// Re-export axios for cases where direct HTTP might be needed (not for Engram API)
+export { engramApi } from "./engramApiDirect";

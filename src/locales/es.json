@@ -1,0 +1,65 @@
+{
+	"app": {
+		"name": "EngramDesktopView",
+		"version": "Versión"
+	},
+	"tabs": {
+		"home": "Inicio",
+		"sessions": "Sesiones",
+		"memories": "Memorias",
+		"topics": "Temas",
+		"timeline": "Línea de Tiempo",
+		"prompts": "Prompts",
+		"emptySessions": "Sesiones Vacías"
+	},
+	"home": {
+		"heroTitle": "🧔‍♂️ Creado para la Comunidad Gentleman",
+		"heroSubtitle": "EngramDesktopView - Monitoreo de memoria para agentes de IA. Rastrea, busca y explora las observaciones de memoria de tu agente en tiempo real.",
+		"neuralDashboard": "✨ Panel de Memoria Neural",
+		"developedBy": "Desarrollado por",
+		"fullStack": "Desarrollador Full Stack",
+		"githubProfile": "Perfil de GitHub",
+		"features": {
+			"memoryTitle": "Monitoreo de Memoria en Tiempo Real",
+			"memoryDesc": "Observa las memorias de tu agente de IA en vivo.",
+			"sessionTitle": "Rastreo de Sesiones",
+			"sessionDesc": "Explora todas las sesiones de agentes, filtra por fecha, proyecto o tema.",
+			"searchTitle": "Búsqueda Inteligente y Filtros",
+			"searchDesc": "Búsqueda de texto completo en todas las observaciones."
+		},
+		"footer": {
+			"poweredBy": "Desarrollado con Engram - La Capa de Memoria para Agentes de IA"
+		}
+	},
+	"sessions": {
+		"title": "Sesiones",
+		"searchPlaceholder": "Buscar sesiones...",
+		"filters": {
+			"today": "Hoy",
+			"thisWeek": "Esta Semana",
+			"thisMonth": "Este Mes",
+			"allTime": "Todo el Tiempo"
+		},
+		"stats": {
+			"sessions": "Sesiones",
+			"observations": "Observaciones",
+			"projects": "Proyectos",
+			"prompts": "Prompts"
+		}
+	},
+	"settings": {
+		"title": "Configuración",
+		"language": "Idioma",
+		"theme": "Tema",
+		"themes": {
+			"light": "Claro",
+			"dark": "Oscuro",
+			"system": "Sistema"
+		},
+		"languages": {
+			"es": "Español",
+			"en": "English",
+			"pt": "Português"
+		}
+	}
+}

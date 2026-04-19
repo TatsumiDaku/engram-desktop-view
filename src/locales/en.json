@@ -1,0 +1,65 @@
+{
+	"app": {
+		"name": "EngramDesktopView",
+		"version": "Version"
+	},
+	"tabs": {
+		"home": "Home",
+		"sessions": "Sessions",
+		"memories": "Memories",
+		"topics": "Topics",
+		"timeline": "Timeline",
+		"prompts": "Prompts",
+		"emptySessions": "Empty Sessions"
+	},
+	"home": {
+		"heroTitle": "🧔‍♂️ Built for the Gentleman Community",
+		"heroSubtitle": "EngramDesktopView - Memory monitoring for AI agents. Track, search, and explore your agent's memory observations in real-time.",
+		"neuralDashboard": "✨ Neural Memory Dashboard",
+		"developedBy": "Developed by",
+		"fullStack": "Full Stack Developer",
+		"githubProfile": "GitHub Profile",
+		"features": {
+			"memoryTitle": "Real-time Memory Monitoring",
+			"memoryDesc": "Watch your AI agent's memory observations stream in live.",
+			"sessionTitle": "Session Tracking",
+			"sessionDesc": "Browse through all agent sessions, filter by date, project, or topic.",
+			"searchTitle": "Intelligent Search & Filters",
+			"searchDesc": "Full-text search across all observations."
+		},
+		"footer": {
+			"poweredBy": "Powered by Engram - The Memory Layer for AI Agents"
+		}
+	},
+	"sessions": {
+		"title": "Sessions",
+		"searchPlaceholder": "Search sessions...",
+		"filters": {
+			"today": "Today",
+			"thisWeek": "This Week",
+			"thisMonth": "This Month",
+			"allTime": "All Time"
+		},
+		"stats": {
+			"sessions": "Sessions",
+			"observations": "Observations",
+			"projects": "Projects",
+			"prompts": "Prompts"
+		}
+	},
+	"settings": {
+		"title": "Settings",
+		"language": "Language",
+		"theme": "Theme",
+		"themes": {
+			"light": "Light",
+			"dark": "Dark",
+			"system": "System"
+		},
+		"languages": {
+			"es": "Español",
+			"en": "English",
+			"pt": "Português"
+		}
+	}
+}
