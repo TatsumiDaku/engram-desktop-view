@@ -169,7 +169,7 @@ export function TopicsTab() {
 
 			{/* Right panel - Detail */}
 			{selectedObservation && (
-				<div className="w-1/3">
+				<div className="w-full md:w-1/3">
 					<MarkdownPanel observation={selectedObservation} />
 				</div>
 			)}

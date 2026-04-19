@@ -18,14 +18,14 @@
 		"searchPlaceholder": "Search memories...",
 		"filters": {
 			"all": "All",
-			"bugfix": "🐛 Bugfix",
-			"decision": "📋 Decision",
-			"architecture": "🏗️ Architecture",
-			"discovery": "💡 Discovery",
-			"pattern": "♻️ Pattern",
-			"config": "⚙️ Config",
-			"preference": "❤️ Preference",
-			"learning": "📚 Learning"
+			"bugfix": "Bugfix",
+			"decision": "Decision",
+			"architecture": "Architecture",
+			"discovery": "Discovery",
+			"pattern": "Pattern",
+			"config": "Config",
+			"preference": "Preference",
+			"learning": "Learning"
 		}
 	},
 	"emptySessions": {
@@ -37,10 +37,10 @@
 		},
 		"buttons": {
 			"verify": "Verifying...",
-			"verifyIcon": "🔍 Verify",
+			"verifyIcon": "Verify",
 			"selectAll": "Select All",
 			"deselectAll": "Deselect All",
-			"delete": "🗑️ Delete"
+			"delete": "Delete"
 		},
 		"selected": "selected",
 		"observations": "observations",
@@ -49,9 +49,9 @@
 		"error": "Failed to load empty sessions"
 	},
 	"home": {
-		"heroTitle": "🧔‍♂️🎩 Built for the Gentleman Community",
+		"heroTitle": "Built for the Gentleman Community",
 		"heroSubtitle": "EngramDesktopView - Memory monitoring for AI agents. Track, search, and explore your agent's memory observations in real-time.",
-		"neuralDashboard": "✨ Neural Memory Dashboard",
+		"neuralDashboard": "Neural Memory Dashboard",
 		"developedBy": "Developed by",
 		"fullStack": "Full Stack Developer",
 		"githubProfile": "GitHub Profile",
@@ -131,9 +131,15 @@
 			"system": "System"
 		},
 		"languages": {
-			"es": "Español",
+			"es": "Espanol",
 			"en": "English",
-			"pt": "Português"
+			"pt": "Portugues"
 		}
+	},
+	"scope": {
+		"all": "All Scopes",
+		"shared": "Shared",
+		"user": "User",
+		"system": "System"
 	}
 }

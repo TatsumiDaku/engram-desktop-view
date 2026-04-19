@@ -1,6 +1,8 @@
 import { Button } from "@/components/atoms/Button";
+import { ScopeBadge } from "@/components/atoms/ScopeBadge";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
 import type { Observation } from "@/types/engram";
+import type { ObservationType } from "@/types/constants";
 import { clsx } from "clsx";
 import { useState } from "react";
 import type { HTMLAttributes } from "react";
@@ -14,6 +16,19 @@ export interface MarkdownPanelProps extends HTMLAttributes<HTMLDivElement> {
 	) => void;
 }
 
+const TYPE_OPTIONS: ObservationType[] = [
+	"bugfix",
+	"decision",
+	"architecture",
+	"discovery",
+	"pattern",
+	"config",
+	"preference",
+	"learning",
+];
+
+const SCOPE_OPTIONS: Observation["scope"][] = ["project", "personal"];
+
 export function MarkdownPanel({
 	observation,
 	onUpdate,
@@ -23,11 +38,33 @@ export function MarkdownPanel({
 	const [isEditing, setIsEditing] = useState(false);
 	const [editTitle, setEditTitle] = useState(observation.title);
 	const [editContent, setEditContent] = useState(observation.content);
+	const [editType, setEditType] = useState<ObservationType>(observation.type);
+	const [editScope, setEditScope] = useState<Observation["scope"]>(
+		observation.scope,
+	);
+	const [editTopicKey, setEditTopicKey] = useState(
+		observation.topicKey || "",
+	);
 
 	const handleSave = () => {
 		if (onUpdate) {
-			onUpdate({ title: editTitle, content: editContent });
+			onUpdate({
+				title: editTitle,
+				content: editContent,
+				type: editType,
+				scope: editScope,
+				topicKey: editTopicKey || null,
+			});
 		}
+		setIsEditing(false);
+	};
+
+	const handleCancel = () => {
+		setEditTitle(observation.title);
+		setEditContent(observation.content);
+		setEditType(observation.type);
+		setEditScope(observation.scope);
+		setEditTopicKey(observation.topicKey || "");
 		setIsEditing(false);
 	};
 
@@ -36,9 +73,7 @@ export function MarkdownPanel({
 			<div className="mb-4 flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					<TypeBadge type={observation.type} />
-					<span className="text-xs text-muted-foreground">
-						{observation.scope}
-					</span>
+					<ScopeBadge scope={observation.scope} />
 				</div>
 				{onUpdate && (
 					<Button
@@ -53,21 +88,72 @@ export function MarkdownPanel({
 
 			{isEditing ? (
 				<div className="space-y-3">
-					<input
-						type="text"
-						value={editTitle}
-						onChange={(e) => setEditTitle(e.target.value)}
-						className="w-full rounded-md border p-2 text-sm"
-					/>
-					<textarea
-						value={editContent}
-						onChange={(e) => setEditContent(e.target.value)}
-						className="w-full rounded-md border p-2 text-sm font-mono"
-						rows={10}
-					/>
-					<Button size="sm" onClick={handleSave}>
-						Save
-					</Button>
+					<div className="grid grid-cols-[80px_1fr] items-center gap-2">
+						<label className="text-sm font-medium">Title:</label>
+						<input
+							type="text"
+							value={editTitle}
+							onChange={(e) => setEditTitle(e.target.value)}
+							className="w-full rounded-md border p-2 text-sm"
+						/>
+					</div>
+					<div className="grid grid-cols-[80px_1fr] items-center gap-2">
+						<label className="text-sm font-medium">Type:</label>
+						<select
+							value={editType}
+							onChange={(e) => setEditType(e.target.value as ObservationType)}
+							className="w-full rounded-md border p-2 text-sm"
+						>
+							{TYPE_OPTIONS.map((type) => (
+								<option key={type} value={type}>
+									{type}
+								</option>
+							))}
+						</select>
+					</div>
+					<div className="grid grid-cols-[80px_1fr] items-center gap-2">
+						<label className="text-sm font-medium">Scope:</label>
+						<select
+							value={editScope}
+							onChange={(e) =>
+								setEditScope(e.target.value as Observation["scope"])
+							}
+							className="w-full rounded-md border p-2 text-sm"
+						>
+							{SCOPE_OPTIONS.map((scope) => (
+								<option key={scope} value={scope}>
+									{scope}
+								</option>
+							))}
+						</select>
+					</div>
+					<div className="grid grid-cols-[80px_1fr] items-center gap-2">
+						<label className="text-sm font-medium">Topic:</label>
+						<input
+							type="text"
+							value={editTopicKey}
+							onChange={(e) => setEditTopicKey(e.target.value)}
+							className="w-full rounded-md border p-2 text-sm"
+							placeholder="topic-key"
+						/>
+					</div>
+					<div className="grid grid-cols-[80px_1fr] gap-2">
+						<label className="text-sm font-medium self-start pt-2">Content:</label>
+						<textarea
+							value={editContent}
+							onChange={(e) => setEditContent(e.target.value)}
+							className="w-full rounded-md border p-2 text-sm font-mono"
+							rows={6}
+						/>
+					</div>
+					<div className="flex justify-end gap-2 pt-2">
+						<Button size="sm" variant="ghost" onClick={handleCancel}>
+							Cancel
+						</Button>
+						<Button size="sm" onClick={handleSave}>
+							Save
+						</Button>
+					</div>
 				</div>
 			) : (
 				<>
@@ -80,7 +166,7 @@ export function MarkdownPanel({
 				</>
 			)}
 
-			{observation.topicKey && (
+			{observation.topicKey && !isEditing && (
 				<div className="mt-4 text-xs text-muted-foreground">
 					Topic: {observation.topicKey}
 				</div>

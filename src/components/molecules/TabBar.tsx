@@ -34,7 +34,7 @@ export function TabBar({
 		<div className="flex items-center justify-between">
 			<div
 				className={clsx(
-					"flex gap-2 overflow-x-auto pb-2 scroll-smooth scrollbar-hide",
+					"flex gap-2 overflow-x-auto pb-2 scroll-smooth scrollbar-hide snap-x snap-mandatory",
 					className,
 				)}
 				{...props}
@@ -44,7 +44,7 @@ export function TabBar({
 						key={tab.id}
 						onClick={() => onTabChange(tab.id)}
 						className={clsx(
-							"shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+							"shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors snap-start",
 							activeTab === tab.id
 								? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[0_0_20px_rgba(168,85,247,0.5)]"
 								: "bg-[var(--muted)] text-[var(--muted-foreground)] hover:bg-[var(--border)] hover:text-[var(--foreground)]",

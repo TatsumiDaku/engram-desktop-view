@@ -20,8 +20,10 @@ interface UIState {
 
 	projectFilter: string | null;
 	typeFilter: string | null;
+	scopeFilter: string | null;
 	setProjectFilter: (project: string | null) => void;
 	setTypeFilter: (type: string | null) => void;
+	setScopeFilter: (scope: string | null) => void;
 	clearFilters: () => void;
 }
 
@@ -57,9 +59,11 @@ export const useUIStore = create<UIState>()(
 
 			projectFilter: null,
 			typeFilter: null,
+			scopeFilter: null,
 			setProjectFilter: (project) => set({ projectFilter: project }),
 			setTypeFilter: (type) => set({ typeFilter: type }),
-			clearFilters: () => set({ projectFilter: null, typeFilter: null }),
+			setScopeFilter: (scope) => set({ scopeFilter: scope }),
+			clearFilters: () => set({ projectFilter: null, typeFilter: null, scopeFilter: null }),
 		}),
 		{
 			name: "engram-desktop-ui",

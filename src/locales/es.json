@@ -1,42 +1,57 @@
 {
 	"app": {
 		"name": "EngramDesktopView",
-		"version": "Versión"
+		"version": "Version"
 	},
 	"tabs": {
 		"home": "Inicio",
 		"sessions": "Sesiones",
 		"memories": "Memorias",
 		"topics": "Temas",
-		"timeline": "Línea de Tiempo",
+		"timeline": "Linea de Tiempo",
 		"prompts": "Prompts",
-		"emptySessions": "Sesiones Vacías",
+		"emptySessions": "Sesiones Vacias",
 		"compare": "Comparar"
 	},
+	"memories": {
+		"title": "Memorias",
+		"searchPlaceholder": "Buscar memorias...",
+		"filters": {
+			"all": "Todo",
+			"bugfix": "Bugfix",
+			"decision": "Decision",
+			"architecture": "Arquitectura",
+			"discovery": "Descubrimiento",
+			"pattern": "Patron",
+			"config": "Config",
+			"preference": "Preferencia",
+			"learning": "Aprendizaje"
+		}
+	},
 	"emptySessions": {
-		"title": "Sesiones Vacías",
-		"searchPlaceholder": "Buscar por ID de sesión, título o proyecto...",
+		"title": "Sesiones Vacias",
+		"searchPlaceholder": "Buscar por ID de sesion, titulo o proyecto...",
 		"empty": {
-			"title": "Sin sesiones vacías",
+			"title": "Sin sesiones vacias",
 			"description": "Todas tus sesiones tienen observaciones"
 		},
 		"buttons": {
 			"verify": "Verificando...",
-			"verifyIcon": "🔍 Verificar",
+			"verifyIcon": "Verificar",
 			"selectAll": "Seleccionar Todo",
 			"deselectAll": "Deseleccionar Todo",
-			"delete": "🗑️ Eliminar"
+			"delete": "Eliminar"
 		},
 		"selected": "seleccionadas",
 		"observations": "observaciones",
-		"notEmpty": "(NO VACÍA)",
+		"notEmpty": "(NO VACIA)",
 		"noProject": "sin proyecto",
-		"error": "Error al cargar sesiones vacías"
+		"error": "Error al cargar sesiones vacias"
 	},
 	"home": {
-		"heroTitle": "🧔‍♂️🎩 Creado para la Comunidad Gentleman",
+		"heroTitle": "Creado para la Comunidad Gentleman",
 		"heroSubtitle": "EngramDesktopView - Monitoreo de memoria para agentes de IA. Rastrea, busca y explora las observaciones de memoria de tu agente en tiempo real.",
-		"neuralDashboard": "✨ Panel de Memoria Neural",
+		"neuralDashboard": "Panel de Memoria Neural",
 		"developedBy": "Desarrollado por",
 		"fullStack": "Desarrollador Full Stack",
 		"githubProfile": "Perfil de GitHub",
@@ -45,8 +60,8 @@
 			"memoryDesc": "Observa las memorias de tu agente de IA en vivo.",
 			"sessionTitle": "Rastreo de Sesiones",
 			"sessionDesc": "Explora todas las sesiones de agentes, filtra por fecha, proyecto o tema.",
-			"searchTitle": "Búsqueda Inteligente y Filtros",
-			"searchDesc": "Búsqueda de texto completo en todas las observaciones."
+			"searchTitle": "Busqueda Inteligente y Filtros",
+			"searchDesc": "Busqueda de texto completo en todas las observaciones."
 		},
 		"footer": {
 			"poweredBy": "Desarrollado con Engram - La Capa de Memoria para Agentes de IA"
@@ -74,55 +89,40 @@
 		},
 		"empty": {
 			"title": "Sin sesiones",
-			"description": "Inicia una nueva sesión con Engram para verla aquí",
-			"untitled": "Sesión sin título"
+			"description": "Inicia una nueva sesion con Engram para verla aqui",
+			"untitled": "Sesion sin titulo"
 		},
 		"topic": "Tema",
 		"observations": "observaciones",
-		"showMore": "Mostrar más",
+		"showMore": "Mostrar mas",
 		"remaining": "restantes"
 	},
-	"memories": {
-		"title": "Memorias",
-		"searchPlaceholder": "Buscar memorias...",
-		"filters": {
-			"all": "Todo",
-			"bugfix": "🐛 Bugfix",
-			"decision": "📋 Decisión",
-			"architecture": "🏗️ Arquitectura",
-			"discovery": "💡 Descubrimiento",
-			"pattern": "♻️ Patrón",
-			"config": "⚙️ Config",
-			"preference": "❤️ Preferencia",
-			"learning": "📚 Aprendizaje"
-		}
-	},
 	"timeline": {
-		"title": "Línea de Tiempo",
+		"title": "Linea de Tiempo",
 		"searchPlaceholder": "Buscar en timeline...",
 		"filters": {
 			"today": "Hoy",
 			"thisWeek": "Esta Semana",
 			"thisMonth": "Este Mes",
-			"specificDate": "Fecha Específica"
+			"specificDate": "Fecha Especifica"
 		},
 		"empty": {
-			"title": "Sin observaciones aún",
-			"description": "Tu línea de tiempo aparecerá aquí cuando crees observaciones"
+			"title": "Sin observaciones aun",
+			"description": "Tu linea de tiempo aparecera aqui cuando crees observaciones"
 		}
 	},
 	"sessionCompare": {
-		"title": "Comparación de Sesiones",
-		"leftSession": "Sesión Izquierda",
-		"rightSession": "Sesión Derecha",
+		"title": "Comparacion de Sesiones",
+		"leftSession": "Sesion Izquierda",
+		"rightSession": "Sesion Derecha",
 		"shared": "Compartidas",
 		"leftUnique": "Solo Izquierda",
 		"rightUnique": "Solo Derecha",
-		"leftOnly": "Únicas de Izquierda",
-		"rightOnly": "Únicas de Derecha"
+		"leftOnly": "Unicas de Izquierda",
+		"rightOnly": "Unicas de Derecha"
 	},
 	"settings": {
-		"title": "Configuración",
+		"title": "Configuracion",
 		"language": "Idioma",
 		"theme": "Tema",
 		"themes": {
@@ -131,9 +131,15 @@
 			"system": "Sistema"
 		},
 		"languages": {
-			"es": "Español",
+			"es": "Espanol",
 			"en": "English",
-			"pt": "Português"
+			"pt": "Portugues"
 		}
+	},
+	"scope": {
+		"all": "Todos los Ambitos",
+		"shared": "Compartido",
+		"user": "Usuario",
+		"system": "Sistema"
 	}
 }

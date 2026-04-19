@@ -120,5 +120,11 @@
 			"en": "English",
 			"pt": "Português"
 		}
+	},
+	"scope": {
+		"all": "Todos os Âmbitos",
+		"shared": "Compartilhado",
+		"user": "Usuário",
+		"system": "Sistema"
 	}
 }

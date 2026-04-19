@@ -10,6 +10,12 @@ import type { Observation } from "@/types/engram";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
+const SCOPE_FILTERS = [
+	{ scope: null, label: "all" },
+	{ scope: "project", label: "shared" },
+	{ scope: "personal", label: "user" },
+];
+
 function formatDate(dateStr: string): string {
 	const date = new Date(dateStr);
 	const today = new Date();
@@ -44,6 +50,8 @@ export function TimelineTab() {
 	const { t } = useTranslation();
 	const { data, isLoading, refetch } = useTimeline();
 	const projectFilter = useUIStore((s) => s.projectFilter);
+	const scopeFilter = useUIStore((s) => s.scopeFilter);
+	const setScopeFilter = useUIStore((s) => s.setScopeFilter);
 	const [search, setSearch] = useState("");
 	const [dateFilter, setDateFilter] = useState<"today" | "week" | "month" | "specific">("month");
 	const [specificDate, setSpecificDate] = useState("");
@@ -51,10 +59,11 @@ export function TimelineTab() {
 		useState<Observation | null>(null);
 
 	const observations = data?.timeline || [];
-	const hasFilters = !!(search || projectFilter || dateFilter !== "month" || specificDate);
+	const hasFilters = !!(search || projectFilter || dateFilter !== "month" || specificDate || scopeFilter);
 
 	const filteredObservations = observations.filter((obs) => {
 		if (projectFilter && obs.project !== projectFilter) return false;
+		if (scopeFilter && obs.scope !== scopeFilter) return false;
 
 		const obsDate = new Date(obs.createdAt);
 		const now = new Date();
@@ -180,37 +189,43 @@ export function TimelineTab() {
 					>
 						{t("timeline.filters.specificDate")}
 					</button>
-					{dateFilter === "specific" && (
-						<input
-							type="date"
-							value={specificDate}
-							onChange={(e) => setSpecificDate(e.target.value)}
-							className="px-3 py-1 rounded text-sm border border-[hsl(263,30%,20%)] bg-[hsl(263,30%,15%)] text-[hsl(263,20%,95%)]"
-						/>
-					)}
 				</div>
 
-				{showNoResults ? (
-					<EmptyState
-						title="No results found"
-						description="Try adjusting your search or date filter"
-						icon={
-							<svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-							</svg>
-						}
-					>
+				{dateFilter === "specific" && (
+					<input
+						type="date"
+						value={specificDate}
+						onChange={(e) => setSpecificDate(e.target.value)}
+						className="px-3 py-1 rounded text-sm border border-[hsl(263,30%,20%)] bg-[hsl(263,30%,15%)] text-[hsl(263,20%,95%)]"
+					/>
+				)}
+
+				{dateFilter === "specific" && specificDate && (
+					<div className="text-sm text-muted-foreground">
+						📅 Showing observations from {new Date(specificDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+					</div>
+				)}
+
+				<div className="flex gap-2 flex-wrap">
+					{SCOPE_FILTERS.map((filter) => (
 						<button
-							onClick={() => { setSearch(""); setDateFilter("month"); setSpecificDate(""); }}
-							className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+							key={filter.label}
+							onClick={() => setScopeFilter(filter.scope)}
+							className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+								scopeFilter === filter.scope
+									? "bg-[hsl(263,70%,58%)] text-white"
+									: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							}`}
 						>
-							Clear filters
+							{t(`scope.${filter.label}`)}
 						</button>
-					</EmptyState>
-				) : showNoData ? (
+					))}
+				</div>
+
+				{showNoData && (
 					<EmptyState
-						title={t("timeline.empty.title")}
-						description={t("timeline.empty.description")}
+						title="No timeline data"
+						description="Start saving memories to see them here"
 						icon={
 							<svg
 								className="h-12 w-12"
@@ -227,55 +242,66 @@ export function TimelineTab() {
 							</svg>
 						}
 					/>
-				) : (
-					<div className="relative">
-						{/* Timeline line */}
-						<div className="absolute left-4 top-0 h-full w-0.5 bg-border" />
+				)}
 
-						<div className="space-y-6">
-							{days.map((day) => (
-								<div key={day}>
-									<div className="mb-2 flex items-center gap-2">
-										<div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
-											{groupedByDay[day].length}
+				{showNoResults && (
+					<EmptyState
+						title="No results found"
+						description="Try adjusting your filters"
+						icon={
+							<svg
+								className="h-12 w-12"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={1.5}
+									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+								/>
+							</svg>
+						}
+					/>
+				)}
+
+				{days.map((day) => (
+					<div key={day} className="space-y-3">
+						<div className="flex items-center gap-2">
+							<span className="font-medium">{day}</span>
+						</div>
+
+						<div className="ml-12 space-y-3">
+							{groupedByDay[day].map((obs) => (
+								<div
+									key={obs.id}
+									className="flex cursor-pointer items-start gap-3 rounded-lg border p-3 hover:bg-accent"
+									onClick={() => setSelectedObservation(obs)}
+								>
+									<div
+										className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${TYPE_COLORS[obs.type]}`}
+									/>
+
+									<div className="min-w-0 flex-1">
+										<div className="flex items-center gap-2">
+											<TypeBadge type={obs.type} />
+											<span className="text-xs text-[var(--muted-foreground)]">
+												{new Date(obs.createdAt).toLocaleDateString()} {new Date(obs.createdAt).toLocaleTimeString()}
+											</span>
 										</div>
-										<span className="font-medium">{day}</span>
-									</div>
-
-									<div className="ml-12 space-y-3">
-										{groupedByDay[day].map((obs) => (
-											<div
-												key={obs.id}
-												className="flex cursor-pointer items-start gap-3 rounded-lg border p-3 hover:bg-accent"
-												onClick={() => setSelectedObservation(obs)}
-											>
-												{/* Timeline dot */}
-												<div
-													className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${TYPE_COLORS[obs.type]}`}
-												/>
-
-												<div className="min-w-0 flex-1">
-													<div className="flex items-center gap-2">
-														<TypeBadge type={obs.type} />
-														<span className="text-xs text-[var(--muted-foreground)]">
-															{new Date(obs.createdAt).toLocaleDateString()} {new Date(obs.createdAt).toLocaleTimeString()}
-														</span>
-													</div>
-													<p className="mt-1 truncate font-medium">
-														{obs.title}
-													</p>
-													<p className="mt-0.5 text-xs text-muted-foreground line-clamp-2">
-														{obs.content}
-													</p>
-												</div>
-											</div>
-										))}
+										<p className="mt-1 truncate font-medium">
+											{obs.title}
+										</p>
+										<p className="mt-0.5 text-xs text-muted-foreground line-clamp-2">
+											{obs.content}
+										</p>
 									</div>
 								</div>
 							))}
 						</div>
 					</div>
-				)}
+				))}
 			</div>
 
 			{/* Right panel - Detail */}

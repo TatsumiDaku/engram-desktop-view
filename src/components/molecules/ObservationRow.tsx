@@ -1,3 +1,4 @@
+import { ScopeBadge } from "@/components/atoms/ScopeBadge";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
 import type { Observation } from "@/types/engram";
 import { clsx } from "clsx";
@@ -33,11 +34,14 @@ export function ObservationRow({
 					</p>
 				</div>
 			</div>
-			{observation.topicKey && (
-				<span className="text-xs text-muted-foreground">
-					{observation.topicKey}
-				</span>
-			)}
+			<div className="flex items-center gap-2">
+				<ScopeBadge scope={observation.scope} />
+				{observation.topicKey && (
+					<span className="text-xs text-muted-foreground">
+						{observation.topicKey}
+					</span>
+				)}
+			</div>
 		</div>
 	);
 }

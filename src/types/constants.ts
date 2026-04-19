@@ -9,4 +9,10 @@ export const TYPE_COLORS = {
 	learning: "bg-cyan-500",
 } as const;
 
+export const SCOPE_COLORS = {
+	project: "bg-blue-500",
+	personal: "bg-green-500",
+} as const;
+
 export type ObservationType = keyof typeof TYPE_COLORS;
+export type ObservationScope = keyof typeof SCOPE_COLORS;

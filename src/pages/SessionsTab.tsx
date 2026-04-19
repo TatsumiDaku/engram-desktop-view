@@ -4,6 +4,7 @@ import { StatCard } from "@/components/atoms/StatCard";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
 import { ObservationRow } from "@/components/molecules/ObservationRow";
 import { useSession, useSessions, useStats } from "@/hooks/useEngram";
+import { getProjectColor } from "@/utils/constants";
 import type { Observation, Session } from "@/types/engram";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -68,7 +69,7 @@ export function SessionsTab() {
 					))}
 				</div>
 				<div className="h-10 w-full rounded-md bg-muted animate-pulse" />
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 					{[...Array(6)].map((_, i) => (
 						<div key={i} className="rounded-lg border p-4 space-y-3">
 							<div className="h-5 w-3/4 rounded bg-muted animate-pulse" />
@@ -200,7 +201,7 @@ export function SessionsTab() {
 				/>
 			) : (
 				<>
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 					{filteredSessions.slice(0, visibleCount).map((session) => (
 						<div
 							key={session.id}
@@ -215,7 +216,12 @@ export function SessionsTab() {
 											t("sessions.empty.untitled")}
 									</p>
 									<p className="mt-1 text-xs text-[hsl(263,20%,60%)]">
-										{session.agentName} • {session.project}
+										<div className="flex items-center gap-1.5">
+											<div className={`inline-block w-2 h-2 rounded-full ${getProjectColor(session.project)}`} />
+											<span>{session.agentName}</span>
+											<span>•</span>
+											<span>{session.project}</span>
+										</div>
 									</p>
 								</div>
 								<TypeBadge type={session.type as "learning"} />
@@ -247,7 +253,7 @@ export function SessionsTab() {
 			{selectedSession && (
 				<div className="fixed inset-0 z-50 flex justify-end bg-black/50" onClick={() => setSelectedSession(null)}>
 					<div
-						className="h-full w-1/2 overflow-y-auto border-l border-[hsl(263,30%,20%)] bg-[hsl(263,30%,8%)] p-6"
+						className="h-full w-full md:w-1/2 overflow-y-auto border-l border-[hsl(263,30%,20%)] bg-[hsl(263,30%,8%)] p-6"
 						onClick={(e) => e.stopPropagation()}
 					>
 						<div className="flex items-center justify-between mb-6">

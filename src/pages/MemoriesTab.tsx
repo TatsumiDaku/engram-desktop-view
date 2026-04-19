@@ -21,6 +21,12 @@ const TYPE_FILTERS = [
 	{ type: "learning", label: "learning", emoji: "📚" },
 ];
 
+const SCOPE_FILTERS = [
+	{ scope: null, label: "all" },
+	{ scope: "project", label: "shared" },
+	{ scope: "personal", label: "user" },
+];
+
 export function MemoriesTab() {
 	const { t } = useTranslation();
 	const { data, isLoading, refetch } = useMemories({ limit: 100 });
@@ -31,12 +37,15 @@ export function MemoriesTab() {
 	const [selectedObservation, setSelectedObservation] =
 		useState<Observation | null>(null);
 	const projectFilter = useUIStore((s) => s.projectFilter);
+	const scopeFilter = useUIStore((s) => s.scopeFilter);
+	const setScopeFilter = useUIStore((s) => s.setScopeFilter);
 
 	const observations = data?.observations || [];
 
 	const filteredObservations = observations.filter((obs) => {
 		if (projectFilter && obs.project !== projectFilter) return false;
 		if (typeFilter && obs.type !== typeFilter) return false;
+		if (scopeFilter && obs.scope !== scopeFilter) return false;
 		if (search) {
 			const searchLower = search.toLowerCase();
 			return (
@@ -114,6 +123,22 @@ export function MemoriesTab() {
 					))}
 				</div>
 
+				<div className="flex gap-2 flex-wrap">
+					{SCOPE_FILTERS.map((filter) => (
+						<button
+							key={filter.label}
+							onClick={() => setScopeFilter(filter.scope)}
+							className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+								scopeFilter === filter.scope
+									? "bg-[hsl(263,70%,58%)] text-white"
+									: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							}`}
+						>
+							{t(`scope.${filter.label}`)}
+						</button>
+					))}
+				</div>
+
 				<div className="flex items-center justify-between">
 					<span className="text-sm text-muted-foreground">
 						Showing {filteredObservations.length} of {observations.length} observations
@@ -155,7 +180,7 @@ export function MemoriesTab() {
 
 			{/* Right panel - Detail */}
 			{selectedObservation && (
-				<div className="w-1/3">
+				<div className="w-full md:w-1/3">
 					<MarkdownPanel
 						observation={selectedObservation}
 						onUpdate={handleUpdate}
