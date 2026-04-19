@@ -10,7 +10,8 @@
 		"topics": "Temas",
 		"timeline": "Línea de Tiempo",
 		"prompts": "Prompts",
-		"emptySessions": "Sesiones Vacías"
+		"emptySessions": "Sesiones Vacías",
+		"compare": "Comparar"
 	},
 	"emptySessions": {
 		"title": "Sesiones Vacías",
@@ -49,6 +50,11 @@
 		},
 		"footer": {
 			"poweredBy": "Desarrollado con Engram - La Capa de Memoria para Agentes de IA"
+		},
+		"stats": {
+			"totalSessions": "Total de Sesiones",
+			"totalObservations": "Total de Observaciones",
+			"totalProjects": "Total de Proyectos"
 		}
 	},
 	"sessions": {
@@ -104,6 +110,16 @@
 			"title": "Sin observaciones aún",
 			"description": "Tu línea de tiempo aparecerá aquí cuando crees observaciones"
 		}
+	},
+	"sessionCompare": {
+		"title": "Comparación de Sesiones",
+		"leftSession": "Sesión Izquierda",
+		"rightSession": "Sesión Derecha",
+		"shared": "Compartidas",
+		"leftUnique": "Solo Izquierda",
+		"rightUnique": "Solo Derecha",
+		"leftOnly": "Únicas de Izquierda",
+		"rightOnly": "Únicas de Derecha"
 	},
 	"settings": {
 		"title": "Configuración",

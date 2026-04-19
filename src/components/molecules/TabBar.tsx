@@ -3,6 +3,7 @@ import { clsx } from "clsx";
 import type { HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "../atoms/LanguageSelector";
+import { SyncIndicator } from "../SyncIndicator";
 import { ThemeToggle } from "../atoms/ThemeToggle";
 
 export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
@@ -26,6 +27,7 @@ export function TabBar({
 		{ id: "timeline", labelKey: "tabs.timeline" },
 		{ id: "prompts", labelKey: "tabs.prompts" },
 		{ id: "empty-sessions", labelKey: "tabs.emptySessions" },
+		{ id: "compare", labelKey: "tabs.compare" },
 	];
 
 	return (
@@ -53,6 +55,7 @@ export function TabBar({
 				))}
 			</div>
 			<div className="flex items-center gap-4">
+				<SyncIndicator />
 				<LanguageSelector />
 				<ThemeToggle />
 			</div>

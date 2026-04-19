@@ -10,7 +10,8 @@
 		"topics": "Tópicos",
 		"timeline": "Linha do Tempo",
 		"prompts": "Prompts",
-		"emptySessions": "Sessões Vazias"
+		"emptySessions": "Sessões Vazias",
+		"compare": "Comparar"
 	},
 	"emptySessions": {
 		"title": "Sessões Vazias",

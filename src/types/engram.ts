@@ -71,4 +71,5 @@ export type TabType =
 	| "topics"
 	| "timeline"
 	| "prompts"
-	| "empty-sessions";
+	| "empty-sessions"
+	| "compare";

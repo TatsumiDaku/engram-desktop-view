@@ -9,6 +9,7 @@ import { EmptySessionsTab } from "./EmptySessionsTab";
 import HomeTab from "./HomeTab";
 import { MemoriesTab } from "./MemoriesTab";
 import { PromptsTab } from "./PromptsTab";
+import SessionCompare from "./SessionCompare";
 import { SessionsTab } from "./SessionsTab";
 import { TimelineTab } from "./TimelineTab";
 import { TopicsTab } from "./TopicsTab";
@@ -47,6 +48,7 @@ export function Dashboard() {
 				{activeTab === "timeline" && <ErrorBoundary><TimelineTab /></ErrorBoundary>}
 				{activeTab === "prompts" && <ErrorBoundary><PromptsTab /></ErrorBoundary>}
 				{activeTab === "empty-sessions" && <ErrorBoundary><EmptySessionsTab /></ErrorBoundary>}
+				{activeTab === "compare" && <ErrorBoundary><SessionCompare /></ErrorBoundary>}
 			</div>
 
 			<KeyboardShortcutsModal />

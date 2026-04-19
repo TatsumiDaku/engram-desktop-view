@@ -10,7 +10,8 @@
 		"topics": "Topics",
 		"timeline": "Timeline",
 		"prompts": "Prompts",
-		"emptySessions": "Empty Sessions"
+		"emptySessions": "Empty Sessions",
+		"compare": "Compare"
 	},
 	"memories": {
 		"title": "Memories",
@@ -64,6 +65,11 @@
 		},
 		"footer": {
 			"poweredBy": "Powered by Engram - The Memory Layer for AI Agents"
+		},
+		"stats": {
+			"totalSessions": "Total Sessions",
+			"totalObservations": "Total Observations",
+			"totalProjects": "Total Projects"
 		}
 	},
 	"sessions": {
@@ -104,6 +110,16 @@
 			"title": "No observations yet",
 			"description": "Your timeline will appear here as you create observations"
 		}
+	},
+	"sessionCompare": {
+		"title": "Session Comparison",
+		"leftSession": "Left Session",
+		"rightSession": "Right Session",
+		"shared": "Shared",
+		"leftUnique": "Left Only",
+		"rightUnique": "Right Only",
+		"leftOnly": "Unique to Left",
+		"rightOnly": "Unique to Right"
 	},
 	"settings": {
 		"title": "Settings",

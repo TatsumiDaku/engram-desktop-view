@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next";
+import { useStats } from "@/hooks/useEngram";
 
 const VERSION = "1.0.0";
 
 export default function HomeTab() {
 	const { t } = useTranslation();
+	const { data: stats, isLoading } = useStats();
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-[80vh] space-y-12">
@@ -87,6 +89,23 @@ export default function HomeTab() {
 					</p>
 				</div>
 			</div>
+
+			{!isLoading && stats && (
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
+					<div className="rounded-lg border border-[hsl(263,30%,20%)] bg-[hsl(263,35%,10%)] p-6 text-center hover:border-[hsl(263,70%,58%)] transition-all">
+						<div className="text-4xl font-bold text-[hsl(263,70%,58%)]">{stats.sessionCount}</div>
+						<div className="text-sm text-[hsl(263,20%,60%)] mt-2">{t("home.stats.totalSessions")}</div>
+					</div>
+					<div className="rounded-lg border border-[hsl(263,30%,20%)] bg-[hsl(263,35%,10%)] p-6 text-center hover:border-[hsl(263,70%,58%)] transition-all">
+						<div className="text-4xl font-bold text-[hsl(263,70%,58%)]">{stats.observationCount}</div>
+						<div className="text-sm text-[hsl(263,20%,60%)] mt-2">{t("home.stats.totalObservations")}</div>
+					</div>
+					<div className="rounded-lg border border-[hsl(263,30%,20%)] bg-[hsl(263,35%,10%)] p-6 text-center hover:border-[hsl(263,70%,58%)] transition-all">
+						<div className="text-4xl font-bold text-[hsl(263,70%,58%)]">{stats.projectCount}</div>
+						<div className="text-sm text-[hsl(263,20%,60%)] mt-2">{t("home.stats.totalProjects")}</div>
+					</div>
+				</div>
+			)}
 
 			<div className="text-center text-[hsl(263,20%,60%)] pt-8 border-t border-[hsl(263,30%,20%)] w-full">
 				<p className="text-lg">EngramDesktopView v{VERSION}</p>
