@@ -28,7 +28,6 @@ export async function engramApiCall<T = unknown>(
 	path: string,
 	body?: object,
 ): Promise<T> {
-	const requestBody = body ? JSON.stringify(body) : null;
 	const startTime = Date.now();
 
 	useLogStore.getState().addLog({

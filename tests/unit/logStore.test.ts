@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { useLogStore, type LogEntry } from "@/stores/logStore";
+import { useLogStore } from "@/stores/logStore";
 
 describe("logStore", () => {
 	beforeEach(() => {
@@ -40,7 +40,7 @@ describe("logStore", () => {
 
 			// Add 105 logs
 			for (let i = 0; i < 105; i++) {
-				addLog({ level: "info", message: `Log ${i}` });
+				addLog({ level: "request", message: `Log ${i}` });
 			}
 
 			const { logs } = useLogStore.getState();
@@ -50,8 +50,8 @@ describe("logStore", () => {
 		it("should assign unique IDs and timestamps", () => {
 			const { addLog } = useLogStore.getState();
 
-			addLog({ level: "info", message: "Log 1" });
-			addLog({ level: "info", message: "Log 2" });
+			addLog({ level: "request", message: "Log 1" });
+			addLog({ level: "response", message: "Log 2" });
 
 			const { logs } = useLogStore.getState();
 			expect(logs[0].id).toBeDefined();
@@ -65,8 +65,8 @@ describe("logStore", () => {
 		it("should clear all logs", () => {
 			const { addLog, clearLogs } = useLogStore.getState();
 
-			addLog({ level: "info", message: "Log 1" });
-			addLog({ level: "info", message: "Log 2" });
+			addLog({ level: "request", message: "Log 1" });
+			addLog({ level: "response", message: "Log 2" });
 			clearLogs();
 
 			const { logs } = useLogStore.getState();

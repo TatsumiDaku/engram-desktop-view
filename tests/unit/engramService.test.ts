@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
 	getSessions,
-	getObservations,
 	getHealth,
 	getStats,
 } from "@/services/engramService";
