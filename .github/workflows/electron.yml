@@ -45,12 +45,16 @@ jobs:
         include:
           - platform: "linux"
             arch: "x64"
+            target: ""
           - platform: "macos"
             arch: "x64"
+            target: ""
           - platform: "macos"
             arch: "arm64"
+            target: ""
           - platform: "win32"
             arch: "x64"
+            target: ""
 
     steps:
       - name: Checkout
@@ -74,12 +78,18 @@ jobs:
         run: pnpm run build
 
       - name: Build Electron app
-        uses: @nick-fields/retry@v3
-        with:
-          timeout_minutes: 30
-          max_attempts: 3
-          command: pnpm exec electron-builder --${{ matrix.platform }} --${{ matrix.arch }}
-          retry_wait_seconds: 60
+        run: |
+          for i in 1 2 3; do
+            echo "Attempt $i of 3..."
+            if pnpm exec electron-builder --${{ matrix.platform }} --${{ matrix.arch }}${{ matrix.target }}; then
+              echo "Build successful!"
+              exit 0
+            fi
+            echo "Build failed, retrying in 60 seconds..."
+            sleep 60
+          done
+          echo "All build attempts failed"
+          exit 1
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -91,6 +101,7 @@ jobs:
             release/**/*.dmg
             release/**/*.AppImage
             release/**/*.deb
+            release/**/*.rpm
           retention-days: 30
 
   release:
@@ -99,13 +110,21 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
+      - name: List artifacts
+        run: |
+          echo "Artifacts downloaded:"
+          find artifacts -type f -name "*.exe" -o -name "*.zip" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" -o -name "*.msi" 2>/dev/null | head -50
+
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           draft: false
           prerelease: false
@@ -116,6 +135,7 @@ jobs:
             artifacts/**/*.dmg
             artifacts/**/*.AppImage
             artifacts/**/*.deb
+            artifacts/**/*.rpm
             artifacts/**/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
