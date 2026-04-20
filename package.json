@@ -1,41 +1,105 @@
 {
-	"name": "engram-desktop-view",
-	"version": "1.0.0",
-	"description": "Desktop dashboard to monitor and explore Engram memory events",
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"preview": "vite preview",
-		"tauri": "tauri",
-		"tauri:dev": "tauri dev",
-		"tauri:build": "tauri build",
-		"reinstall": "rm -rf node_modules dist src-tauri/target && pnpm install",
-		"biome-all": "biome check --write .",
-		"pre-commit": "biome check --write . && pnpm build"
-	},
-	"dependencies": {
-		"@tanstack/react-query": "^5.62.7",
-		"axios": "^1.7.9",
-		"clsx": "^2.1.1",
-		"i18next": "^26.0.6",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"react-i18next": "^17.0.4",
-		"react-router": "^7.1.1",
-		"zustand": "^5.0.2"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
-		"@tauri-apps/api": "^2.2.0",
-		"@tauri-apps/cli": "^2.2.3",
-		"@types/react": "^18.3.14",
-		"@types/react-dom": "^18.3.2",
-		"@vitejs/plugin-react": "^4.7.0",
-		"autoprefixer": "^10.4.20",
-		"postcss": "^8.4.49",
-		"tailwindcss": "^3.4.17",
-		"typescript": "^5.7.2",
-		"vite": "^6.0.5"
-	}
+  "name": "engram-desktop-view",
+  "version": "1.1.0",
+  "description": "Desktop dashboard to monitor and explore Engram memory events",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:electron": "node scripts/build-electron.cjs",
+    "build": "vite build && npm run build:electron",
+    "preview": "vite preview",
+    "electron:dev": "npm run build && electron .",
+    "electron:build": "npm run build && electron-builder",
+    "electron:build:win": "npm run build && electron-builder --win",
+    "electron:build:linux": "npm run build && electron-builder --linux",
+    "electron:build:mac": "npm run build && electron-builder --mac",
+    "reinstall": "rm -rf node_modules dist dist-electron && npm install",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.62.7",
+    "axios": "^1.7.9",
+    "clsx": "^2.1.1",
+    "electron-log": "^5.2.4",
+    "i18next": "^26.0.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^17.0.4",
+    "react-router": "^7.1.1",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.49.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.14",
+    "@types/react-dom": "^18.3.2",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/coverage-v8": "^2.0.5",
+    "autoprefixer": "^10.4.20",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.24.2",
+    "jsdom": "^24.1.3",
+    "png-to-ico": "^3.0.1",
+    "postcss": "^8.4.49",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^3.4.17",
+    "to-ico": "^1.1.5",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.0.5"
+  },
+  "build": {
+    "appId": "com.engram.desktop-view",
+    "productName": "EngramDesktopView",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
 }

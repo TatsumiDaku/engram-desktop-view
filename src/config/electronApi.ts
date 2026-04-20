@@ -1,7 +1,22 @@
-// Wrapper for Engram API calls via Tauri Rust backend
-// This avoids CORS by routing requests through the Rust side
-import { invoke } from "@tauri-apps/api/core";
+// Electron API wrapper for Engram backend calls
+// This uses the contextBridge exposed API from preload.ts
+
 import { useLogStore } from "@/stores/logStore";
+
+// Type for the exposed electron API
+declare global {
+	interface Window {
+		electronAPI: {
+			engramRequest: (method: string, path: string, body?: object) => Promise<unknown>;
+			minimizeWindow: () => void;
+			maximizeWindow: () => void;
+			closeWindow: () => void;
+			getAppVersion: () => Promise<string>;
+			getPlatform: () => string;
+			onOpenSettings: (callback: () => void) => () => void;
+		};
+	}
+}
 
 export interface EngramApiResponse<T = unknown> {
 	data: T | null;
@@ -20,18 +35,14 @@ export async function engramApiCall<T = unknown>(
 		level: "request",
 		method,
 		url: path,
-		message: `Tauri invoke: ${method} ${path}`,
+		message: `Electron IPC: ${method} ${path}`,
 	});
 
 	try {
-		const response = await invoke<string>("engram_request", {
-			method,
-			path,
-			body: requestBody,
-		});
+		const response = await window.electronAPI.engramRequest(method, path, body);
 
 		const duration = Date.now() - startTime;
-		const dataPreview = response ? response.slice(0, 100) : undefined;
+		const dataPreview = typeof response === "string" ? response.slice(0, 100) : undefined;
 
 		useLogStore.getState().addLog({
 			level: "response",
@@ -43,11 +54,18 @@ export async function engramApiCall<T = unknown>(
 			dataPreview,
 		});
 
-		if (!response || response.trim() === "") {
+		if (!response || (typeof response === "string" && response.trim() === "")) {
 			return null as T;
 		}
 
-		return JSON.parse(response) as T;
+		// Handle string responses (error messages like "Method Not Allowed")
+		if (typeof response === "string") {
+			if (response.includes("Method Not Allowed") || response.includes("invalid")) {
+				throw new Error(response);
+			}
+		}
+
+		return response as T;
 	} catch (error) {
 		const duration = Date.now() - startTime;
 		const errorMsg = error instanceof Error ? error.message : String(error);

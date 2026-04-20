@@ -3,7 +3,7 @@ import {
 	engramGet,
 	engramPatch,
 	engramPost,
-} from "@/config/tauriApi";
+} from "@/config/electronApi";
 import type {
 	FilterState,
 	HealthStatus,
@@ -30,8 +30,8 @@ function mapObservation(apiObs: any): Observation {
 
 export const getAllObservations = async (): Promise<Observation[]> => {
 	const endpoints = [
-		{ method: "POST", path: "/observations/search", body: { q: "*" }, fallback: true },
-		{ method: "POST", path: "/observations/search", body: {}, fallback: false },
+		// PRIMARY: GET /observations/recent (confirmed working)
+		{ method: "GET", path: "/observations/recent", body: undefined, fallback: false },
 	];
 
 	for (const endpoint of endpoints) {
@@ -44,6 +44,12 @@ export const getAllObservations = async (): Promise<Observation[]> => {
 			}
 			if (!data) continue;
 
+			// Handle string responses (error messages)
+			if (typeof data === "string") {
+				console.warn(`[engramService] ${endpoint.method} ${endpoint.path} returned string:`, data.slice(0, 100));
+				continue;
+			}
+
 			let arr: any[] = [];
 			if (Array.isArray(data)) {
 				arr = data;
@@ -55,6 +61,9 @@ export const getAllObservations = async (): Promise<Observation[]> => {
 				arr = data.items;
 			} else if (data.results && Array.isArray(data.results)) {
 				arr = data.results;
+			} else if (data.error) {
+				console.warn(`[engramService] ${endpoint.method} ${endpoint.path} returned error:`, data.error);
+				continue;
 			} else {
 				continue;
 			}
@@ -284,13 +293,15 @@ export const getTopics = async (
 		: allObs;
 
 	const topicsMap: Record<string, Observation[]> = {};
+	const UNCATEGORIZED = "Sin categoría";
+
 	for (const obs of filtered) {
-		if (obs.topicKey) {
-			if (!topicsMap[obs.topicKey]) {
-				topicsMap[obs.topicKey] = [];
-			}
-			topicsMap[obs.topicKey].push(obs);
+		// Use topicKey if available, otherwise group under "Sin categoría"
+		const topicKey = obs.topicKey || UNCATEGORIZED;
+		if (!topicsMap[topicKey]) {
+			topicsMap[topicKey] = [];
 		}
+		topicsMap[topicKey].push(obs);
 	}
 
 	return topicsMap;

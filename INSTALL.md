@@ -1,96 +1,201 @@
-# 📥 Installation Guide
+# 📥 EngramDesktopView Installation Guide
 
-## Windows
+This file contains detailed installation instructions for Linux distributions.
 
-### Option 1: Download the Binary (Recommended)
+---
 
-1. Download `EngramDesktopView-1.0.0-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
-2. Extract the ZIP to any folder
-3. Run `EngramDesktopView.exe`
-4. Done!
+## 🐧 Ubuntu / Debian
 
-### Option 2: Build from Source
+### Using .deb package
+
+```bash
+# Download the latest release
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.amd64.deb
+
+# Install the package
+sudo dpkg -i EngramDesktopView-1.1.0.amd64.deb
+
+# If you get dependency errors, fix them with:
+sudo apt-get install -f
+
+# Launch the app
+engram-desktop-view
+```
+
+### Using AppImage (No installation required)
+
+```bash
+# Download AppImage
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.AppImage
+
+# Make executable
+chmod +x EngramDesktopView-1.1.0.AppImage
+
+# Run directly
+./EngramDesktopView-1.1.0.AppImage
+```
+
+---
+
+## 🔴 Fedora / RHEL / CentOS
+
+### Using .rpm package
+
+```bash
+# Download the latest release
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.x86_64.rpm
+
+# Install with dnf (recommended)
+sudo dnf install EngramDesktopView-1.1.0.x86_64.rpm
+
+# Or with rpm
+sudo rpm -i EngramDesktopView-1.1.0.x86_64.rpm
+
+# Launch
+engram-desktop-view
+```
+
+---
+
+## 🟢 openSUSE
+
+```bash
+# Download rpm
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.x86_64.rpm
+
+# Install
+sudo zypper install EngramDesktopView-1.1.0.x86_64.rpm
+
+# Launch
+engram-desktop-view
+```
+
+---
+
+## 🔵 Arch Linux
+
+### Using AUR (with yay/paru)
+
+```bash
+# Using yay
+yay -S engram-desktop-view
+
+# Or using paru
+paru -S engram-desktop-view
+```
+
+### Manual AUR installation
+
+```bash
+# Clone the AUR repository
+git clone https://aur.archlinux.org/engram-desktop-view.git
+cd engram-desktop-view
+
+# Build and install
+makepkg -si
+
+# Launch
+engram-desktop-view
+```
+
+---
+
+## 📦 AppImage (All Distributions)
+
+AppImage is a portable format that works on virtually any Linux distribution without installation or root privileges.
+
+### Installation
+
+```bash
+# Download the AppImage
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.AppImage
+
+# Make it executable
+chmod +x EngramDesktopView-1.1.0.AppImage
+```
+
+### Running
+
+```bash
+# Run directly from terminal
+./EngramDesktopView-1.1.0.AppImage
+```
+
+### Creating a desktop shortcut
+
+```bash
+# Create application entry
+cat > ~/.local/share/applications/engram-desktop-view.desktop << 'EOF'
+[Desktop Entry]
+Name=EngramDesktopView
+Comment=Real-time dashboard for Engram memory agent
+Exec=/path/to/EngramDesktopView-1.1.0.AppImage
+Type=Application
+Categories=Utility;
+Icon=utilities-system-monitor
+Terminal=false
+EOF
+```
+
+---
+
+## 🐧 Common Linux Issues
+
+### Missing dependencies
+
+If the app won't start due to missing libraries:
+
+```bash
+# Ubuntu/Debian
+sudo apt install libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 libasound2
+
+# Fedora
+sudo dnf install gtk3 libnotify nss-libs libXScrnSaver alsa-lib
+
+# Arch
+sudo pacman -S gtk3 libnotify nss libxss alsa-lib
+```
+
+### AppImage FUSE issues
+
+If AppImage fails to mount:
+
+```bash
+# Install FUSE
+sudo apt install fuse
+
+# If still failing, try with --no-sandbox flag
+./EngramDesktopView-1.1.0.AppImage --no-sandbox
+```
+
+### Wayland display issues
+
+If using Wayland and the app shows a blank window:
+
+```bash
+# Run with X11
+ELECTRON_OZONE_PLATFORM_HINT=auto ./EngramDesktopView-1.1.0.AppImage
+```
+
+---
+
+## 🔧 Build from Source
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm 9+
+- Git
 
 ```bash
 git clone https://github.com/TatsumiDaku/engram-desktop-view.git
 cd engram-desktop-view
-npm install
-npm run tauri build
+pnpm install
+pnpm run electron:build:linux
 ```
 
-The executable will be in `src-tauri/target/release/bundle/`
+The output will be in `release/`.
 
 ---
 
-## 🐧 Linux
-
-### Build from Source
-
-```bash
-# Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# System dependencies
-# Ubuntu/Debian:
-sudo apt update
-sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-
-# Fedora:
-sudo dnf install webkit2gtk4.1-devel libappindicator-gtk3-devel librsvg2-devel patchelf
-
-# Build
-git clone https://github.com/TatsumiDaku/engram-desktop-view.git
-cd engram-desktop-view
-npm install
-npm run tauri build
-```
-
-The AppImage will be in `src-tauri/target/release/bundle/appimage/`
-
----
-
-## ✅ Requirements
-
-| Requirement | Minimum |
-|-------------|---------|
-| OS | Windows 10+ / Ubuntu 20.04+ / Fedora 34+ |
-| RAM | 4 GB |
-| Disk Space | 100 MB |
-| Engram | Running at localhost:7437 |
-
----
-
-## 🚀 First Launch
-
-1. Make sure Engram is running: `npx engram`
-2. Open `EngramDesktopView.exe`
-3. Done!
-
----
-
-## ❓ Troubleshooting
-
-- **"Engram is offline"** - Verify Engram is running at `localhost:7437`
-- **App doesn't open** - Wait a few seconds, it's normal
-- **UI looks broken** - Download the latest release
-
----
-
-## 🔄 Updating
-
-1. Download the new release
-2. Close the app
-3. Replace the old files
-4. Done!
-
----
-
-## 🗑️ Uninstalling
-
-Simply delete the folder. No system modifications are made.
-
----
-
-<p align="center">
-🧔 EngramDesktopView • TatsumiDaku
-</p>
+For other issues, please open an issue on GitHub: https://github.com/TatsumiDaku/engram-desktop-view/issues

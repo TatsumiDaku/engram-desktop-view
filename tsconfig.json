@@ -33,10 +33,11 @@
 			"@models/*": ["src/models/*"],
 			"@pages/*": ["src/pages/*"],
 			"@config/*": ["src/config/*"],
+			"@stores/*": ["src/stores/*"],
 			"@constants/*": ["src/utils/constants/*"],
 			"@helpers/*": ["src/utils/helpers/*"],
 			"@styles/*": ["src/styles/*"]
 		}
 	},
-	"include": ["src"]
+	"include": ["src", "tests"]
 }
