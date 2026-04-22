@@ -51,12 +51,8 @@ function createWindow() {
     log.info("Window ready to show");
     mainWindow?.show();
   });
-  mainWindow.on("close", (event) => {
-    if (!isAppQuitting) {
-      event.preventDefault();
-      mainWindow?.hide();
-      log.info("Window hidden to tray");
-    }
+  mainWindow.on("close", () => {
+    log.info("Window closing");
   });
   mainWindow.on("closed", () => {
     log.info("Window closed");

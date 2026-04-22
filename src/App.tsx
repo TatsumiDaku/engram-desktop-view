@@ -7,7 +7,10 @@ import { useToast } from "@/hooks/useToast";
 import "./i18n";
 
 function App() {
+	console.info("[App] Application initializing...");
 	const { toasts, removeToast } = useToast();
+
+	console.info("[App] Rendering App component");
 
 	return (
 		<ErrorBoundary>

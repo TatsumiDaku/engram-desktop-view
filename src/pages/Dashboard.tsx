@@ -15,7 +15,9 @@ import { TimelineTab } from "./TimelineTab";
 import { TopicsTab } from "./TopicsTab";
 
 export function Dashboard() {
+	console.info("[Dashboard] Component mounting");
 	const [activeTab, setActiveTab] = useState<TabType>("home");
+	console.info("[Dashboard] Rendering Dashboard");
 	const setShortcutsModalOpen = useUIStore((s) => s.setShortcutsModalOpen);
 	const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
 	const shortcutsModalOpen = useUIStore((s) => s.shortcutsModalOpen);
@@ -53,8 +55,8 @@ export function Dashboard() {
 
 			<KeyboardShortcutsModal />
 
-			<footer className="text-center text-sm text-[var(--muted-foreground)] py-4 border-t border-[var(--border)]">
-				EngramDesktopView v1.0.0
+			<footer id="app-version" className="text-center text-sm text-[var(--muted-foreground)] py-4 border-t border-[var(--border)]">
+				EngramDesktopView
 			</footer>
 		</div>
 	);
