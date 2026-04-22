@@ -32,6 +32,17 @@ import_electron.contextBridge.exposeInMainWorld("electronAPI", {
     return () => {
       import_electron.ipcRenderer.removeListener("open-settings", handler);
     };
+  },
+  // Auto-update API
+  checkForUpdates: () => import_electron.ipcRenderer.invoke("check-for-updates"),
+  downloadUpdate: () => import_electron.ipcRenderer.invoke("download-update"),
+  quitAndInstall: () => import_electron.ipcRenderer.send("quit-and-install"),
+  onUpdateStatus: (callback) => {
+    const handler = (_event, status) => callback(status);
+    import_electron.ipcRenderer.on("update-status", handler);
+    return () => {
+      import_electron.ipcRenderer.removeListener("update-status", handler);
+    };
   }
 });
 console.log("[Preload] Context bridge exposed successfully");

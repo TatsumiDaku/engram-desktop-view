@@ -1,0 +1,53 @@
+# NSIS BMP Assets Guide
+
+## Required BMP Files
+
+NSIS installer requires specific bitmap assets for the header and footer:
+
+### Header Bitmap
+- **Size**: 150 x 57 pixels
+- **Format**: 24-bit BMP (uncompressed)
+- **Default location**: Referenced in nsis-template.nsi
+
+### Footer Bitmap
+- **Size**: 150 x 75 pixels (typical)
+- **Format**: 24-bit BMP (uncompressed)
+- **Default location**: Referenced in nsis-template.nsi
+
+## Creating BMP Assets
+
+### Option 1: Image Editor (Recommended)
+Use any image editor (GIMP, Photoshop, Paint.NET) to:
+1. Create a 150x57 (header) or 150x75 (footer) image
+2. Use dark background (#0a0a0f) with neon purple (#a855f7) accents
+3. Export as 24-bit BMP
+
+### Option 2: PowerShell Script
+```powershell
+Add-Type -AssemblyName System.Drawing
+$bmp = New-Object System.Drawing.Bitmap(150, 57)
+$graphics = [System.Drawing.Graphics]::FromImage($bmp)
+$graphics.Clear([System.Drawing.Color]::FromArgb(10, 10, 15))  # #0a0a0f
+$purpleBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(168, 85, 247))  # #a855f7
+$graphics.FillRectangle($purpleBrush, 0, 50, 150, 7)  # accent bar at bottom
+$graphics.Dispose()
+$bmp.Save("$PSScriptRoot\nsis-header.bmp", [System.Drawing.Imaging.ImageFormat]::Bmp)
+$bmp.Dispose()
+```
+
+### Option 3: Sharp (for programmatic creation)
+Since the project already has `sharp` installed, you can create these programmatically in a build script.
+
+## Current Status
+
+For now, electron-builder will use default NSIS graphics. The dark theme is applied through the NSIS template script (colors, text, etc.).
+
+To enable custom header/footer graphics:
+1. Create the BMP files in this folder (`build/`)
+2. Name them `nsis-header.bmp` and `nsis-footer.bmp`
+3. Update `scripts/nsis-template.nsi` to reference them instead of defaults
+
+## Color Reference
+- Background: #0a0a0f (RGB: 10, 10, 15)
+- Accent: #a855f7 (RGB: 168, 85, 247)
+- Text: #ffffff (RGB: 255, 255, 255)

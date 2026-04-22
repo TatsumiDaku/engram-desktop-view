@@ -266,6 +266,26 @@ xattr -cr /Applications/EngramDesktopView.app
 
 ---
 
+## Fixing Electron "failed to install correctly"
+
+If you encounter the "Electron failed to install correctly" error:
+
+1. Clear Electron cache:
+   ```bash
+   pnpm exec electron-builder install-app-deps
+   # OR manually (PowerShell):
+   Remove-Item -Recurse -Force $env:APPDATA\electron\Cache
+   Remove-Item -Recurse -Force $env:LOCALAPPDATA\electron\Cache
+   ```
+
+2. Reinstall electron:
+   ```bash
+   Remove-Item -Recurse -Force node_modules\electron
+   pnpm add -D electron@33.4.11
+   ```
+
+---
+
 ## 🏗️ Build from Source
 
 ### Prerequisites

@@ -11,7 +11,7 @@ const buildOptions = {
 	sourcemap: true,
 	target: "node18",
 	platform: "node",
-	external: ["electron", "electron-log"],
+	external: ["electron", "electron-log", "electron-updater"],
 	plugins: externalPlugins,
 };
 

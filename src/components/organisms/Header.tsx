@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button";
+import { UpdateDropdown } from "@/components/organisms/UpdateDropdown";
 import { useHealth, useSessions } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
 import { clsx } from "clsx";
@@ -141,6 +142,8 @@ export function Header({ className, ...props }: HeaderProps) {
 						/>
 					</svg>
 				</Button>
+
+				<UpdateDropdown />
 
 				<Button
 					size="sm"

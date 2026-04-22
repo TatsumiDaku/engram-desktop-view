@@ -3,6 +3,17 @@
 
 import { useLogStore } from "@/stores/logStore";
 
+// Update status types matching preload.ts
+export interface UpdateStatus {
+	status: "checking-for-update" | "update-available" | "update-not-available" | "download-progress" | "update-downloaded" | "error";
+	version?: string;
+	percent?: number;
+	bytesPerSecond?: number;
+	total?: number;
+	transferred?: number;
+	message?: string;
+}
+
 // Type for the exposed electron API
 declare global {
 	interface Window {
@@ -14,6 +25,11 @@ declare global {
 			getAppVersion: () => Promise<string>;
 			getPlatform: () => string;
 			onOpenSettings: (callback: () => void) => () => void;
+			// Auto-update API
+			checkForUpdates: () => Promise<{ success: boolean; updateInfo?: unknown; message?: string }>;
+			downloadUpdate: () => Promise<{ success: boolean; message?: string }>;
+			quitAndInstall: () => void;
+			onUpdateStatus: (callback: (status: UpdateStatus) => void) => () => void;
 		};
 	}
 }

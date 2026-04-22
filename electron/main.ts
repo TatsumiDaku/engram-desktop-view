@@ -2,6 +2,8 @@ import { app, BrowserWindow, Menu, Tray, nativeImage, ipcMain, dialog, shell, ne
 import path from "path";
 import { fileURLToPath } from "url";
 import log from "electron-log";
+import pkg from "electron-updater";
+const { autoUpdater } = pkg;
 
 // ESM compatibility for __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -280,11 +282,110 @@ function setupApiHandler(): void {
 	log.info("[API Handler] Engram API handler setup complete");
 }
 
+// AutoUpdater setup for electron-updater
+function setupAutoUpdater(): void {
+	// Configure for GitHub releases
+	autoUpdater.logger = log;
+	autoUpdater.autoDownload = false;
+	autoUpdater.autoInstallOnAppQuit = true;
+
+	// Set feed URL for GitHub releases
+	autoUpdater.setFeedURL({
+		provider: "github",
+		owner: "TatsumiDaku",
+		repo: "engram-desktop-view",
+	});
+
+	// Only check for updates in production (not in development)
+	if (process.env.NODE_ENV !== "development" && app.isPackaged) {
+		autoUpdater.checkForUpdates().catch((err) => {
+			log.error("[AutoUpdater] Initial check failed:", err);
+		});
+	}
+
+	// AutoUpdater event handlers
+	autoUpdater.on("checking-for-update", () => {
+		log.info("[AutoUpdater] Checking for update...");
+		mainWindow?.webContents.send("update-status", { status: "checking-for-update" });
+	});
+
+	autoUpdater.on("update-available", (info) => {
+		log.info("[AutoUpdater] Update available:", info.version);
+		mainWindow?.webContents.send("update-status", { status: "update-available", version: info.version });
+	});
+
+	autoUpdater.on("update-not-available", (info) => {
+		log.info("[AutoUpdater] Update not available. Current version:", info.version);
+		mainWindow?.webContents.send("update-status", { status: "update-not-available", version: info.version });
+	});
+
+	autoUpdater.on("download-progress", (progress) => {
+		log.info(`[AutoUpdater] Download progress: ${progress.percent.toFixed(1)}%`);
+		mainWindow?.webContents.send("update-status", {
+			status: "download-progress",
+			percent: progress.percent,
+			bytesPerSecond: progress.bytesPerSecond,
+			total: progress.total,
+			transferred: progress.transferred,
+		});
+	});
+
+	autoUpdater.on("update-downloaded", (info) => {
+		log.info("[AutoUpdater] Update downloaded:", info.version);
+		mainWindow?.webContents.send("update-status", { status: "update-downloaded", version: info.version });
+	});
+
+	autoUpdater.on("error", (err) => {
+		log.error("[AutoUpdater] Error:", err.message);
+		mainWindow?.webContents.send("update-status", { status: "error", message: err.message });
+	});
+
+	// IPC handlers for update operations
+	ipcMain.handle("check-for-updates", async () => {
+		if (process.env.NODE_ENV === "development" || !app.isPackaged) {
+			log.info("[AutoUpdater] Skipping update check in development mode");
+			return { success: false, message: "Updates disabled in development mode" };
+		}
+
+		try {
+			const result = await autoUpdater.checkForUpdates();
+			return { success: true, updateInfo: result?.updateInfo };
+		} catch (error) {
+			const err = error as Error;
+			log.error("[AutoUpdater] Check for updates failed:", err.message);
+			return { success: false, message: err.message };
+		}
+	});
+
+	ipcMain.handle("download-update", async () => {
+		if (process.env.NODE_ENV === "development" || !app.isPackaged) {
+			return { success: false, message: "Updates disabled in development mode" };
+		}
+
+		try {
+			await autoUpdater.downloadUpdate();
+			return { success: true };
+		} catch (error) {
+			const err = error as Error;
+			log.error("[AutoUpdater] Download update failed:", err.message);
+			return { success: false, message: err.message };
+		}
+	});
+
+	ipcMain.on("quit-and-install", () => {
+		log.info("[AutoUpdater] Quit and install triggered");
+		autoUpdater.quitAndInstall();
+	});
+
+	log.info("[AutoUpdater] Auto-updater setup complete");
+}
+
 // App event handlers
 app.whenReady().then(() => {
 	log.info("App ready");
 
 	setupApiHandler();
+	setupAutoUpdater();
 	createMenu();
 	createWindow();
 	createTray();
