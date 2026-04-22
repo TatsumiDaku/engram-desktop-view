@@ -147,7 +147,7 @@ Ensure Engram is running at `localhost:7437` before launching the app.
 
 #### Option 1: NSIS Installer (Recommended)
 
-1. Download `EngramDesktopView-Setup-1.2.3.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+1. Download `EngramDesktopView.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 2. Run the installer
 3. Follow the installation wizard
 4. Launch from Start Menu or Desktop shortcut
@@ -162,7 +162,7 @@ Ensure Engram is running at `localhost:7437` before launching the app.
 #### Option 3: Scoop
 
 ```powershell
-scoop bucket add extras
+scoop bucket add 
 scoop install engram-desktop-view
 ```
 
