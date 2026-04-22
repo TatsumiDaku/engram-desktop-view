@@ -1,5 +1,0 @@
-allowBuilds:
-  '@biomejs/biome': false
-  electron: false
-  esbuild: false
-  sharp: false
