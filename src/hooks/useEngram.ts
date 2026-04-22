@@ -26,10 +26,9 @@ export const useSessions = (filters?: Partial<FilterState>) => {
 		queryKey: ["sessions", filters],
 		queryFn: async () => {
 			const result = await getSessions(filters);
-			console.log("[useEngram] useSessions success", { count: result?.length });
+			console.log("[useEngram] useSessions success", { count: result?.sessions?.length });
 			return result;
 		},
-		onError: (err) => console.error("[useEngram] useSessions error:", err),
 	});
 };
 
@@ -43,7 +42,6 @@ export const useSession = (sessionId: string) => {
 			return result;
 		},
 		enabled: !!sessionId,
-		onError: (err) => console.error("[useEngram] useSession error:", err),
 	});
 };
 
@@ -53,10 +51,9 @@ export const useEmptySessions = (search?: string) => {
 		queryKey: ["empty-sessions", search],
 		queryFn: async () => {
 			const result = await getEmptySessions(search);
-			console.log("[useEngram] useEmptySessions success", { count: result?.length });
+			console.log("[useEngram] useEmptySessions success", { count: result?.sessions?.length });
 			return result;
 		},
-		onError: (err) => console.error("[useEngram] useEmptySessions error:", err),
 	});
 };
 
@@ -84,10 +81,9 @@ export const useMemories = (
 		queryKey: ["memories", filters],
 		queryFn: async () => {
 			const result = await getObservations(filters);
-			console.log("[useEngram] useMemories success", { count: result?.length });
+			console.log("[useEngram] useMemories success", { count: result?.observations?.length });
 			return result;
 		},
-		onError: (err) => console.error("[useEngram] useMemories error:", err),
 	});
 };
 
@@ -98,10 +94,9 @@ export const useTopics = (project?: string) => {
 		queryKey: ["topics", project],
 		queryFn: async () => {
 			const result = await getTopics(project);
-			console.log("[useEngram] useTopics success", { count: result?.length });
+			console.log("[useEngram] useTopics success", { topicsCount: Object.keys(result).length });
 			return result;
 		},
-		onError: (err) => console.error("[useEngram] useTopics error:", err),
 	});
 };
 
@@ -112,10 +107,9 @@ export const useTimeline = (filters?: Partial<FilterState>) => {
 		queryKey: ["timeline", filters],
 		queryFn: async () => {
 			const result = await getTimeline(filters);
-			console.log("[useEngram] useTimeline success", { count: result?.length });
+			console.log("[useEngram] useTimeline success", { count: result?.timeline?.length });
 			return result;
 		},
-		onError: (err) => console.error("[useEngram] useTimeline error:", err),
 	});
 };
 
@@ -150,17 +144,16 @@ export const usePrompts = (search?: string) => {
 		queryKey: ["prompts", search],
 		queryFn: async () => {
 			const result = await getPrompts(search);
-			console.log("[useEngram] usePrompts success", { count: result?.length });
+			console.log("[useEngram] usePrompts success", { count: result?.prompts?.length });
 			return result;
 		},
-		onError: (err) => console.error("[useEngram] usePrompts error:", err),
 	});
 };
 
 export const useDeletePrompt = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (id: string) => {
+		mutationFn: (id: number) => {
 			console.log("[useEngram] useDeletePrompt deleting...", { id });
 			return deletePrompt(id);
 		},
@@ -184,7 +177,6 @@ export const useHealth = () => {
 			return result;
 		},
 		refetchInterval: autoRefresh ? 10000 : false,
-		onError: (err) => console.error("[useEngram] useHealth error:", err),
 	});
 };
 
@@ -198,7 +190,6 @@ export const useStats = () => {
 			console.log("[useEngram] useStats success", result);
 			return result;
 		},
-		onError: (err) => console.error("[useEngram] useStats error:", err),
 	});
 };
 
