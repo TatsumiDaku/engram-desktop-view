@@ -106,9 +106,7 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "icon": "build/icon.ico",
-      "template": "scripts/nsis-template.nsi"
+      "createStartMenuShortcut": true
     }
   }
 }
