@@ -4,14 +4,68 @@
 
 > Real-time dashboard for monitoring your Engram memory agent. Built with Electron.
 
+[![Version](https://img.shields.io/badge/version-v1.2.0-blue.svg)](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Electron](https://img.shields.io/badge/Electron-33.4-?logo=electron)](https://electronjs.org)
+[![Auto-Update](https://img.shields.io/badge/Auto--Update-electron--updater-green.svg)](https://github.com/electron/electron-updater)
 
 🧔‍♂️ Made with ❤️ for the [Gentleman Programming](https://github.com/Gentleman-Programming/engram) community
 
 ---
 
 ## ✨ Features
+
+### 🚀 Auto-Update System
+
+Never miss a release. EngramDesktopView automatically checks for updates and lets you install with one click via the **UpdateDropdown** UI:
+
+- 🔍 Automatic update checks on startup
+- 📥 Download progress with real-time percentage
+- ⬇️ Manual "Check for Updates" option in the UI
+- 🔄 Install & Restart — updates are applied on the next launch
+
+> Built with [electron-updater](https://www.electron.build/auto-update) for seamless GitHub releases.
+
+### 🖥️ System Tray Integration
+
+EngramDesktopView lives in your system tray for quick access:
+
+- **Minimize to tray** — closing the window keeps the app running in the background
+- **Tray menu** — right-click for quick actions (Show, Quit)
+- **Double-click tray icon** — restore the window
+- **Persistent** — app continues running even when all windows are closed
+
+### 🌍 Multi-Language Support (i18n)
+
+Your memory dashboard speaks your language:
+
+| Language | Code |
+|----------|------|
+| 🇪🇸 Español | `es` |
+| 🇬🇧 English | `en` |
+| 🇧🇷 Português | `pt` |
+
+Switch languages instantly from the header selector. All UI strings, dates, and formats adapt to your locale.
+
+### 🎨 Dark & Light Theme
+
+Two beautiful themes to match your workflow:
+
+- **Dark mode** (default) — deep navy tones for low-light environments
+- **Light mode** — clean whites for bright setups
+
+Toggle with a single click in the header. Theme preference is persisted.
+
+### 💚 Health Indicator
+
+Real-time connection status to your Engram backend:
+
+- 🟢 **Green pulse** — Engram is connected and healthy
+- 🔴 **Red indicator** — connection lost or Engram unreachable
+
+The health indicator polls `localhost:7437` and updates automatically. No more guessing if your memory agent is running.
+
+---
 
 ### 📑 Eight Powerful Tabs
 
@@ -91,21 +145,21 @@ Ensure Engram is running at `localhost:7437` before launching the app.
 
 ### 🪟 Windows
 
-#### Option 1: Installer (Recommended)
+#### Option 1: NSIS Installer (Recommended)
 
-1. Download `EngramDesktopView-Setup-1.1.0.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+1. Download `EngramDesktopView-Setup-1.2.0.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 2. Run the installer
 3. Follow the installation wizard
 4. Launch from Start Menu or Desktop shortcut
 
 #### Option 2: Portable (ZIP)
 
-1. Download `EngramDesktopView-1.1.0-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+1. Download `EngramDesktopView-1.2.0-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 2. Extract to any folder (e.g., `C:\Programs\EngramDesktopView`)
 3. Run `EngramDesktopView.exe`
 4. (Optional) Create a shortcut manually
 
-#### Windows Store (Scoop)
+#### Option 3: Scoop
 
 ```powershell
 scoop bucket add extras
@@ -118,30 +172,46 @@ scoop install engram-desktop-view
 
 #### Intel & Apple Silicon
 
-1. Download `EngramDesktopView-1.1.0.dmg` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
-2. Open the DMG file
+1. Download `EngramDesktopView-1.2.0-mac.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+2. Extract the ZIP
 3. Drag `EngramDesktopView.app` to Applications
-4. Eject the DMG
-5. Launch from Applications (first launch may require right-click → Open)
+4. Launch from Applications (first launch may require right-click → Open)
 
-#### Homebrew (Coming Soon)
-
-```bash
-brew install --cask engram-desktop-view
-```
+> **Note:** macOS may show "App is damaged" — run: `xattr -cr /Applications/EngramDesktopView.app`
 
 ---
 
 ### 🐧 Linux
 
+#### AppImage (Universal)
+
+```bash
+# Download AppImage
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.0/EngramDesktopView-1.2.0.AppImage
+
+# Make executable
+chmod +x EngramDesktopView-1.2.0.AppImage
+
+# Run (no installation needed)
+./EngramDesktopView-1.2.0.AppImage
+
+# Optional: Create a desktop shortcut
+cat > ~/.local/share/applications/engram-desktop-view.desktop << 'EOF'
+[Desktop Entry]
+Name=EngramDesktopView
+Exec=/path/to/EngramDesktopView-1.2.0.AppImage
+Type=Application
+EOF
+```
+
 #### Ubuntu / Debian (deb)
 
 ```bash
 # Download the .deb package
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.amd64.deb
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.0/EngramDesktopView-1.2.0.amd64.deb
 
 # Install
-sudo dpkg -i EngramDesktopView-1.1.0.amd64.deb
+sudo dpkg -i EngramDesktopView-1.2.0.amd64.deb
 
 # Install dependencies if needed
 sudo apt-get install -f
@@ -154,10 +224,10 @@ engram-desktop-view
 
 ```bash
 # Download the .rpm package
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.x86_64.rpm
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.0/EngramDesktopView-1.2.0.x86_64.rpm
 
 # Install
-sudo rpm -i EngramDesktopView-1.1.0.x86_64.rpm
+sudo rpm -i EngramDesktopView-1.2.0.x86_64.rpm
 
 # Launch
 engram-desktop-view
@@ -175,24 +245,10 @@ cd engram-desktop-view
 makepkg -si
 ```
 
-#### AppImage (Universal)
-
-```bash
-# Download AppImage
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.AppImage
-
-# Make executable
-chmod +x EngramDesktopView-1.1.0.AppImage
-
-# Run
-./EngramDesktopView-1.1.0.AppImage
-```
-
 #### openSUSE
 
 ```bash
-# Download rpm
-sudo zypper install EngramDesktopView-1.1.0.x86_64.rpm
+sudo zypper install EngramDesktopView-1.2.0.x86_64.rpm
 ```
 
 #### Flatpak
@@ -204,32 +260,74 @@ flatpak run com.engram.DesktopView
 
 ---
 
-### 📦 Portable Linux AppImage Instructions
+## 🔧 Development
 
-AppImage is a portable format that works on most distributions without installation:
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `pnpm run dev` | Start Vite frontend dev server (localhost:5173) |
+| `pnpm run dev:electron` | Full dev mode: Vite + Electron running concurrently |
+| `pnpm run build` | Production build: Vite + Electron bundled |
+| `pnpm run electron:build:win` | Build Windows executable |
+| `pnpm run electron:build:mac` | Build macOS app |
+| `pnpm run electron:build:linux` | Build Linux packages |
+| `pnpm run test` | Run Vitest unit tests |
+| `pnpm run test:watch` | Watch mode for tests |
+
+### Recommended Dev Workflow
 
 ```bash
-# 1. Download the AppImage
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.1.0/EngramDesktopView-1.1.0.AppImage
-
-# 2. Make it executable
-chmod +x EngramDesktopView-1.1.0.AppImage
-
-# 3. Run it (no installation needed)
-./EngramDesktopView-1.1.0.AppImage
-
-# Optional: Create a desktop shortcut
-cat > ~/.local/share/applications/engram-desktop-view.desktop << EOF
-[Desktop Entry]
-Name=EngramDesktopView
-Exec=/path/to/EngramDesktopView-1.1.0.AppImage
-Type=Application
-EOF
+# Start full Electron dev mode with hot-reload
+pnpm run dev:electron
 ```
+
+This uses `concurrently` to run Vite and Electron together with hot-reload.
+
+> ⚠️ `pnpm run electron:dev` is deprecated — it builds the production bundle first. Use `pnpm run dev:electron` instead.
 
 ---
 
-## 🔧 Troubleshooting
+## 🏗️ Build from Source
+
+### Prerequisites
+
+- **Node.js** 20+
+- **pnpm** 9+
+- **Git**
+
+### Clone & Build
+
+```bash
+# Clone the repository
+git clone https://github.com/TatsumiDaku/engram-desktop-view.git
+cd engram-desktop-view
+
+# Install dependencies
+pnpm install
+
+# Production build for your platform
+pnpm run build && pnpm run electron:build
+```
+
+### Platform-Specific Builds
+
+```bash
+# Windows (NSIS installer + ZIP)
+pnpm run electron:build:win
+
+# macOS (ZIP)
+pnpm run electron:build:mac
+
+# Linux (AppImage + deb)
+pnpm run electron:build:linux
+```
+
+The executables will be in the `release/` directory.
+
+---
+
+## 🔍 Troubleshooting
 
 ### Linux: "Unable to find suitable destination"
 
@@ -255,7 +353,7 @@ sudo dnf install gtk3 libnotify nss-libs
 sudo apt install fuse
 
 # If still failing, try with --no-sandbox
-./EngramDesktopView-1.1.0.AppImage --no-sandbox
+./EngramDesktopView-1.2.0.AppImage --no-sandbox
 ```
 
 ### macOS: "App is damaged"
@@ -264,80 +362,59 @@ sudo apt install fuse
 xattr -cr /Applications/EngramDesktopView.app
 ```
 
----
+### pnpm v10: Build Scripts Blocked
 
-## Fixing Electron "failed to install correctly"
+If you see an `approve-builds` error with pnpm v10:
+
+```bash
+# Run the installer without prompts
+pnpm install --approve-builds
+
+# Or approve globally
+pnpm approve-builds --global
+```
+
+### Fixing Electron "failed to install correctly"
 
 If you encounter the "Electron failed to install correctly" error:
 
 1. Clear Electron cache:
    ```bash
    pnpm exec electron-builder install-app-deps
-   # OR manually (PowerShell):
+   ```
+
+2. Or manually (PowerShell):
+   ```powershell
    Remove-Item -Recurse -Force $env:APPDATA\electron\Cache
    Remove-Item -Recurse -Force $env:LOCALAPPDATA\electron\Cache
    ```
 
-2. Reinstall electron:
-   ```bash
-   Remove-Item -Recurse -Force node_modules\electron
-   pnpm add -D electron@33.4.11
-   ```
-
 ---
 
-## 🏗️ Build from Source
+## 📋 System Requirements
 
-### Prerequisites
-
-- Node.js 20+
-- pnpm 9+
-- Git
-
-### Clone & Build
-
-```bash
-# Clone the repository
-git clone https://github.com/TatsumiDaku/engram-desktop-view.git
-cd engram-desktop-view
-
-# Install dependencies
-pnpm install
-
-# Development mode
-pnpm run dev
-
-# In another terminal, run Electron
-pnpm run build:electron && electron .
-```
-
-### Production Build
-
-```bash
-# Windows
-pnpm run electron:build:win
-
-# Linux
-pnpm run electron:build:linux
-
-# macOS
-pnpm run electron:build:mac
-```
-
-The executable will be in `release/` directory.
+| Requirement | Value |
+|-------------|-------|
+| **Engram Backend** | Must be running at `localhost:7437` |
+| **Operating System** | Windows 10+, macOS 10.15+, Linux (glibc 2.31+) |
+| **RAM** | 4GB minimum |
+| **Disk Space** | 200MB for installation |
 
 ---
 
 ## 🏗️ Architecture & Technologies
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | React + TypeScript + TailwindCSS |
-| **Desktop Runtime** | Electron 33 |
-| **State Management** | Zustand + TanStack Query |
-| **Memory Backend** | [Engram](https://github.com/Gentleman-Programming/engram) |
-| **Internationalization** | react-i18next (ES/EN/PT) |
-| **Build Tool** | Vite + electron-builder |
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| **Frontend** | React 18 + TypeScript | UI components and state |
+| **Styling** | TailwindCSS | Utility-first styling |
+| **Desktop Runtime** | Electron 33 | Cross-platform desktop shell |
+| **State Management** | Zustand + TanStack Query | Client state + server caching |
+| **Memory Backend** | [Engram](https://github.com/Gentleman-Programming/engram) | Persistent memory storage |
+| **i18n** | react-i18next | Multi-language (ES/EN/PT) |
+| **Auto-Update** | electron-updater | GitHub release updates |
+| **Build Tool** | Vite + electron-builder | Fast dev + cross-platform builds |
+| **Testing** | Vitest + Playwright | Unit + E2E tests |
 
 ---
 
@@ -354,5 +431,5 @@ MIT
 ---
 
 <p align="center">
-🎩 EngramDesktopView • TatsumiDaku
+🎩 EngramDesktopView • TatsumiDaku • v1.2.0
 </p>
