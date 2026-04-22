@@ -10,10 +10,10 @@ This file contains detailed installation instructions for Linux distributions.
 
 ```bash
 # Download the latest release
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.amd64.deb
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.amd64.deb
 
 # Install the package
-sudo dpkg -i EngramDesktopView-1.2.1.amd64.deb
+sudo dpkg -i EngramDesktopView-1.2.3.amd64.deb
 
 # If you get dependency errors, fix them with:
 sudo apt-get install -f
@@ -26,13 +26,13 @@ engram-desktop-view
 
 ```bash
 # Download AppImage
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.AppImage
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.AppImage
 
 # Make executable
-chmod +x EngramDesktopView-1.2.1.AppImage
+chmod +x EngramDesktopView-1.2.3.AppImage
 
 # Run directly
-./EngramDesktopView-1.2.1.AppImage
+./EngramDesktopView-1.2.3.AppImage
 ```
 
 ---
@@ -43,13 +43,13 @@ chmod +x EngramDesktopView-1.2.1.AppImage
 
 ```bash
 # Download the latest release
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.x86_64.rpm
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.x86_64.rpm
 
 # Install with dnf (recommended)
-sudo dnf install EngramDesktopView-1.2.1.x86_64.rpm
+sudo dnf install EngramDesktopView-1.2.3.x86_64.rpm
 
 # Or with rpm
-sudo rpm -i EngramDesktopView-1.2.1.x86_64.rpm
+sudo rpm -i EngramDesktopView-1.2.3.x86_64.rpm
 
 # Launch
 engram-desktop-view
@@ -61,10 +61,10 @@ engram-desktop-view
 
 ```bash
 # Download rpm
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.x86_64.rpm
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.x86_64.rpm
 
 # Install
-sudo zypper install EngramDesktopView-1.2.1.x86_64.rpm
+sudo zypper install EngramDesktopView-1.2.3.x86_64.rpm
 
 # Launch
 engram-desktop-view
@@ -108,17 +108,17 @@ AppImage is a portable format that works on virtually any Linux distribution wit
 
 ```bash
 # Download the AppImage
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.AppImage
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.AppImage
 
 # Make it executable
-chmod +x EngramDesktopView-1.2.1.AppImage
+chmod +x EngramDesktopView-1.2.3.AppImage
 ```
 
 ### Running
 
 ```bash
 # Run directly from terminal
-./EngramDesktopView-1.2.1.AppImage
+./EngramDesktopView-1.2.3.AppImage
 ```
 
 ### Creating a desktop shortcut
@@ -129,7 +129,7 @@ cat > ~/.local/share/applications/engram-desktop-view.desktop << 'EOF'
 [Desktop Entry]
 Name=EngramDesktopView
 Comment=Real-time dashboard for Engram memory agent
-Exec=/path/to/EngramDesktopView-1.2.1.AppImage
+Exec=/path/to/EngramDesktopView-1.2.3.AppImage
 Type=Application
 Categories=Utility;
 Icon=utilities-system-monitor
@@ -165,7 +165,7 @@ If AppImage fails to mount:
 sudo apt install fuse
 
 # If still failing, try with --no-sandbox flag
-./EngramDesktopView-1.2.1.AppImage --no-sandbox
+./EngramDesktopView-1.2.3.AppImage --no-sandbox
 ```
 
 ### Wayland display issues
@@ -174,7 +174,7 @@ If using Wayland and the app shows a blank window:
 
 ```bash
 # Run with X11
-ELECTRON_OZONE_PLATFORM_HINT=auto ./EngramDesktopView-1.2.1.AppImage
+ELECTRON_OZONE_PLATFORM_HINT=auto ./EngramDesktopView-1.2.3.AppImage
 ```
 
 ---

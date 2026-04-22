@@ -4,7 +4,7 @@
 
 > Real-time dashboard for monitoring your Engram memory agent. Built with Electron.
 
-[![Version](https://img.shields.io/badge/version-v1.2.1-blue.svg)](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+[![Version](https://img.shields.io/badge/version-v1.2.3-blue.svg)](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Electron](https://img.shields.io/badge/Electron-33.4-?logo=electron)](https://electronjs.org)
 [![Auto-Update](https://img.shields.io/badge/Auto--Update-electron--updater-green.svg)](https://github.com/electron/electron-updater)
@@ -147,14 +147,14 @@ Ensure Engram is running at `localhost:7437` before launching the app.
 
 #### Option 1: NSIS Installer (Recommended)
 
-1. Download `EngramDesktopView-Setup-1.2.1.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+1. Download `EngramDesktopView-Setup-1.2.3.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 2. Run the installer
 3. Follow the installation wizard
 4. Launch from Start Menu or Desktop shortcut
 
 #### Option 2: Portable (ZIP)
 
-1. Download `EngramDesktopView-1.2.1-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+1. Download `EngramDesktopView-1.2.3-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 2. Extract to any folder (e.g., `C:\Programs\EngramDesktopView`)
 3. Run `EngramDesktopView.exe`
 4. (Optional) Create a shortcut manually
@@ -172,7 +172,7 @@ scoop install engram-desktop-view
 
 #### Intel & Apple Silicon
 
-1. Download `EngramDesktopView-1.2.1-mac.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+1. Download `EngramDesktopView-1.2.3-mac.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 2. Extract the ZIP
 3. Drag `EngramDesktopView.app` to Applications
 4. Launch from Applications (first launch may require right-click → Open)
@@ -187,19 +187,19 @@ scoop install engram-desktop-view
 
 ```bash
 # Download AppImage
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.AppImage
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.AppImage
 
 # Make executable
-chmod +x EngramDesktopView-1.2.1.AppImage
+chmod +x EngramDesktopView-1.2.3.AppImage
 
 # Run (no installation needed)
-./EngramDesktopView-1.2.1.AppImage
+./EngramDesktopView-1.2.3.AppImage
 
 # Optional: Create a desktop shortcut
 cat > ~/.local/share/applications/engram-desktop-view.desktop << 'EOF'
 [Desktop Entry]
 Name=EngramDesktopView
-Exec=/path/to/EngramDesktopView-1.2.1.AppImage
+Exec=/path/to/EngramDesktopView-1.2.3.AppImage
 Type=Application
 EOF
 ```
@@ -208,10 +208,10 @@ EOF
 
 ```bash
 # Download the .deb package
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.amd64.deb
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.amd64.deb
 
 # Install
-sudo dpkg -i EngramDesktopView-1.2.1.amd64.deb
+sudo dpkg -i EngramDesktopView-1.2.3.amd64.deb
 
 # Install dependencies if needed
 sudo apt-get install -f
@@ -224,10 +224,10 @@ engram-desktop-view
 
 ```bash
 # Download the .rpm package
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.1/EngramDesktopView-1.2.1.x86_64.rpm
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.x86_64.rpm
 
 # Install
-sudo rpm -i EngramDesktopView-1.2.1.x86_64.rpm
+sudo rpm -i EngramDesktopView-1.2.3.x86_64.rpm
 
 # Launch
 engram-desktop-view
@@ -248,7 +248,7 @@ makepkg -si
 #### openSUSE
 
 ```bash
-sudo zypper install EngramDesktopView-1.2.1.x86_64.rpm
+sudo zypper install EngramDesktopView-1.2.3.x86_64.rpm
 ```
 
 #### Flatpak
@@ -353,7 +353,7 @@ sudo dnf install gtk3 libnotify nss-libs
 sudo apt install fuse
 
 # If still failing, try with --no-sandbox
-./EngramDesktopView-1.2.1.AppImage --no-sandbox
+./EngramDesktopView-1.2.3.AppImage --no-sandbox
 ```
 
 ### macOS: "App is damaged"
@@ -431,5 +431,5 @@ MIT
 ---
 
 <p align="center">
-🎩 EngramDesktopView • TatsumiDaku • v1.2.1
+🎩 EngramDesktopView • TatsumiDaku • v1.2.3
 </p>
