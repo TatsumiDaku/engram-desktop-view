@@ -8,6 +8,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   test:
     name: Test
@@ -167,7 +170,7 @@ jobs:
       - name: List artifacts
         run: |
           echo "Artifacts downloaded:"
-          find artifacts -type f \( -name "*.exe" -o -name "*.zip" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" -o -name "*.msi" \) 2>/dev/null | head -50
+          find artifacts -type f \( -name "*.exe" -o -name "*.zip" -o -name "*.AppImage" -o -name "*.deb" \) 2>/dev/null | head -50
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -180,7 +183,5 @@ jobs:
             artifacts/**/*.zip
             artifacts/**/*.AppImage
             artifacts/**/*.deb
-            artifacts/**/*.rpm
-            artifacts/**/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
