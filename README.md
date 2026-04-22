@@ -162,7 +162,8 @@ Ensure Engram is running at `localhost:7437` before launching the app.
 #### Option 3: Scoop
 
 ```powershell
-scoop bucket add 
+# Add your own bucket (required for this app)
+scoop bucket add engram-desktop https://github.com/TatsumiDaku/engram-desktop-view
 scoop install engram-desktop-view
 ```
 
