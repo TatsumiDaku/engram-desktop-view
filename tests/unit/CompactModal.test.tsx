@@ -112,26 +112,33 @@ describe("CompactModal", () => {
 		setupMocks();
 
 		// Setup default mock implementations
-		vi.mocked(useSessions).mockImplementation(() => ({
-			data: {
-				sessions: [
-					{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
-					{ id: "session-2", project: "project-a", observationCount: 3, agentName: "agent-2" },
-					{ id: "session-3", project: "project-b", observationCount: 2, agentName: "agent-3" },
-				],
-			},
-			isLoading: false,
-		}));
+		vi.mocked(useSessions).mockImplementation(() =>
+			({
+				data: {
+					sessions: [
+						{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1", type: "session", latestTitle: null, topicKey: null, createdAt: "2024-01-01", updatedAt: "2024-01-01" },
+						{ id: "session-2", project: "project-a", observationCount: 3, agentName: "agent-2", type: "session", latestTitle: null, topicKey: null, createdAt: "2024-01-01", updatedAt: "2024-01-01" },
+						{ id: "session-3", project: "project-b", observationCount: 2, agentName: "agent-3", type: "session", latestTitle: null, topicKey: null, createdAt: "2024-01-01", updatedAt: "2024-01-01" },
+					],
+					stats: { projectCount: 2, sessionCount: 3, observationCount: 10, promptCount: 0, emptySessionCount: 0 },
+				},
+				isLoading: false,
+			}) as any
+		);
 
-		vi.mocked(useCompactSessions).mockImplementation(() => ({
-			mutateAsync: mockUseCompactSessionsMutateAsync,
-			isPending: false,
-		}));
+		vi.mocked(useCompactSessions).mockImplementation(() =>
+			({
+				mutateAsync: mockUseCompactSessionsMutateAsync,
+				isPending: false,
+			}) as any
+		);
 
-		vi.mocked(useCompactProjects).mockImplementation(() => ({
-			mutateAsync: mockUseCompactProjectsMutateAsync,
-			isPending: false,
-		}));
+		vi.mocked(useCompactProjects).mockImplementation(() =>
+			({
+				mutateAsync: mockUseCompactProjectsMutateAsync,
+				isPending: false,
+			}) as any
+		);
 
 		// Open the modal for each test
 		useUIStore.getState().setCompactModalOpen(true);
@@ -389,9 +396,9 @@ describe("CompactModal", () => {
 	describe("empty states", () => {
 		it("should show empty message when no sessions", () => {
 			vi.mocked(useSessions).mockReturnValueOnce({
-				data: { sessions: [] },
+				data: { sessions: [], stats: { projectCount: 0, sessionCount: 0, observationCount: 0, promptCount: 0, emptySessionCount: 0 } },
 				isLoading: false,
-			});
+			} as any);
 
 			renderModal();
 
