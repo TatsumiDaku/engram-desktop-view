@@ -69,7 +69,10 @@ export type TabType =
 	| "sessions"
 	| "memories"
 	| "topics"
+	| "projects"
 	| "timeline"
 	| "prompts"
 	| "empty-sessions"
-	| "compare";
+	| "compare"
+	| "search"
+	| "compact";

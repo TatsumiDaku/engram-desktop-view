@@ -11,9 +11,11 @@ interface UIState {
 	settingsModalOpen: boolean;
 	mergeProjectsModalOpen: boolean;
 	shortcutsModalOpen: boolean;
+	compactModalOpen: boolean;
 	setSettingsModalOpen: (open: boolean) => void;
 	setMergeProjectsModalOpen: (open: boolean) => void;
 	setShortcutsModalOpen: (open: boolean) => void;
+	setCompactModalOpen: (open: boolean) => void;
 
 	autoRefresh: boolean;
 	setAutoRefresh: (enabled: boolean) => void;
@@ -49,10 +51,12 @@ export const useUIStore = create<UIState>()(
 			settingsModalOpen: false,
 			mergeProjectsModalOpen: false,
 			shortcutsModalOpen: false,
+			compactModalOpen: false,
 			setSettingsModalOpen: (open) => set({ settingsModalOpen: open }),
 			setMergeProjectsModalOpen: (open) =>
 				set({ mergeProjectsModalOpen: open }),
 			setShortcutsModalOpen: (open) => set({ shortcutsModalOpen: open }),
+			setCompactModalOpen: (open) => set({ compactModalOpen: open }),
 
 			autoRefresh: true,
 			setAutoRefresh: (enabled) => set({ autoRefresh: enabled }),

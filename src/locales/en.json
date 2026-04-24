@@ -8,10 +8,12 @@
 		"sessions": "Sessions",
 		"memories": "Memories",
 		"topics": "Topics",
+		"projects": "Projects",
 		"timeline": "Timeline",
 		"prompts": "Prompts",
 		"emptySessions": "Empty Sessions",
-		"compare": "Compare"
+		"compare": "Compare",
+		"compact": "Compact"
 	},
 	"memories": {
 		"title": "Memories",
@@ -141,5 +143,74 @@
 		"shared": "Shared",
 		"user": "User",
 		"system": "System"
+	},
+	"observationDetailModal": {
+		"title": "Observation Detail",
+		"close": "Close",
+		"project": "Project",
+		"topic": "Topic",
+		"created": "Created",
+		"updated": "Updated",
+		"id": "ID",
+		"content": "Content",
+		"noContent": "No content"
+	},
+	"observationModal": {
+		"unsavedChanges": "You have unsaved changes. Are you sure you want to close?"
+	},
+	"sessionModal": {
+		"empty": "No observations in this session"
+	},
+	"projects": {
+		"title": "Projects",
+		"searchPlaceholder": "Search projects...",
+		"sessions": "sessions",
+		"observations": "observations",
+		"showMore": "See {{count}} more projects",
+		"empty": {
+			"title": "No projects yet",
+			"description": "Projects will appear here when you have sessions"
+		},
+		"deleteProject": "Delete Project",
+		"deleteConfirm": "Delete Project",
+		"deleteMessage": "Are you sure you want to delete project \"{{projectName}}\"? This will remove {{sessionCount}} session(s).",
+		"deleteSessions": "Delete Sessions",
+		"selectAll": "Select All",
+		"deselectAll": "Deselect All",
+		"deleteSelected": "Delete Selected ({{count}})",
+		"selected": "selected",
+		"noSessionsToDelete": "No empty sessions to delete"
+	},
+	"compact": {
+		"title": "Compact Sessions or Projects",
+		"tabs": {
+			"sessions": "Compact Sessions",
+			"projects": "Compact Projects"
+		},
+		"sessions": {
+			"selectSessions": "Select sessions to compact",
+			"selectedCount": "{{count}} session(s) selected",
+			"observationCount": "{{count}} observations",
+			"newSessionName": "Name for compacted session",
+			"namePlaceholder": "e.g., Week 16 Review",
+			"warning": "This will recreate observations with new session IDs. Original timestamps will be lost.",
+			"button": "Compact ({{count}} → 1)"
+		},
+		"projects": {
+			"selectProjects": "Select projects to compact",
+			"selectedCount": "{{count}} project(s) selected",
+			"sessionCount": "{{count}} sessions",
+			"observationCount": "{{count}} observations",
+			"targetProject": "Target project name",
+			"targetPlaceholder": "e.g., main-project",
+			"button": "Compact Projects"
+		},
+		"success": {
+			"title": "✅ Compaction successful",
+			"sessions": "{{count}} sesiones → 1 sesión",
+			"observations": "{{count}} observaciones preservadas",
+			"deleted": "{{count}} sesiones eliminadas",
+			"projects": "{{count}} projects compacted"
+		}
 	}
 }

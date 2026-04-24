@@ -8,10 +8,12 @@
 		"sessions": "Sesiones",
 		"memories": "Memorias",
 		"topics": "Temas",
+		"projects": "Proyectos",
 		"timeline": "Linea de Tiempo",
 		"prompts": "Prompts",
 		"emptySessions": "Sesiones Vacias",
-		"compare": "Comparar"
+		"compare": "Comparar",
+		"compact": "Compactar"
 	},
 	"memories": {
 		"title": "Memorias",
@@ -141,5 +143,74 @@
 		"shared": "Compartido",
 		"user": "Usuario",
 		"system": "Sistema"
+	},
+	"observationDetailModal": {
+		"title": "Detalle de Observacion",
+		"close": "Cerrar",
+		"project": "Proyecto",
+		"topic": "Tema",
+		"created": "Creado",
+		"updated": "Actualizado",
+		"id": "ID",
+		"content": "Contenido",
+		"noContent": "Sin contenido"
+	},
+	"observationModal": {
+		"unsavedChanges": "Tienes cambios sin guardar. Estás seguro de que quieres cerrar?"
+	},
+	"sessionModal": {
+		"empty": "Sin observaciones en esta sesión"
+	},
+	"projects": {
+		"title": "Proyectos",
+		"searchPlaceholder": "Buscar proyectos...",
+		"sessions": "sesiones",
+		"observations": "observaciones",
+		"showMore": "Ver {{count}} proyectos mas",
+		"empty": {
+			"title": "Sin proyectos",
+			"description": "Los proyectos apareceran aqui cuando tengas sesiones"
+		},
+		"deleteProject": "Eliminar Proyecto",
+		"deleteConfirm": "Eliminar Proyecto",
+		"deleteMessage": "Esta seguro de que desea eliminar el proyecto \"{{projectName}}\"? Esto eliminara {{sessionCount}} sesion(es).",
+		"deleteSessions": "Eliminar Sesiones",
+		"selectAll": "Seleccionar Todo",
+		"deselectAll": "Deseleccionar Todo",
+		"deleteSelected": "Eliminar Seleccionadas ({{count}})",
+		"selected": "seleccionadas",
+		"noSessionsToDelete": "No hay sesiones vacias para eliminar"
+	},
+	"compact": {
+		"title": "Compactar Sesiones o Proyectos",
+		"tabs": {
+			"sessions": "Compactar Sesiones",
+			"projects": "Compactar Proyectos"
+		},
+		"sessions": {
+			"selectSessions": "Seleccionar sesiones para compactar",
+			"selectedCount": "{{count}} sesion(es) seleccionada(s)",
+			"observationCount": "{{count}} observaciones",
+			"newSessionName": "Nombre para la sesion compactada",
+			"namePlaceholder": "ej., Resumen Semana 16",
+			"warning": "Esto recreara observaciones con nuevos IDs de sesion. Las marcas de tiempo originales se perderan.",
+			"button": "Compactar ({{count}} → 1)"
+		},
+		"projects": {
+			"selectProjects": "Seleccionar proyectos para compactar",
+			"selectedCount": "{{count}} proyecto(s) seleccionado(s)",
+			"sessionCount": "{{count}} sesiones",
+			"observationCount": "{{count}} observaciones",
+			"targetProject": "Nombre del proyecto destino",
+			"targetPlaceholder": "ej., proyecto-principal",
+			"button": "Compactar Proyectos"
+		},
+		"success": {
+			"title": "✅ Compactacion exitosa",
+			"sessions": "{{count}} sesiones → 1 sesion",
+			"observations": "{{count}} observaciones preservadas",
+			"deleted": "{{count}} sesiones eliminadas",
+			"projects": "{{count}} proyectos compactados"
+		}
 	}
 }

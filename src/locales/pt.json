@@ -8,10 +8,12 @@
 		"sessions": "Sessões",
 		"memories": "Memórias",
 		"topics": "Tópicos",
+		"projects": "Projetos",
 		"timeline": "Linha do Tempo",
 		"prompts": "Prompts",
 		"emptySessions": "Sessões Vazias",
-		"compare": "Comparar"
+		"compare": "Comparar",
+		"compact": "Compactar"
 	},
 	"emptySessions": {
 		"title": "Sessões Vazias",
@@ -37,7 +39,7 @@
 		"heroTitle": "🧔‍♂️🎩 Criado para a Comunidade Gentleman",
 		"heroSubtitle": "EngramDesktopView - Monitoramento de memória para agentes de IA. Rastreie, busque e explore as observações de memória do seu agente em tempo real.",
 		"neuralDashboard": "✨ Painel de Memória Neural",
-		"developedBy": "Desenvolvido por",
+		"developedBy": "Desarrollado por",
 		"fullStack": "Desenvolvedor Full Stack",
 		"githubProfile": "Perfil do GitHub",
 		"features": {
@@ -103,7 +105,7 @@
 		},
 		"empty": {
 			"title": "Sem observações ainda",
-			"description": "Sua linha do tempo aparecerá aqui quando criar observações"
+			"description": "Sua linha de tempo aparecerá aqui quando criar observações"
 		}
 	},
 	"settings": {
@@ -126,5 +128,74 @@
 		"shared": "Compartilhado",
 		"user": "Usuário",
 		"system": "Sistema"
+	},
+	"observationDetailModal": {
+		"title": "Detalhe da Observacao",
+		"close": "Fechar",
+		"project": "Projeto",
+		"topic": "Topico",
+		"created": "Criado",
+		"updated": "Atualizado",
+		"id": "ID",
+		"content": "Conteudo",
+		"noContent": "Sem conteudo"
+	},
+	"observationModal": {
+		"unsavedChanges": "Você tem alterações não salvas. Tem certeza de que deseja fechar?"
+	},
+	"sessionModal": {
+		"empty": "Sem observações nesta sessão"
+	},
+	"projects": {
+		"title": "Projetos",
+		"searchPlaceholder": "Buscar projetos...",
+		"sessions": "sessoes",
+		"observations": "observacoes",
+		"showMore": "Ver {{count}} projetos mais",
+		"empty": {
+			"title": "Sem projetos",
+			"description": "Os projetos aparecerao aqui quando voce tiver sessoes"
+		},
+		"deleteProject": "Eliminar Projeto",
+		"deleteConfirm": "Eliminar Projeto",
+		"deleteMessage": "Tem certeza de que deseja eliminar o projeto \"{{projectName}}\"? Isso removera {{sessionCount}} sessao(oes).",
+		"deleteSessions": "Eliminar Sessoes",
+		"selectAll": "Selecionar Tudo",
+		"deselectAll": "Desmarcar Tudo",
+		"deleteSelected": "Eliminar Selecionadas ({{count}})",
+		"selected": "selecionadas",
+		"noSessionsToDelete": "Nao ha sessoes vazias para eliminar"
+	},
+	"compact": {
+		"title": "Compactar Sessoes ou Projetos",
+		"tabs": {
+			"sessions": "Compactar Sessoes",
+			"projects": "Compactar Projetos"
+		},
+		"sessions": {
+			"selectSessions": "Selecionar sessoes para compactar",
+			"selectedCount": "{{count}} sessao(oes) selecionada(s)",
+			"observationCount": "{{count}} observacoes",
+			"newSessionName": "Nome para a sessao compactada",
+			"namePlaceholder": "ex., Resumo Semana 16",
+			"warning": "Isso recriara observacoes com novos IDs de sessao. As marcas de tempo originais serao perdidas.",
+			"button": "Compactar ({{count}} → 1)"
+		},
+		"projects": {
+			"selectProjects": "Selecionar projetos para compactar",
+			"selectedCount": "{{count}} projeto(s) selecionado(s)",
+			"sessionCount": "{{count}} sessoes",
+			"observationCount": "{{count}} observacoes",
+			"targetProject": "Nome do projeto destino",
+			"targetPlaceholder": "ex., projeto-principal",
+			"button": "Compactar Projetos"
+		},
+		"success": {
+			"title": "✅ Compacao bem-sucedida",
+			"sessions": "{{count}} sessoes → 1 sessao",
+			"observations": "{{count}} observacoes preservadas",
+			"deleted": "{{count}} sessoes eliminadas",
+			"projects": "{{count}} projetos compactados"
+		}
 	}
 }

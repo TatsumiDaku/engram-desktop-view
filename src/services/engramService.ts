@@ -13,6 +13,9 @@ import type {
 	Session,
 } from "@/types/engram";
 
+// Common FTS5 tokens broad enough to surface most observations (same as reference implementation)
+const BROAD_TERMS = ["the", "is", "to", "in", "a", "of", "and", "project", "agent", "bugfix", "decision", "architecture", "discovery", "pattern", "config", "learning"];
+
 function mapObservation(apiObs: any): Observation {
 	return {
 		id: apiObs.id,
@@ -28,57 +31,30 @@ function mapObservation(apiObs: any): Observation {
 	};
 }
 
+// Fetches all reachable observations via multiple broad FTS searches and deduplicates (reference implementation approach)
 export const getAllObservations = async (): Promise<Observation[]> => {
-	const endpoints = [
-		// PRIMARY: GET /observations/recent (confirmed working)
-		{ method: "GET", path: "/observations/recent", body: undefined, fallback: false },
-	];
+	const results = await Promise.allSettled(
+		BROAD_TERMS.map((q) =>
+			engramGet<any[]>(`/search?q=${encodeURIComponent(q)}&limit=1000`).then((r) => r ?? [])
+		)
+	);
 
-	for (const endpoint of endpoints) {
-		try {
-			let data: any;
-			if (endpoint.method === "POST") {
-				data = await engramPost<any>(endpoint.path, endpoint.body);
-			} else {
-				data = await engramGet<any>(endpoint.path);
-			}
-			if (!data) continue;
+	const seen = new Set<number>();
+	const all: Observation[] = [];
 
-			// Handle string responses (error messages)
-			if (typeof data === "string") {
-				console.warn(`[engramService] ${endpoint.method} ${endpoint.path} returned string:`, data.slice(0, 100));
-				continue;
+	for (const r of results) {
+		if (r.status === "fulfilled" && Array.isArray(r.value)) {
+			for (const obs of r.value) {
+				if (!seen.has(obs.id)) {
+					seen.add(obs.id);
+					all.push(mapObservation(obs));
+				}
 			}
-
-			let arr: any[] = [];
-			if (Array.isArray(data)) {
-				arr = data;
-			} else if (Array.isArray(data.observations)) {
-				arr = data.observations;
-			} else if (Array.isArray(data.data)) {
-				arr = data.data;
-			} else if (Array.isArray(data.items)) {
-				arr = data.items;
-			} else if (data.results && Array.isArray(data.results)) {
-				arr = data.results;
-			} else if (data.error) {
-				console.warn(`[engramService] ${endpoint.method} ${endpoint.path} returned error:`, data.error);
-				continue;
-			} else {
-				continue;
-			}
-
-			if (arr.length > 0) {
-				return arr.map(mapObservation);
-			}
-		} catch (error) {
-			console.warn(`[engramService] ${endpoint.method} ${endpoint.path} failed:`, error);
-			if (endpoint.fallback) continue;
 		}
 	}
 
-	console.warn("[engramService] getAllObservations: all endpoints failed, returning empty array");
-	return [];
+	console.log("[engramService] getAllObservations: fetched", all.length, "unique observations via search");
+	return all;
 };
 
 // Derive sessions from observations grouped by session_id
@@ -88,6 +64,7 @@ export const getSessionsFromObservations = async (): Promise<Session[]> => {
 
 	for (const obs of allObs) {
 		const sessionId = obs.sessionId;
+		if (!sessionId) continue;
 		const entry = map.get(sessionId) ?? [];
 		entry.push(obs);
 		map.set(sessionId, entry);
@@ -128,38 +105,61 @@ export const getSessionsFromObservations = async (): Promise<Session[]> => {
 		);
 };
 
-// Sessions API - uses GET /sessions/recent
+// Sessions API - derives sessions from observations (same approach as reference implementation)
 export const getSessions = async (
 	_filters?: Partial<FilterState>,
 ): Promise<{ sessions: Session[]; stats: ProjectStats }> => {
-	const data = await engramGet<any[]>("/sessions/recent?limit=500");
+	const allObs = await getAllObservations();
 
-	const sessions: Session[] = ((data as any[]) || []).map((s: any) => ({
-		id: s.id,
-		project: s.project,
-		agentName: s.id.startsWith("manual-save-")
-			? "manual"
-			: (() => {
-					const parts = s.id.split("-");
-					return parts.length > 3 ? parts.slice(0, -3).join("-") : s.id;
-				})(),
-		type: "session",
-		latestTitle: null,
-		topicKey: null,
-		createdAt: s.started_at,
-		updatedAt: s.started_at,
-		observationCount: s.observation_count || 0,
-	}));
+	// Group observations by sessionId
+	const map = new Map<string, Observation[]>();
+	for (const obs of allObs) {
+		if (!obs.sessionId) continue;
+		const entry = map.get(obs.sessionId) ?? [];
+		entry.push(obs);
+		map.set(obs.sessionId, entry);
+	}
+
+	const sessions: Session[] = Array.from(map.entries())
+		.map(([sessionId, obsList]) => {
+			const sorted = [...obsList].sort((a, b) =>
+				a.createdAt.localeCompare(b.createdAt),
+			);
+			const lastObs = sorted[sorted.length - 1];
+			const firstObs = sorted[0];
+
+			const dateMatch = sessionId.match(/-(\d{8})-/);
+			const agentName = dateMatch
+				? sessionId.substring(0, dateMatch.index ?? 0)
+				: sessionId.startsWith("manual-save-")
+					? "manual"
+					: sessionId;
+
+			return {
+				id: sessionId,
+				project: obsList[0].project,
+				agentName,
+				type: "session",
+				latestTitle: lastObs?.title ?? null,
+				topicKey: sorted.find((o) => o.topicKey)?.topicKey ?? null,
+				createdAt: firstObs?.createdAt ?? "",
+				updatedAt: lastObs?.updatedAt ?? "",
+				observationCount: sorted.length,
+			};
+		})
+		.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+		);
 
 	return {
 		sessions,
 		stats: {
-			projectCount: 0,
+			projectCount: new Set(sessions.map((s) => s.project)).size,
 			sessionCount: sessions.length,
-			observationCount: 0,
+			observationCount: allObs.length,
 			promptCount: 0,
-			emptySessionCount: sessions.filter((s) => s.observationCount === 0)
-				.length,
+			emptySessionCount: 0,
 		},
 	};
 };
@@ -168,6 +168,8 @@ export const getSession = async (
 	sessionId: string,
 ): Promise<{ session: Session; observations: Observation[] }> => {
 	const allObs = await getAllObservations();
+
+	// Match observations by exact sessionId (now sessions are derived from observations too)
 	const sessionObs = allObs.filter((o) => o.sessionId === sessionId);
 
 	if (sessionObs.length === 0) {
@@ -176,7 +178,9 @@ export const getSession = async (
 			session: {
 				id: sessionId,
 				project: "",
-				agentName: sessionId.startsWith("manual-save-") ? "manual" : sessionId,
+				agentName: sessionId.startsWith("manual-save-")
+					? "manual"
+					: sessionId.split("-").slice(0, -2).join("-"),
 				type: "session",
 				latestTitle: null,
 				topicKey: null,
@@ -200,10 +204,7 @@ export const getSession = async (
 			project: firstObs.project,
 			agentName: sessionId.startsWith("manual-save-")
 				? "manual"
-				: (() => {
-						const parts = sessionId.split("-");
-						return parts.length > 3 ? parts.slice(0, -3).join("-") : sessionId;
-					})(),
+				: sessionId.split("-").slice(0, -2).join("-"),
 			type: "session",
 			latestTitle: lastObs.title,
 			topicKey: sorted.find((o) => o.topicKey)?.topicKey ?? null,
@@ -396,8 +397,38 @@ export const mergeProjects = async (
 	targetProject: string,
 ): Promise<{ merged: number }> => {
 	const data = await engramPost<{ merged: number }>("/projects/migrate", {
-		from: sourceProject,
-		to: targetProject,
+		old_project: sourceProject,
+		new_project: targetProject,
 	});
 	return (data as { merged: number }) ?? { merged: 0 };
+};
+
+// Session compaction APIs
+export const createSession = async (name: string): Promise<{ id: string }> => {
+	const data = await engramPost<{ id: string }>("/sessions", { id: name });
+	return (data as { id: string }) ?? { id: name };
+};
+
+export const createObservation = async (
+	obs: Partial<Observation>,
+): Promise<Observation> => {
+	const payload: Record<string, unknown> = {};
+	if (obs.sessionId !== undefined) payload.session_id = obs.sessionId;
+	if (obs.project !== undefined) payload.project = obs.project;
+	if (obs.type !== undefined) payload.type = obs.type;
+	if (obs.title !== undefined) payload.title = obs.title;
+	if (obs.content !== undefined) payload.content = obs.content;
+	if (obs.scope !== undefined) payload.scope = obs.scope;
+	if (obs.topicKey !== undefined) payload.topic_key = obs.topicKey;
+
+	const data = await engramPost<any>("/observations", payload);
+	return mapObservation(data);
+};
+
+export const deleteObservationHard = async (id: number): Promise<void> => {
+	await engramDelete(`/observations/${id}?hard=true`);
+};
+
+export const deleteSession = async (sessionId: string): Promise<void> => {
+	await engramDelete(`/sessions/${encodeURIComponent(sessionId)}`);
 };
