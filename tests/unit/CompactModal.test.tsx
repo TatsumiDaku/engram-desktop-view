@@ -103,7 +103,7 @@ describe("CompactModal", () => {
 		setupMocks();
 
 		// Setup default mock implementations
-		useSessions.mockReturnValue({
+		;(useSessions as ReturnType<typeof useSessions> & { mockReturnValue: Function }).mockReturnValue({
 			data: {
 				sessions: [
 					{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
@@ -114,12 +114,12 @@ describe("CompactModal", () => {
 			isLoading: false,
 		});
 
-		useCompactSessions.mockReturnValue({
+		;(useCompactSessions as ReturnType<typeof useCompactSessions> & { mockReturnValue: Function }).mockReturnValue({
 			mutateAsync: mockUseCompactSessionsMutateAsync,
 			isPending: false,
 		});
 
-		useCompactProjects.mockReturnValue({
+		;(useCompactProjects as ReturnType<typeof useCompactProjects> & { mockReturnValue: Function }).mockReturnValue({
 			mutateAsync: mockUseCompactProjectsMutateAsync,
 			isPending: false,
 		});
@@ -287,7 +287,7 @@ describe("CompactModal", () => {
 		it("should disable compact button when no sessions selected", () => {
 			renderModal();
 
-			const button = screen.getByRole("button", { name: /Compact.*sessions/i });
+			const button = screen.getByRole("button", { name: /Compact.*sessions/i }) as HTMLButtonElement;
 			expect(button.disabled).toBe(true);
 		});
 
@@ -299,7 +299,7 @@ describe("CompactModal", () => {
 			fireEvent.click(checkboxes[0]);
 
 			await waitFor(() => {
-				const button = screen.getByRole("button", { name: /Compact.*sessions/i });
+				const button = screen.getByRole("button", { name: /Compact.*sessions/i }) as HTMLButtonElement;
 				expect(button.disabled).toBe(true);
 			});
 		});
@@ -316,7 +316,7 @@ describe("CompactModal", () => {
 			fireEvent.change(input, { target: { value: "My Session" } });
 
 			await waitFor(() => {
-				const button = screen.getByRole("button", { name: /Compact.*sessions/i });
+				const button = screen.getByRole("button", { name: /Compact.*sessions/i }) as HTMLButtonElement;
 				expect(button.disabled).toBe(false);
 			});
 		});
@@ -331,7 +331,7 @@ describe("CompactModal", () => {
 			fireEvent.click(projectsTab);
 
 			await waitFor(() => {
-				const button = screen.getByRole("button", { name: /Compact Projects/i });
+				const button = screen.getByRole("button", { name: /Compact Projects/i }) as HTMLButtonElement;
 				expect(button.disabled).toBe(true);
 			});
 		});
@@ -349,7 +349,7 @@ describe("CompactModal", () => {
 				fireEvent.click(checkboxes[0]);
 			});
 
-			const button = screen.getByRole("button", { name: /Compact Projects/i });
+			const button = screen.getByRole("button", { name: /Compact Projects/i }) as HTMLButtonElement;
 			expect(button.disabled).toBe(true);
 		});
 
@@ -371,7 +371,7 @@ describe("CompactModal", () => {
 			fireEvent.change(targetInput, { target: { value: "Target Project" } });
 
 			await waitFor(() => {
-				const button = screen.getByRole("button", { name: /Compact Projects/i });
+				const button = screen.getByRole("button", { name: /Compact Projects/i }) as HTMLButtonElement;
 				expect(button.disabled).toBe(false);
 			});
 		});
@@ -380,7 +380,7 @@ describe("CompactModal", () => {
 	describe("empty states", () => {
 		it("should show empty message when no sessions", () => {
 			// Override the mock for this test
-			useSessions.mockReturnValueOnce({
+			;(useSessions as ReturnType<typeof useSessions> & { mockReturnValueOnce: Function }).mockReturnValueOnce({
 				data: { sessions: [] },
 				isLoading: false,
 			});

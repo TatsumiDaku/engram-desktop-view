@@ -103,7 +103,7 @@ describe("CompactModal - Destructive Warning Display", () => {
 		setupMocks();
 
 		// Setup default mock implementations
-		useSessions.mockReturnValue({
+		;(useSessions as ReturnType<typeof useSessions> & { mockReturnValue: Function }).mockReturnValue({
 			data: {
 				sessions: [
 					{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
@@ -113,12 +113,12 @@ describe("CompactModal - Destructive Warning Display", () => {
 			isLoading: false,
 		});
 
-		useCompactSessions.mockReturnValue({
+		;(useCompactSessions as ReturnType<typeof useCompactSessions> & { mockReturnValue: Function }).mockReturnValue({
 			mutateAsync: mockUseCompactSessionsMutateAsync,
 			isPending: false,
 		});
 
-		useCompactProjects.mockReturnValue({
+		;(useCompactProjects as ReturnType<typeof useCompactProjects> & { mockReturnValue: Function }).mockReturnValue({
 			mutateAsync: mockUseCompactProjectsMutateAsync,
 			isPending: false,
 		});
@@ -155,8 +155,10 @@ describe("CompactModal - Destructive Warning Display", () => {
 			// Warning div should come before buttons div
 			if (warningDiv && buttonsDiv) {
 				const body = document.body;
-				const warningIndex = Array.from(body.querySelectorAll('div')).indexOf(warningDiv);
-				const buttonsIndex = Array.from(body.querySelectorAll('div')).indexOf(buttonsDiv);
+				const warningEl = warningDiv as HTMLDivElement;
+				const buttonsEl = buttonsDiv as HTMLDivElement;
+				const warningIndex = Array.from(body.querySelectorAll('div')).indexOf(warningEl);
+				const buttonsIndex = Array.from(body.querySelectorAll('div')).indexOf(buttonsEl);
 				expect(warningIndex).toBeLessThan(buttonsIndex);
 			}
 		});
