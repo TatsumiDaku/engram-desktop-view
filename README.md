@@ -4,7 +4,7 @@
 
 > Real-time dashboard for monitoring your Engram memory agent. Built with Electron.
 
-[![Version](https://img.shields.io/badge/version-v1.2.3-blue.svg)](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+[![Version](https://img.shields.io/badge/version-v1.3.2-blue.svg)](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Electron](https://img.shields.io/badge/Electron-33.4-?logo=electron)](https://electronjs.org)
 [![Auto-Update](https://img.shields.io/badge/Auto--Update-electron--updater-green.svg)](https://github.com/electron/electron-updater)
@@ -130,7 +130,7 @@ Edit any observation directly from the Memories, Topics, or Timeline tabs:
 
 - **Export Data** - download all observations as JSON or Markdown
 - **Import Data** - restore from previously exported JSON files
-- **Merge Projects** - move observations from one project to another
+- **Compact Sessions** - compact sessions and merge projects into a single workflow
 - **Session Comparison** - find shared and unique observations between any two sessions
 
 ---
@@ -147,14 +147,14 @@ Ensure Engram is running at `localhost:7437` before launching the app.
 
 #### Option 1: NSIS Installer (Recommended)
 
-1. Download `EngramDesktopView Setup 1.2.3.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView.Setup.1.2.3.exe)
+1. Download `EngramDesktopView Setup 1.3.2.exe` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.3.2/EngramDesktopView.Setup.1.3.2.exe)
 2. Run the installer
 3. Follow the installation wizard
 4. Launch from Start Menu or Desktop shortcut
 
 #### Option 2: Portable (ZIP)
 
-1. Download `EngramDesktopView-1.2.3-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
+1. Download `EngramDesktopView-1.3.2-win.zip` from [Releases](https://github.com/TatsumiDaku/engram-desktop-view/releases/latest)
 2. Extract to any folder (e.g., `C:\Programs\EngramDesktopView`)
 3. Run `EngramDesktopView.exe`
 4. (Optional) Create a shortcut manually
@@ -188,7 +188,7 @@ scoop install engram-desktop-view
 
 ```bash
 # Download AppImage
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.AppImage
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.3.2/EngramDesktopView-1.3.2.AppImage
 
 # Make executable
 chmod +x EngramDesktopView-1.2.3.AppImage
@@ -209,10 +209,10 @@ EOF
 
 ```bash
 # Download the .deb package
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.amd64.deb
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.3.2/EngramDesktopView-1.3.2.amd64.deb
 
 # Install
-sudo dpkg -i EngramDesktopView-1.2.3.amd64.deb
+sudo dpkg -i EngramDesktopView-1.3.2.amd64.deb
 
 # Install dependencies if needed
 sudo apt-get install -f
@@ -225,10 +225,10 @@ engram-desktop-view
 
 ```bash
 # Download the .rpm package
-wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.2.3/EngramDesktopView-1.2.3.x86_64.rpm
+wget https://github.com/TatsumiDaku/engram-desktop-view/releases/download/v1.3.2/EngramDesktopView-1.3.2.x86_64.rpm
 
 # Install
-sudo rpm -i EngramDesktopView-1.2.3.x86_64.rpm
+sudo rpm -i EngramDesktopView-1.3.2.x86_64.rpm
 
 # Launch
 engram-desktop-view
@@ -249,7 +249,7 @@ makepkg -si
 #### openSUSE
 
 ```bash
-sudo zypper install EngramDesktopView-1.2.3.x86_64.rpm
+sudo zypper install EngramDesktopView-1.3.2.x86_64.rpm
 ```
 
 #### Flatpak
@@ -432,5 +432,5 @@ MIT
 ---
 
 <p align="center">
-🎩 EngramDesktopView • TatsumiDaku • v1.2.3
+🎩 EngramDesktopView • TatsumiDaku • v1.3.2
 </p>

@@ -1,7 +1,6 @@
 import { CompactModal } from "@/components/organisms/CompactModal";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { KeyboardShortcutsModal } from "@/components/KeyboardShortcutsModal";
-import { MergeProjectsModal } from "@/components/organisms/MergeProjectsModal";
 import { NavigationSidebar } from "@/components/organisms/NavigationSidebar";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useUIStore } from "@/stores/uiStore";
@@ -24,11 +23,9 @@ export function Dashboard() {
 	console.info("[Dashboard] Rendering Dashboard");
 	const setShortcutsModalOpen = useUIStore((s) => s.setShortcutsModalOpen);
 	const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
-	const setMergeProjectsModalOpen = useUIStore((s) => s.setMergeProjectsModalOpen);
 	const setCompactModalOpen = useUIStore((s) => s.setCompactModalOpen);
 	const shortcutsModalOpen = useUIStore((s) => s.shortcutsModalOpen);
 	const settingsModalOpen = useUIStore((s) => s.settingsModalOpen);
-	const mergeProjectsModalOpen = useUIStore((s) => s.mergeProjectsModalOpen);
 	const compactModalOpen = useUIStore((s) => s.compactModalOpen);
 
 	// Handle settings tab -> open settings modal
@@ -51,7 +48,6 @@ export function Dashboard() {
 			key: "Escape",
 			action: () => {
 				if (shortcutsModalOpen) setShortcutsModalOpen(false);
-				else if (mergeProjectsModalOpen) setMergeProjectsModalOpen(false);
 				else if (settingsModalOpen) setSettingsModalOpen(false);
 			},
 		},
@@ -78,7 +74,6 @@ export function Dashboard() {
 
 			<KeyboardShortcutsModal />
 			{settingsModalOpen && <SettingsModal />}
-			{mergeProjectsModalOpen && <MergeProjectsModal />}
 			{compactModalOpen && <CompactModal />}
 
 			<footer id="app-version" className="text-center text-sm text-muted-foreground py-4 border-t border-border">

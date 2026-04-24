@@ -37,9 +37,6 @@ function observationsToMarkdown(observations: Observation[]): string {
 export function SettingsModal() {
 	const settingsModalOpen = useUIStore((s) => s.settingsModalOpen);
 	const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
-	const setMergeProjectsModalOpen = useUIStore(
-		(s) => s.setMergeProjectsModalOpen,
-	);
 	const exportData = useExportData();
 	const importData = useImportData();
 	const { success, error } = useToast();
@@ -205,23 +202,7 @@ export function SettingsModal() {
 						</Button>
 					</div>
 
-					<div className="rounded-lg border p-4">
-						<h3 className="font-medium">Merge Projects</h3>
-						<p className="mt-1 text-sm text-muted-foreground">
-							Move observations from one project to another
-						</p>
-						<Button
-							className="mt-3"
-							variant="secondary"
-							onClick={() => {
-								setSettingsModalOpen(false);
-								setMergeProjectsModalOpen(true);
-							}}
-						>
-							Open Merge Projects
-						</Button>
 					</div>
-				</div>
 			</div>
 
 			{showImportConfirm && (
