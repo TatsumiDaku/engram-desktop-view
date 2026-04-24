@@ -3,6 +3,7 @@ import { SearchInput } from "@/components/atoms/SearchInput";
 import { ObservationDetailModal } from "@/components/organisms/ObservationDetailModal";
 import { SessionModal } from "@/components/organisms/SessionModal";
 import { useDeleteEmptySession, useProjects } from "@/hooks/useEngram";
+import { useToast } from "@/hooks/useToast";
 import { getProjectColor } from "@/utils/constants";
 import type { Observation } from "@/types/engram";
 import { useTranslation } from "react-i18next";
@@ -14,6 +15,7 @@ export function ProjectsTab() {
 	const { data, isLoading } = useProjects();
 	const deleteSession = useDeleteEmptySession();
 	const queryClient = useQueryClient();
+	const { success } = useToast();
 	const [search, setSearch] = useState("");
 	const [selectedProject, setSelectedProject] = useState<string | null>(null);
 	const [selectedSessions, setSelectedSessions] = useState<Set<string>>(new Set());
@@ -204,6 +206,52 @@ export function ProjectsTab() {
 											/>
 											<p className="font-medium truncate">{project.name}</p>
 										</div>
+										<button
+											onClick={(e) => {
+												e.stopPropagation();
+												if (isProjectDeletable || project.sessions.every((s) => s.observationCount === 0)) {
+													const confirmed = window.confirm(
+														t("projects.deleteMessage", {
+															projectName: project.name,
+															sessionCount: project.sessionCount,
+														})
+													);
+													if (confirmed) {
+														const emptySessions = project.sessions.filter((s) => s.observationCount === 0);
+														Promise.all(emptySessions.map((s) => deleteSession.mutateAsync(s.id)))
+															.then(() => {
+																queryClient.invalidateQueries({ queryKey: ["sessions"] });
+																success(t("projects.deleteSuccess"));
+															})
+															.catch(() => {
+																setDeleteError("Failed to delete project");
+															});
+													}
+												} else {
+													window.confirm(
+														t("projects.cannotDeleteMessage", {
+															projectName: project.name,
+														})
+													);
+												}
+											}}
+											className="p-1 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
+											title={t("projects.deleteProject")}
+										>
+											<svg
+												className="h-4 w-4"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+												/>
+											</svg>
+										</button>
 									</div>
 									<div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
 										<span>

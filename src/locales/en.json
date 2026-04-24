@@ -138,6 +138,22 @@
 			"pt": "Portugues"
 		}
 	},
+	"exportImport": {
+		"title": "Export / Import",
+		"exportData": "Export Data",
+		"exportDescription": "Download all your Engram data",
+		"importData": "Import Data",
+		"importDescription": "Restore data from a previously exported JSON file",
+		"exportFormat": "Format:",
+		"exportSuccess": "Data exported successfully!",
+		"exportError": "Failed to export data",
+		"importSuccess": "Data imported successfully!",
+		"importError": "Failed to import data",
+		"importPreview": "Found {{count}} observations to import",
+		"importInvalid": "Invalid JSON file",
+		"importConfirm": "Confirm Import",
+		"importConfirmMessage": "This will add observations to your existing data. Do you want to proceed?"
+	},
 	"scope": {
 		"all": "All Scopes",
 		"shared": "Shared",
@@ -174,6 +190,8 @@
 		"deleteProject": "Delete Project",
 		"deleteConfirm": "Delete Project",
 		"deleteMessage": "Are you sure you want to delete project \"{{projectName}}\"? This will remove {{sessionCount}} session(s).",
+		"cannotDeleteMessage": "Cannot delete project \"{{projectName}}\" because it contains observations. Delete the observations first.",
+		"deleteSuccess": "Project deleted successfully",
 		"deleteSessions": "Delete Sessions",
 		"selectAll": "Select All",
 		"deselectAll": "Deselect All",

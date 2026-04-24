@@ -378,9 +378,9 @@ export const getStats = async (): Promise<ProjectStats> => {
 
 // Settings API
 export const exportData = async (): Promise<{ data: string }> => {
-	// Export returns a blob, so we need to handle it differently
-	const data = await engramGet<string>("/export");
-	return { data: (data as string) || "" };
+	const data = await engramGet<Record<string, unknown>>("/export");
+	const jsonString = JSON.stringify(data, null, 2);
+	return { data: jsonString };
 };
 
 export const importData = async (

@@ -138,6 +138,22 @@
 			"pt": "Portugues"
 		}
 	},
+	"exportImport": {
+		"title": "Exportar / Importar",
+		"exportData": "Exportar Datos",
+		"exportDescription": "Descarga todos tus datos de Engram",
+		"importData": "Importar Datos",
+		"importDescription": "Restaura datos desde un archivo JSON exportado previamente",
+		"exportFormat": "Formato:",
+		"exportSuccess": "Datos exportados exitosamente!",
+		"exportError": "Error al exportar datos",
+		"importSuccess": "Datos importados exitosamente!",
+		"importError": "Error al importar datos",
+		"importPreview": "Se encontraron {{count}} observaciones para importar",
+		"importInvalid": "Archivo JSON invalido",
+		"importConfirm": "Confirmar Importacion",
+		"importConfirmMessage": "Esto agregara observaciones a tus datos existentes. Deseas continuar?"
+	},
 	"scope": {
 		"all": "Todos los Ambitos",
 		"shared": "Compartido",
@@ -174,6 +190,8 @@
 		"deleteProject": "Eliminar Proyecto",
 		"deleteConfirm": "Eliminar Proyecto",
 		"deleteMessage": "Esta seguro de que desea eliminar el proyecto \"{{projectName}}\"? Esto eliminara {{sessionCount}} sesion(es).",
+		"cannotDeleteMessage": "No se puede eliminar el proyecto \"{{projectName}}\" porque contiene observaciones. Elimina las observaciones primero.",
+		"deleteSuccess": "Proyecto eliminado exitosamente",
 		"deleteSessions": "Eliminar Sesiones",
 		"selectAll": "Seleccionar Todo",
 		"deselectAll": "Deseleccionar Todo",

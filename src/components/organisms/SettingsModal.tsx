@@ -3,6 +3,7 @@ import { useExportData, useImportData } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
 import { useState } from "react";
 import { useToast } from "@/hooks/useToast";
+import { useTranslation } from "react-i18next";
 import type { Observation } from "@/types/engram";
 
 type ExportFormat = "json" | "markdown";
@@ -35,6 +36,7 @@ function observationsToMarkdown(observations: Observation[]): string {
 }
 
 export function SettingsModal() {
+	const { t } = useTranslation();
 	const settingsModalOpen = useUIStore((s) => s.settingsModalOpen);
 	const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
 	const exportData = useExportData();
@@ -51,6 +53,10 @@ export function SettingsModal() {
 	const handleExport = async () => {
 		try {
 			const result = await exportData.mutateAsync();
+			if (!result.data || result.data === "{}") {
+				error(t("exportImport.exportError"));
+				return;
+			}
 			let content: string;
 			let filename: string;
 			let mimeType: string;
@@ -80,9 +86,9 @@ export function SettingsModal() {
 			a.download = filename;
 			a.click();
 			URL.revokeObjectURL(url);
-			success("Data exported successfully!");
+			success(t("exportImport.exportSuccess"));
 		} catch {
-			error("Failed to export data");
+			error(t("exportImport.exportError"));
 		}
 	};
 
@@ -103,9 +109,9 @@ export function SettingsModal() {
 					const count = Array.isArray(parsed)
 						? parsed.length
 						: parsed.observations?.length || 0;
-					setImportPreview(`Found ${count} observations to import`);
+					setImportPreview(t("exportImport.importPreview", { count }));
 				} catch {
-					setImportPreview("Invalid JSON file");
+					setImportPreview(t("exportImport.importInvalid"));
 				}
 				setShowImportConfirm(true);
 			};
@@ -118,12 +124,12 @@ export function SettingsModal() {
 		if (!pendingImportData) return;
 		try {
 			await importData.mutateAsync(pendingImportData);
-			success("Data imported successfully!");
+			success(t("exportImport.importSuccess"));
 			setShowImportConfirm(false);
 			setPendingImportData(null);
 			setImportPreview(null);
 		} catch {
-			error("Failed to import data");
+			error(t("exportImport.importError"));
 			setShowImportConfirm(false);
 		}
 	};
@@ -137,7 +143,7 @@ export function SettingsModal() {
 
 			<div className="relative z-10 w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
 				<div className="mb-4 flex items-center justify-between">
-					<h2 className="text-lg font-semibold">Settings</h2>
+					<h2 className="text-lg font-semibold">{t("settings.title")}</h2>
 					<Button
 						variant="ghost"
 						size="sm"
@@ -161,13 +167,13 @@ export function SettingsModal() {
 
 				<div className="space-y-4">
 					<div className="rounded-lg border p-4">
-						<h3 className="font-medium">Export Data</h3>
+						<h3 className="font-medium">{t("exportImport.exportData")}</h3>
 						<p className="mt-1 text-sm text-muted-foreground">
-							Download all your Engram data
+							{t("exportImport.exportDescription")}
 						</p>
 
 						<div className="mt-3 flex items-center gap-2">
-							<label className="text-sm">Format:</label>
+							<label className="text-sm">{t("exportImport.exportFormat")}</label>
 							<select
 								value={exportFormat}
 								onChange={(e) => setExportFormat(e.target.value as ExportFormat)}
@@ -188,9 +194,9 @@ export function SettingsModal() {
 					</div>
 
 					<div className="rounded-lg border p-4">
-						<h3 className="font-medium">Import Data</h3>
+						<h3 className="font-medium">{t("exportImport.importData")}</h3>
 						<p className="mt-1 text-sm text-muted-foreground">
-							Restore data from a previously exported JSON file
+							{t("exportImport.importDescription")}
 						</p>
 						<Button
 							className="mt-3"
@@ -209,12 +215,12 @@ export function SettingsModal() {
 				<div className="fixed inset-0 z-[60] flex items-center justify-center">
 					<div className="absolute inset-0 bg-black/70" />
 					<div className="relative z-10 w-full max-w-sm rounded-lg bg-background p-6 shadow-lg">
-						<h3 className="text-lg font-semibold">Confirm Import</h3>
+						<h3 className="text-lg font-semibold">{t("exportImport.importConfirm")}</h3>
 						<p className="mt-2 text-sm text-muted-foreground">
 							{importPreview}
 						</p>
 						<p className="mt-2 text-sm text-muted-foreground">
-							This will add observations to your existing data. Do you want to proceed?
+							{t("exportImport.importConfirmMessage")}
 						</p>
 						<div className="mt-4 flex justify-end gap-2">
 							<Button
