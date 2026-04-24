@@ -2,6 +2,7 @@ import { EmptyState } from "@/components/atoms/EmptyState";
 import { SearchInput } from "@/components/atoms/SearchInput";
 import { StatCard } from "@/components/atoms/StatCard";
 import { TypeBadge } from "@/components/atoms/TypeBadge";
+import { ObservationDetailModal } from "@/components/organisms/ObservationDetailModal";
 import { ObservationRow } from "@/components/molecules/ObservationRow";
 import { useSession, useSessions, useStats } from "@/hooks/useEngram";
 import { getProjectColor } from "@/utils/constants";
@@ -19,6 +20,7 @@ export function SessionsTab() {
 	>("all");
 	const [visibleCount, setVisibleCount] = useState(9);
 	const [selectedSession, setSelectedSession] = useState<Session | null>(null);
+	const [selectedObservation, setSelectedObservation] = useState<Observation | null>(null);
 	const [sessionSearch, setSessionSearch] = useState("");
 	const [sessionTypeFilter, setSessionTypeFilter] = useState<string | null>(null);
 
@@ -110,7 +112,7 @@ export function SessionsTab() {
 				/>
 				<button
 					onClick={() => refetch()}
-					className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+					className="px-3 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors text-sm"
 					title="Refresh sessions"
 				>
 					🔄
@@ -123,8 +125,8 @@ export function SessionsTab() {
 					onClick={() => setDateFilter("today")}
 					className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 						dateFilter === "today"
-							? "bg-[hsl(263,70%,58%)] text-white"
-							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							? "bg-primary text-primary-foreground"
+							: "bg-muted text-muted-foreground hover:bg-muted/80"
 					}`}
 				>
 					{t("sessions.filters.today")}
@@ -133,8 +135,8 @@ export function SessionsTab() {
 					onClick={() => setDateFilter("week")}
 					className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 						dateFilter === "week"
-							? "bg-[hsl(263,70%,58%)] text-white"
-							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							? "bg-primary text-primary-foreground"
+							: "bg-muted text-muted-foreground hover:bg-muted/80"
 					}`}
 				>
 					{t("sessions.filters.thisWeek")}
@@ -143,8 +145,8 @@ export function SessionsTab() {
 					onClick={() => setDateFilter("month")}
 					className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 						dateFilter === "month"
-							? "bg-[hsl(263,70%,58%)] text-white"
-							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							? "bg-primary text-primary-foreground"
+							: "bg-muted text-muted-foreground hover:bg-muted/80"
 					}`}
 				>
 					{t("sessions.filters.thisMonth")}
@@ -153,8 +155,8 @@ export function SessionsTab() {
 					onClick={() => setDateFilter("all")}
 					className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 						dateFilter === "all"
-							? "bg-[hsl(263,70%,58%)] text-white"
-							: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+							? "bg-primary text-primary-foreground"
+							: "bg-muted text-muted-foreground hover:bg-muted/80"
 					}`}
 				>
 					{t("sessions.filters.allTime")}
@@ -208,8 +210,8 @@ export function SessionsTab() {
 								onClick={() => setSelectedSession(selectedSession?.id === session.id ? null : session)}
 								className={`cursor-pointer rounded-lg border p-4 transition-all ${
 									selectedSession?.id === session.id
-										? "border-[hsl(263,70%,58%)] bg-[hsl(263,30%,15%)] shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-										: "border-[hsl(263,30%,20%)] hover:border-[hsl(263,70%,58%)] hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+										? "border-primary bg-muted"
+										: "border-border hover:border-primary"
 								}`}
 							>
 								<div className="flex items-start justify-between">
@@ -219,7 +221,7 @@ export function SessionsTab() {
 												session.agentName ||
 												t("sessions.empty.untitled")}
 										</p>
-										<p className="mt-1 text-xs text-[hsl(263,20%,60%)]">
+										<p className="mt-1 text-xs text-muted-foreground">
 											<div className="flex items-center gap-1.5">
 												<div className={`inline-block w-2 h-2 rounded-full ${getProjectColor(session.project)}`} />
 												<span>{session.agentName}</span>
@@ -240,12 +242,12 @@ export function SessionsTab() {
 										</svg>
 									</div>
 								</div>
-								<div className="mt-3 flex items-center justify-between text-xs text-[hsl(263,20%,60%)]">
+								<div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
 									<span>{session.observationCount} {t("sessions.observations")}</span>
 									<span>{new Date(session.createdAt).toLocaleDateString()}</span>
 								</div>
 								{session.topicKey && (
-									<div className="mt-2 text-xs text-[hsl(263,70%,58%)]">
+									<div className="mt-2 text-xs text-primary">
 										{t("sessions.topic")}: {session.topicKey}
 									</div>
 								)}
@@ -253,14 +255,14 @@ export function SessionsTab() {
 
 							{/* Expanded Session Detail - Accordion Style */}
 							{selectedSession?.id === session.id && (
-								<div className="mt-2 rounded-lg border border-[hsl(263,30%,20%)] bg-[hsl(263,30%,10%)] p-4">
+								<div className="mt-2 rounded-lg border border-border bg-card p-4">
 									<div className="mb-4 flex items-center justify-between">
-										<h3 className="font-medium text-[hsl(263,20%,90%)]">
+										<h3 className="font-medium text-foreground">
 											Observations ({sessionData?.observations?.length || 0})
 										</h3>
 										<button
 											onClick={() => setSelectedSession(null)}
-											className="text-xs text-[hsl(263,20%,60%)] hover:text-[hsl(263,20%,90%)]"
+											className="text-xs text-muted-foreground hover:text-foreground"
 										>
 											Close
 										</button>
@@ -278,8 +280,8 @@ export function SessionsTab() {
 											onClick={() => setSessionTypeFilter(null)}
 											className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
 												sessionTypeFilter === null
-													? "bg-[hsl(263,70%,58%)] text-white"
-													: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+													? "bg-primary text-primary-foreground"
+													: "bg-muted text-muted-foreground hover:bg-muted/80"
 											}`}
 										>
 											All
@@ -290,8 +292,8 @@ export function SessionsTab() {
 												onClick={() => setSessionTypeFilter(type)}
 												className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
 													sessionTypeFilter === type
-														? "bg-[hsl(263,70%,58%)] text-white"
-														: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+														? "bg-primary text-primary-foreground"
+														: "bg-muted text-muted-foreground hover:bg-muted/80"
 												}`}
 											>
 												{type}
@@ -302,7 +304,7 @@ export function SessionsTab() {
 									{sessionLoading ? (
 										<div className="space-y-2">
 											{[...Array(3)].map((_, i) => (
-												<div key={i} className="h-12 rounded bg-[hsl(263,30%,12%)] animate-pulse" />
+												<div key={i} className="h-12 rounded bg-muted animate-pulse" />
 											))}
 										</div>
 									) : (
@@ -323,10 +325,11 @@ export function SessionsTab() {
 													<ObservationRow
 														key={observation.id}
 														observation={observation}
+														onClick={() => setSelectedObservation(observation)}
 													/>
 												))}
 											{(!sessionData?.observations || sessionData.observations.length === 0) && (
-												<p className="text-center text-[hsl(263,20%,60%)] py-4 text-sm">No observations in this session</p>
+												<p className="text-center text-muted-foreground py-4 text-sm">No observations in this session</p>
 											)}
 										</div>
 									)}
@@ -338,12 +341,20 @@ export function SessionsTab() {
 				{visibleCount < filteredSessions.length && (
 					<button
 						onClick={() => setVisibleCount(prev => prev + 9)}
-						className="w-full mt-4 py-3 rounded-lg bg-red-600 text-white font-medium hover:bg-red-500 transition-colors"
+						className="w-full mt-4 py-3 rounded-lg border border-border bg-card text-foreground font-medium hover:bg-muted transition-colors"
 					>
 						{t("sessions.showMore")} ({filteredSessions.length - visibleCount} {t("sessions.remaining")})
 					</button>
 				)}
 				</>
+			)}
+
+			{/* Observation Detail Modal */}
+			{selectedObservation && (
+				<ObservationDetailModal
+					observation={selectedObservation}
+					onClose={() => setSelectedObservation(null)}
+				/>
 			)}
 		</div>
 	);

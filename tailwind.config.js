@@ -41,6 +41,18 @@ export default {
 					DEFAULT: "hsl(var(--card))",
 					foreground: "hsl(var(--card-foreground))",
 				},
+				/* Type badge colors */
+				"type-bugfix": "hsl(var(--type-bugfix))",
+				"type-decision": "hsl(var(--type-decision))",
+				"type-architecture": "hsl(var(--type-architecture))",
+				"type-discovery": "hsl(var(--type-discovery))",
+				"type-pattern": "hsl(var(--type-pattern))",
+				"type-config": "hsl(var(--type-config))",
+				"type-preference": "hsl(var(--type-preference))",
+				"type-learning": "hsl(var(--type-learning))",
+				/* Scope badge colors */
+				"scope-project": "hsl(var(--scope-project))",
+				"scope-personal": "hsl(var(--scope-personal))",
 			},
 			borderRadius: {
 				lg: "var(--radius)",

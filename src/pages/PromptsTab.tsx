@@ -57,7 +57,7 @@ export function PromptsTab() {
 				/>
 				<button
 					onClick={() => refetch()}
-					className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+					className="px-3 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors text-sm"
 					title="Refresh prompts"
 				>
 					🔄

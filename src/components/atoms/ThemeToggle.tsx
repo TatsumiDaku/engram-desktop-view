@@ -25,7 +25,7 @@ export function ThemeToggle() {
 				</svg>
 			) : (
 				<svg
-					className="h-5 w-5 text-[var(--primary)]"
+					className="h-5 w-5 text-[var(--foreground)]"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"

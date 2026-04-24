@@ -141,7 +141,7 @@ export function TimelineTab() {
 					/>
 					<button
 						onClick={() => refetch()}
-						className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+						className="px-3 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors text-sm"
 						title="Refresh timeline"
 					>
 						🔄
@@ -153,8 +153,8 @@ export function TimelineTab() {
 						onClick={() => setDateFilter("today")}
 						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 							dateFilter === "today"
-								? "bg-[hsl(263,70%,58%)] text-white"
-								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+								? "bg-primary text-primary-foreground"
+								: "bg-muted text-muted-foreground hover:bg-muted/80"
 						}`}
 					>
 						{t("timeline.filters.today")}
@@ -163,8 +163,8 @@ export function TimelineTab() {
 						onClick={() => setDateFilter("week")}
 						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 							dateFilter === "week"
-								? "bg-[hsl(263,70%,58%)] text-white"
-								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+								? "bg-primary text-primary-foreground"
+								: "bg-muted text-muted-foreground hover:bg-muted/80"
 						}`}
 					>
 						{t("timeline.filters.thisWeek")}
@@ -173,8 +173,8 @@ export function TimelineTab() {
 						onClick={() => setDateFilter("month")}
 						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 							dateFilter === "month"
-								? "bg-[hsl(263,70%,58%)] text-white"
-								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+								? "bg-primary text-primary-foreground"
+								: "bg-muted text-muted-foreground hover:bg-muted/80"
 						}`}
 					>
 						{t("timeline.filters.thisMonth")}
@@ -183,8 +183,8 @@ export function TimelineTab() {
 						onClick={() => setDateFilter("specific")}
 						className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 							dateFilter === "specific"
-								? "bg-[hsl(263,70%,58%)] text-white"
-								: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+								? "bg-primary text-primary-foreground"
+								: "bg-muted text-muted-foreground hover:bg-muted/80"
 						}`}
 					>
 						{t("timeline.filters.specificDate")}
@@ -196,7 +196,7 @@ export function TimelineTab() {
 						type="date"
 						value={specificDate}
 						onChange={(e) => setSpecificDate(e.target.value)}
-						className="px-3 py-1 rounded text-sm border border-[hsl(263,30%,20%)] bg-[hsl(263,30%,15%)] text-[hsl(263,20%,95%)]"
+						className="px-3 py-1 rounded text-sm border border-border bg-muted text-foreground"
 					/>
 				)}
 
@@ -213,8 +213,8 @@ export function TimelineTab() {
 							onClick={() => setScopeFilter(filter.scope)}
 							className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 								scopeFilter === filter.scope
-									? "bg-[hsl(263,70%,58%)] text-white"
-									: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+									? "bg-primary text-primary-foreground"
+									: "bg-muted text-muted-foreground hover:bg-muted/80"
 							}`}
 						>
 							{t(`scope.${filter.label}`)}

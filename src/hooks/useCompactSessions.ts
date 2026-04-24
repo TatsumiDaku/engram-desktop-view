@@ -6,7 +6,6 @@ import {
 	getAllObservations,
 } from "@/services/engramService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Observation } from "@/types/engram";
 
 export interface CompactSessionsResult {
 	newSessionId: string;

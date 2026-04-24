@@ -10,7 +10,7 @@ export function SyncIndicator() {
 			{isActive && (
 				<div className="flex items-center gap-1">
 					<div className="h-2 w-2 rounded-full bg-yellow-400 animate-pulse" />
-					<span className="text-xs text-[hsl(263,20%,60%)]">Syncing...</span>
+					<span className="text-xs text-muted-foreground">Syncing...</span>
 				</div>
 			)}
 		</div>

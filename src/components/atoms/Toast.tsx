@@ -9,10 +9,10 @@ interface Toast {
 }
 
 const toastStyles = {
-	success: "bg-green-600 text-white",
-	error: "bg-red-600 text-white",
-	info: "bg-blue-600 text-white",
-	warning: "bg-yellow-600 text-black",
+	success: "bg-green-600 dark:bg-green-700 text-white",
+	error: "bg-red-600 dark:bg-red-700 text-white",
+	info: "bg-blue-600 dark:bg-blue-700 text-white",
+	warning: "bg-yellow-500 dark:bg-yellow-600 text-black dark:text-white",
 };
 
 export function Toast({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }) {

@@ -1,17 +1,17 @@
 export const TYPE_COLORS = {
-	bugfix: "bg-red-500",
-	decision: "bg-purple-500",
-	architecture: "bg-blue-500",
-	discovery: "bg-yellow-500",
-	pattern: "bg-green-500",
-	config: "bg-gray-500",
-	preference: "bg-pink-500",
-	learning: "bg-cyan-500",
+	bugfix: "bg-type-bugfix",
+	decision: "bg-type-decision",
+	architecture: "bg-type-architecture",
+	discovery: "bg-type-discovery",
+	pattern: "bg-type-pattern",
+	config: "bg-type-config",
+	preference: "bg-type-preference",
+	learning: "bg-type-learning",
 } as const;
 
 export const SCOPE_COLORS = {
-	project: "bg-blue-500",
-	personal: "bg-green-500",
+	project: "bg-scope-project",
+	personal: "bg-scope-personal",
 } as const;
 
 export type ObservationType = keyof typeof TYPE_COLORS;

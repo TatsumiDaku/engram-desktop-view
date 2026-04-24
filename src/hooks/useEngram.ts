@@ -15,9 +15,14 @@ import {
 	mergeProjects,
 	updateObservation,
 } from "@/services/engramService";
-import type { FilterState } from "@/types/engram";
+import type { FilterState, Session } from "@/types/engram";
+import { useMemo } from "react";
 import { useUIStore } from "@/stores/uiStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+// Re-export compact hooks for convenience
+export { useCompactSessions } from "./useCompactSessions";
+export { useCompactProjects } from "./useCompactProjects";
 
 // Sessions hooks
 export const useSessions = (filters?: Partial<FilterState>) => {
@@ -33,14 +38,9 @@ export const useSessions = (filters?: Partial<FilterState>) => {
 };
 
 export const useSession = (sessionId: string) => {
-	console.log("[useEngram] useSession fetching...", { sessionId });
 	return useQuery({
 		queryKey: ["session", sessionId],
-		queryFn: async () => {
-			const result = await getSession(sessionId);
-			console.log("[useEngram] useSession success", { sessionId });
-			return result;
-		},
+		queryFn: () => getSession(sessionId),
 		enabled: !!sessionId,
 	});
 };
@@ -239,4 +239,39 @@ export const useMergeProjects = () => {
 		},
 		onError: (err) => console.error("[useEngram] useMergeProjects error:", err),
 	});
+};
+
+// Projects hook
+export interface ProjectSummary {
+	name: string;
+	sessionCount: number;
+	observationCount: number;
+	sessions: Session[];
+}
+
+export const useProjects = () => {
+	const { data, isLoading } = useSessions();
+	return {
+		data: {
+			projects: useMemo(() => {
+				const sessions = data?.sessions ?? [];
+				const map = new Map<string, Session[]>();
+				for (const session of sessions) {
+					const list = map.get(session.project) ?? [];
+					list.push(session);
+					map.set(session.project, list);
+				}
+				const projects: ProjectSummary[] = Array.from(map.entries())
+					.map(([name, sessions]) => ({
+						name,
+						sessionCount: sessions.length,
+						observationCount: sessions.reduce((sum, s) => sum + s.observationCount, 0),
+						sessions,
+					}))
+					.sort((a, b) => b.sessionCount - a.sessionCount);
+				return projects;
+			}, [data]),
+		},
+		isLoading,
+	};
 };

@@ -93,7 +93,7 @@ export function MergeProjectsModal() {
 						<select
 							value={source}
 							onChange={(e) => setSource(e.target.value)}
-							className="w-full rounded-md border px-3 py-2 text-sm"
+							className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
 						>
 							<option value="">Select project...</option>
 							{projects.map((p) => (
@@ -114,7 +114,7 @@ export function MergeProjectsModal() {
 						<select
 							value={target}
 							onChange={(e) => setTarget(e.target.value)}
-							className="w-full rounded-md border px-3 py-2 text-sm"
+							className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
 						>
 							<option value="">Select project...</option>
 							{projects.map((p) => (
@@ -147,7 +147,7 @@ export function MergeProjectsModal() {
 					)}
 
 					{validationError && source && target && source === target && (
-						<div className="rounded-lg bg-red-500/10 p-3 text-sm text-red-500">
+						<div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive dark:bg-destructive/20">
 							{validationError}
 						</div>
 					)}

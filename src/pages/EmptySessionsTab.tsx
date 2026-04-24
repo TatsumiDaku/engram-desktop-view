@@ -110,14 +110,14 @@ export function EmptySessionsTab() {
 		<div className="space-y-4">
 			{/* Error Display */}
 			{deleteError && (
-				<div className="rounded-lg border border-red-500/50 bg-red-500/10 p-4 text-red-400">
+				<div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive dark:border-destructive/70 dark:bg-destructive/20">
 					<p className="font-semibold">⚠️ Error</p>
 					<p className="text-sm mt-1">{deleteError}</p>
 				</div>
 			)}
 
 			{isError && (
-				<div className="rounded-lg border border-red-500/50 bg-red-500/10 p-4 text-red-400">
+				<div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive dark:border-destructive/70 dark:bg-destructive/20">
 					<p className="font-semibold">⚠️ {t("sessions.error")}</p>
 					<p className="text-sm mt-1">
 						{error instanceof Error ? error.message : String(error)}
@@ -126,10 +126,10 @@ export function EmptySessionsTab() {
 			)}
 
 			<div className="flex justify-between items-center">
-				<h2 className="text-lg font-semibold text-[hsl(263,20%,95%)]">
+				<h2 className="text-lg font-semibold text-foreground">
 					{t("emptySessions.title")} ({sessions.length})
 					{selectedIds.length > 0 && (
-						<span className="ml-2 text-sm text-[hsl(263,70%,58%)]">
+						<span className="ml-2 text-sm text-primary">
 							({selectedIds.length} {t("emptySessions.selected")})
 						</span>
 					)}
@@ -138,14 +138,14 @@ export function EmptySessionsTab() {
 					<button
 						onClick={verifyEmptySessions}
 						disabled={verifying || sessions.length === 0}
-						className="px-3 py-1 rounded text-sm font-medium bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)] transition-colors disabled:opacity-50"
+						className="px-3 py-1 rounded text-sm font-medium bg-muted text-muted-foreground hover:bg-muted/80 transition-colors disabled:opacity-50"
 					>
 						{verifying ? t("emptySessions.buttons.verify") : t("emptySessions.buttons.verifyIcon")}
 					</button>
 					<button
 						onClick={selectAll}
 						disabled={sessions.length === 0}
-						className="px-3 py-1 rounded text-sm font-medium bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)] transition-colors disabled:opacity-50"
+						className="px-3 py-1 rounded text-sm font-medium bg-muted text-muted-foreground hover:bg-muted/80 transition-colors disabled:opacity-50"
 					>
 						{selectedIds.length === filteredSessions.length &&
 						filteredSessions.length > 0
@@ -155,7 +155,7 @@ export function EmptySessionsTab() {
 					<button
 						onClick={deleteSelected}
 						disabled={selectedIds.length === 0}
-						className="px-3 py-1 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+						className="px-3 py-1 rounded text-sm font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						{t("emptySessions.buttons.delete")} ({selectedIds.length})
 					</button>
@@ -171,7 +171,7 @@ export function EmptySessionsTab() {
 			<div className="flex items-center gap-2">
 				<button
 					onClick={() => refetch()}
-					className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+					className="px-3 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors text-sm"
 					title="Refresh"
 				>
 					🔄
@@ -210,24 +210,24 @@ export function EmptySessionsTab() {
 								key={session.id}
 								className={`group flex items-center justify-between rounded-lg border p-4 transition-colors ${
 									selectedIds.includes(session.id)
-										? "border-[hsl(263,70%,58%)] bg-[hsl(263,70%,58%)]/10"
-										: "border-[var(--border)] hover:border-[hsl(263,30%,30%)]"
+										? "border-primary bg-primary/10"
+										: "border-border hover:border-muted-foreground"
 								}`}
 							>
 								<input
 									type="checkbox"
 									checked={selectedIds.includes(session.id)}
 									onChange={() => toggleSelect(session.id)}
-									className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-[var(--primary)]"
+									className="h-4 w-4 rounded border-border bg-background text-primary focus:ring-primary"
 								/>
 								<div className="flex-1 overflow-hidden ml-3">
-									<p className="font-medium text-[var(--foreground)]">
+									<p className="font-medium text-foreground">
 										{session.latestTitle ||
 											session.agentName ||
 											"Untitled Session"}
 									</p>
-									<div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-[var(--muted-foreground)]">
-										<span className="font-mono text-xs bg-[hsl(263,30%,15%)] px-1.5 py-0.5 rounded">
+									<div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+										<span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">
 											{session.id.length > 40
 												? session.id.slice(0, 40) + "..."
 												: session.id}
@@ -242,7 +242,7 @@ export function EmptySessionsTab() {
 										{obsCount !== undefined && (
 											<span
 												className={
-													isActuallyEmpty ? "text-green-400" : "text-yellow-400"
+													isActuallyEmpty ? "text-green-500 dark:text-green-400" : "text-yellow-500 dark:text-yellow-400"
 												}
 											>
 												{obsCount} {t("emptySessions.observations")}
@@ -253,11 +253,11 @@ export function EmptySessionsTab() {
 								</div>
 								<button
 									onClick={() => handleDelete(session.id)}
-									className="ml-2 p-2 rounded-lg hover:bg-red-500/20 transition-colors"
+									className="ml-2 p-2 rounded-lg hover:bg-destructive/20 transition-colors"
 									title="Delete session"
 								>
 									<svg
-										className="h-4 w-4 text-red-500"
+										className="h-4 w-4 text-destructive"
 										fill="none"
 										viewBox="0 0 24 24"
 										stroke="currentColor"

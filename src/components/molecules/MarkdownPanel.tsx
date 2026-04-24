@@ -94,7 +94,7 @@ export function MarkdownPanel({
 							type="text"
 							value={editTitle}
 							onChange={(e) => setEditTitle(e.target.value)}
-							className="w-full rounded-md border p-2 text-sm"
+							className="w-full rounded-md border border-input bg-background p-2 text-sm text-foreground"
 						/>
 					</div>
 					<div className="grid grid-cols-[80px_1fr] items-center gap-2">
@@ -102,7 +102,7 @@ export function MarkdownPanel({
 						<select
 							value={editType}
 							onChange={(e) => setEditType(e.target.value as ObservationType)}
-							className="w-full rounded-md border p-2 text-sm"
+							className="w-full rounded-md border border-input bg-background p-2 text-sm text-foreground"
 						>
 							{TYPE_OPTIONS.map((type) => (
 								<option key={type} value={type}>
@@ -118,7 +118,7 @@ export function MarkdownPanel({
 							onChange={(e) =>
 								setEditScope(e.target.value as Observation["scope"])
 							}
-							className="w-full rounded-md border p-2 text-sm"
+							className="w-full rounded-md border border-input bg-background p-2 text-sm text-foreground"
 						>
 							{SCOPE_OPTIONS.map((scope) => (
 								<option key={scope} value={scope}>
@@ -133,7 +133,7 @@ export function MarkdownPanel({
 							type="text"
 							value={editTopicKey}
 							onChange={(e) => setEditTopicKey(e.target.value)}
-							className="w-full rounded-md border p-2 text-sm"
+							className="w-full rounded-md border border-input bg-background p-2 text-sm text-foreground"
 							placeholder="topic-key"
 						/>
 					</div>

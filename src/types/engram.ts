@@ -75,4 +75,5 @@ export type TabType =
 	| "empty-sessions"
 	| "compare"
 	| "search"
-	| "compact";
+	| "compact"
+	| "settings";

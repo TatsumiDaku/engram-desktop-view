@@ -1,0 +1,44 @@
+schema: spec-driven
+
+context: |
+  Tech stack: React 18.3 + Vite 6 + Electron 33 + TypeScript 5 + Zustand 5 + React Router 7 + TanStack Query 5 + i18next
+  Architecture: Atomic design (atoms/molecules/organisms), React hooks pattern, Zustand stores with persist middleware
+  Testing: Vitest 2.0 with jsdom, @testing-library/react, @vitest/coverage-v8, Playwright 1.49 for E2E
+  Style: Tailwind CSS 3.4, Biome linter, CSS variables for theming (dark/light mode)
+
+strict_tdd: true
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Identify affected modules/packages
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group tasks by phase (infrastructure, implementation, testing)
+    - Use hierarchical numbering (1.1, 1.2, etc.)
+    - Keep tasks small enough to complete in one session
+  apply:
+    - Follow existing code patterns and conventions
+    - Load relevant coding skills for the project stack
+  verify:
+    - Run tests if test infrastructure exists
+    - Compare implementation against every spec scenario
+  archive:
+    - Warn before merging destructive deltas (large removals)
+
+testing:
+  runner: vitest 2.0.5
+  command: npm test
+  coverage_command: npm run test:coverage
+  layers:
+    unit: vitest + @testing-library/react + jsdom
+    integration: available (React Query mocking, service mocks)
+    e2e: playwright 1.49
+  coverage:
+    provider: v8
+    reporter: ["text", "html", "lcov"]

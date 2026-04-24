@@ -5,43 +5,67 @@
 @tailwind utilities;
 
 :root {
-	--primary: 263 70% 58%;
+	--primary: 220 65% 50%;
 	--primary-foreground: 0 0% 100%;
-	--secondary: 263 70% 50%;
+	--secondary: 220 65% 50%;
 	--secondary-foreground: 0 0% 100%;
-	--muted: 263 30% 90%;
-	--muted-foreground: 263 20% 40%;
-	--accent: 263 70% 58%;
+	--muted: 220 10% 92%;
+	--muted-foreground: 220 10% 45%;
+	--accent: 220 65% 50%;
 	--accent-foreground: 0 0% 100%;
-	--background: 0 0% 100%;
-	--foreground: 263 20% 10%;
+	--background: 220 10% 98%;
+	--foreground: 220 15% 15%;
 	--card: 0 0% 100%;
-	--card-foreground: 263 20% 10%;
-	--border: 263 30% 85%;
-	--input: 263 30% 90%;
-	--ring: 263 70% 58%;
-	--glow-purple: 0 0 20px rgba(168 85 247 0.3);
-	--glow-purple-strong: 0 0 30px rgba(168 85 247 0.5);
+	--card-foreground: 220 15% 15%;
+	--border: 220 10% 88%;
+	--input: 220 10% 90%;
+	--ring: 220 65% 50%;
+	--destructive: 0 84% 60%;
+	--destructive-foreground: 0 0% 100%;
+	/* Type badge colors */
+	--type-bugfix: 0 84% 60%;
+	--type-decision: 270 60% 60%;
+	--type-architecture: 217 91% 60%;
+	--type-discovery: 45 93% 58%;
+	--type-pattern: 142 71% 45%;
+	--type-config: 220 9% 46%;
+	--type-preference: 330 81% 60%;
+	--type-learning: 188 78% 50%;
+	/* Scope badge colors */
+	--scope-project: 217 91% 60%;
+	--scope-personal: 142 71% 45%;
 }
 
 .dark {
-	--primary: 263 70% 58%;
+	--primary: 220 65% 55%;
 	--primary-foreground: 0 0% 100%;
-	--secondary: 263 70% 50%;
+	--secondary: 220 65% 55%;
 	--secondary-foreground: 0 0% 100%;
-	--muted: 263 30% 15%;
-	--muted-foreground: 263 20% 60%;
-	--accent: 263 70% 58%;
+	--muted: 220 15% 12%;
+	--muted-foreground: 220 10% 60%;
+	--accent: 220 65% 55%;
 	--accent-foreground: 0 0% 100%;
-	--background: 263 40% 5%;
-	--foreground: 263 20% 95%;
-	--card: 263 35% 10%;
-	--card-foreground: 263 20% 95%;
-	--border: 263 30% 20%;
-	--input: 263 30% 15%;
-	--ring: 263 70% 58%;
-	--glow-purple: 0 0 20px rgba(168 85 247 0.5);
-	--glow-purple-strong: 0 0 30px rgba(168 85 247 0.8);
+	--background: 220 20% 6%;
+	--foreground: 220 10% 92%;
+	--card: 220 15% 10%;
+	--card-foreground: 220 10% 92%;
+	--border: 220 15% 18%;
+	--input: 220 15% 12%;
+	--ring: 220 65% 55%;
+	--destructive: 0 62% 50%;
+	--destructive-foreground: 0 0% 100%;
+	/* Type badge colors - dark mode adjustments */
+	--type-bugfix: 0 72% 51%;
+	--type-decision: 270 65% 65%;
+	--type-architecture: 217 90% 65%;
+	--type-discovery: 45 90% 55%;
+	--type-pattern: 142 70% 50%;
+	--type-config: 220 10% 60%;
+	--type-preference: 330 75% 65%;
+	--type-learning: 188 75% 55%;
+	/* Scope badge colors */
+	--scope-project: 217 90% 65%;
+	--scope-personal: 142 70% 50%;
 }
 
 @layer base {
@@ -49,6 +73,21 @@
 		@apply border-border;
 	}
 	body {
+		@apply bg-background text-foreground;
+	}
+
+	/* Form elements dark mode support */
+	select,
+	input[type="text"],
+	input[type="search"],
+	input[type="date"],
+	input[type="email"],
+	input[type="password"],
+	textarea {
+		@apply bg-background text-foreground border-input;
+	}
+
+	select option {
 		@apply bg-background text-foreground;
 	}
 }

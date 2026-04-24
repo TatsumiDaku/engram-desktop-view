@@ -1,7 +1,7 @@
 import { EmptyState } from "@/components/atoms/EmptyState";
 import { SearchInput } from "@/components/atoms/SearchInput";
 import { SkeletonRow } from "@/components/atoms/Skeleton";
-import { MarkdownPanel } from "@/components/molecules/MarkdownPanel";
+import { ObservationModal } from "@/components/organisms/ObservationModal";
 import { ObservationRow } from "@/components/molecules/ObservationRow";
 import { useMemories, useUpdateObservation } from "@/hooks/useEngram";
 import { useUIStore } from "@/stores/uiStore";
@@ -67,6 +67,10 @@ export function MemoriesTab() {
 		}
 	};
 
+	const handleCloseModal = () => {
+		setSelectedObservation(null);
+	};
+
 	if (isLoading) {
 		return (
 			<div className="flex gap-4">
@@ -100,7 +104,7 @@ export function MemoriesTab() {
 					/>
 					<button
 						onClick={() => refetch()}
-						className="px-3 py-2 rounded-md bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,25%)] transition-colors text-sm"
+						className="px-3 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors text-sm"
 						title="Refresh memories"
 					>
 						🔄
@@ -114,8 +118,8 @@ export function MemoriesTab() {
 							onClick={() => setTypeFilter(filter.type)}
 							className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 								typeFilter === filter.type
-									? "bg-[hsl(263,70%,58%)] text-white"
-									: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+									? "bg-primary text-primary-foreground"
+									: "bg-muted text-muted-foreground hover:bg-muted/80"
 							}`}
 						>
 							{filter.emoji} {t(`memories.filters.${filter.label}`)}
@@ -130,8 +134,8 @@ export function MemoriesTab() {
 							onClick={() => setScopeFilter(filter.scope)}
 							className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
 								scopeFilter === filter.scope
-									? "bg-[hsl(263,70%,58%)] text-white"
-									: "bg-[hsl(263,30%,15%)] text-[hsl(263,20%,60%)] hover:bg-[hsl(263,30%,20%)]"
+									? "bg-primary text-primary-foreground"
+									: "bg-muted text-muted-foreground hover:bg-muted/80"
 							}`}
 						>
 							{t(`scope.${filter.label}`)}
@@ -178,14 +182,13 @@ export function MemoriesTab() {
 				)}
 			</div>
 
-			{/* Right panel - Detail */}
+			{/* Modal - Observation Detail/Edit */}
 			{selectedObservation && (
-				<div className="w-full md:w-1/3">
-					<MarkdownPanel
-						observation={selectedObservation}
-						onUpdate={handleUpdate}
-					/>
-				</div>
+				<ObservationModal
+					observation={selectedObservation}
+					onClose={handleCloseModal}
+					onUpdate={handleUpdate}
+				/>
 			)}
 		</div>
 	);
