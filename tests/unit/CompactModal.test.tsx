@@ -112,7 +112,7 @@ describe("CompactModal", () => {
 		setupMocks();
 
 		// Setup default mock implementations
-		useSessions.mockImplementation(() => ({
+		vi.mocked(useSessions).mockImplementation(() => ({
 			data: {
 				sessions: [
 					{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
@@ -123,12 +123,12 @@ describe("CompactModal", () => {
 			isLoading: false,
 		}));
 
-		useCompactSessions.mockImplementation(() => ({
+		vi.mocked(useCompactSessions).mockImplementation(() => ({
 			mutateAsync: mockUseCompactSessionsMutateAsync,
 			isPending: false,
 		}));
 
-		useCompactProjects.mockImplementation(() => ({
+		vi.mocked(useCompactProjects).mockImplementation(() => ({
 			mutateAsync: mockUseCompactProjectsMutateAsync,
 			isPending: false,
 		}));
@@ -388,7 +388,7 @@ describe("CompactModal", () => {
 
 	describe("empty states", () => {
 		it("should show empty message when no sessions", () => {
-			useSessions.mockReturnValueOnce({
+			vi.mocked(useSessions).mockReturnValueOnce({
 				data: { sessions: [] },
 				isLoading: false,
 			});
