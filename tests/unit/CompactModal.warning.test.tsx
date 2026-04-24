@@ -21,17 +21,25 @@ const setupMocks = () => {
 };
 
 // Mock useEngram with all re-exported hooks
-vi.mock("@/hooks/useEngram", () => {
-	const useSessions = vi.fn();
-	const useCompactSessions = vi.fn();
-	const useCompactProjects = vi.fn();
-
-	return {
-		useSessions,
-		useCompactSessions,
-		useCompactProjects,
-	};
-});
+vi.mock("@/hooks/useEngram", () => ({
+	useSessions: vi.fn().mockImplementation(() => ({
+		data: {
+			sessions: [
+				{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
+				{ id: "session-2", project: "project-a", observationCount: 3, agentName: "agent-2" },
+			],
+		},
+		isLoading: false,
+	})),
+	useCompactSessions: vi.fn().mockImplementation(() => ({
+		mutateAsync: mockUseCompactSessionsMutateAsync,
+		isPending: false,
+	})),
+	useCompactProjects: vi.fn().mockImplementation(() => ({
+		mutateAsync: mockUseCompactProjectsMutateAsync,
+		isPending: false,
+	})),
+}));
 
 // Mock i18next with proper interpolation
 vi.mock("react-i18next", () => ({
@@ -103,7 +111,7 @@ describe("CompactModal - Destructive Warning Display", () => {
 		setupMocks();
 
 		// Setup default mock implementations
-		;(useSessions as ReturnType<typeof useSessions> & { mockReturnValue: Function }).mockReturnValue({
+		useSessions.mockImplementation(() => ({
 			data: {
 				sessions: [
 					{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
@@ -111,17 +119,17 @@ describe("CompactModal - Destructive Warning Display", () => {
 				],
 			},
 			isLoading: false,
-		});
+		}));
 
-		;(useCompactSessions as ReturnType<typeof useCompactSessions> & { mockReturnValue: Function }).mockReturnValue({
+		useCompactSessions.mockImplementation(() => ({
 			mutateAsync: mockUseCompactSessionsMutateAsync,
 			isPending: false,
-		});
+		}));
 
-		;(useCompactProjects as ReturnType<typeof useCompactProjects> & { mockReturnValue: Function }).mockReturnValue({
+		useCompactProjects.mockImplementation(() => ({
 			mutateAsync: mockUseCompactProjectsMutateAsync,
 			isPending: false,
-		});
+		}));
 
 		useUIStore.getState().setCompactModalOpen(true);
 	});

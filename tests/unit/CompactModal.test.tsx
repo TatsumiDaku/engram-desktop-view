@@ -21,17 +21,26 @@ const setupMocks = () => {
 };
 
 // Mock useEngram with all re-exported hooks
-vi.mock("@/hooks/useEngram", () => {
-	const useSessions = vi.fn();
-	const useCompactSessions = vi.fn();
-	const useCompactProjects = vi.fn();
-
-	return {
-		useSessions,
-		useCompactSessions,
-		useCompactProjects,
-	};
-});
+vi.mock("@/hooks/useEngram", () => ({
+	useSessions: vi.fn().mockImplementation(() => ({
+		data: {
+			sessions: [
+				{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
+				{ id: "session-2", project: "project-a", observationCount: 3, agentName: "agent-2" },
+				{ id: "session-3", project: "project-b", observationCount: 2, agentName: "agent-3" },
+			],
+		},
+		isLoading: false,
+	})),
+	useCompactSessions: vi.fn().mockImplementation(() => ({
+		mutateAsync: mockUseCompactSessionsMutateAsync,
+		isPending: false,
+	})),
+	useCompactProjects: vi.fn().mockImplementation(() => ({
+		mutateAsync: mockUseCompactProjectsMutateAsync,
+		isPending: false,
+	})),
+}));
 
 // Mock i18next with proper interpolation
 vi.mock("react-i18next", () => ({
@@ -103,7 +112,7 @@ describe("CompactModal", () => {
 		setupMocks();
 
 		// Setup default mock implementations
-		;(useSessions as ReturnType<typeof useSessions> & { mockReturnValue: Function }).mockReturnValue({
+		useSessions.mockImplementation(() => ({
 			data: {
 				sessions: [
 					{ id: "session-1", project: "project-a", observationCount: 5, agentName: "agent-1" },
@@ -112,17 +121,17 @@ describe("CompactModal", () => {
 				],
 			},
 			isLoading: false,
-		});
+		}));
 
-		;(useCompactSessions as ReturnType<typeof useCompactSessions> & { mockReturnValue: Function }).mockReturnValue({
+		useCompactSessions.mockImplementation(() => ({
 			mutateAsync: mockUseCompactSessionsMutateAsync,
 			isPending: false,
-		});
+		}));
 
-		;(useCompactProjects as ReturnType<typeof useCompactProjects> & { mockReturnValue: Function }).mockReturnValue({
+		useCompactProjects.mockImplementation(() => ({
 			mutateAsync: mockUseCompactProjectsMutateAsync,
 			isPending: false,
-		});
+		}));
 
 		// Open the modal for each test
 		useUIStore.getState().setCompactModalOpen(true);
@@ -379,8 +388,7 @@ describe("CompactModal", () => {
 
 	describe("empty states", () => {
 		it("should show empty message when no sessions", () => {
-			// Override the mock for this test
-			;(useSessions as ReturnType<typeof useSessions> & { mockReturnValueOnce: Function }).mockReturnValueOnce({
+			useSessions.mockReturnValueOnce({
 				data: { sessions: [] },
 				isLoading: false,
 			});
