@@ -24,23 +24,14 @@ export const useCompactSessions = () => {
 			selectedSessionIds: string[];
 			newSessionName: string;
 		}): Promise<CompactSessionsResult> => {
-			console.log("[useCompactSessions] Starting compaction", {
-				selectedSessionIds,
-				newSessionName,
-			});
-
 			// Step 1: Create new session
 			const { id: newSessionId } = await createSession(newSessionName);
-			console.log("[useCompactSessions] Created new session", { newSessionId });
 
 			// Step 2: Get all observations and filter by selected session IDs
 			const allObservations = await getAllObservations();
 			const selectedObservations = allObservations.filter((obs) =>
 				selectedSessionIds.includes(obs.sessionId),
 			);
-			console.log("[useCompactSessions] Found observations to migrate", {
-				count: selectedObservations.length,
-			});
 
 			// Step 3: Recreate each observation in the new session, then delete original
 			let observationsPreserved = 0;
@@ -83,11 +74,6 @@ export const useCompactSessions = () => {
 				}
 			}
 
-			console.log("[useCompactSessions] Migrated observations", {
-				preserved: observationsPreserved,
-				deleteErrors: deleteErrors.length,
-			});
-
 			// Step 4: Delete source sessions
 			let sessionsDeleted = 0;
 			for (const sessionId of selectedSessionIds) {
@@ -102,12 +88,6 @@ export const useCompactSessions = () => {
 				}
 			}
 
-			console.log("[useCompactSessions] Compaction complete", {
-				newSessionId,
-				observationsPreserved,
-				sessionsDeleted,
-			});
-
 			return {
 				newSessionId,
 				observationsPreserved,
@@ -115,7 +95,6 @@ export const useCompactSessions = () => {
 			};
 		},
 		onSuccess: () => {
-			console.log("[useCompactSessions] Success - invalidating queries");
 			queryClient.invalidateQueries();
 		},
 		onError: (err) => {

@@ -16,11 +16,6 @@ export const useCompactProjects = () => {
 			selectedProjects: string[];
 			targetProject: string;
 		}): Promise<CompactProjectsResult> => {
-			console.log("[useCompactProjects] Starting compaction", {
-				selectedProjects,
-				targetProject,
-			});
-
 			let projectsMigrated = 0;
 			const errors: Error[] = [];
 
@@ -28,10 +23,6 @@ export const useCompactProjects = () => {
 				try {
 					await mergeProjects(sourceProject, targetProject);
 					projectsMigrated++;
-					console.log("[useCompactProjects] Migrated project", {
-						source: sourceProject,
-						target: targetProject,
-					});
 				} catch (error) {
 					console.error("[useCompactProjects] Failed to migrate project", {
 						source: sourceProject,
@@ -43,15 +34,9 @@ export const useCompactProjects = () => {
 				}
 			}
 
-			console.log("[useCompactProjects] Compaction complete", {
-				projectsMigrated,
-				errors: errors.length,
-			});
-
 			return { projectsMigrated };
 		},
 		onSuccess: () => {
-			console.log("[useCompactProjects] Success - invalidating queries");
 			queryClient.invalidateQueries();
 		},
 		onError: (err) => {

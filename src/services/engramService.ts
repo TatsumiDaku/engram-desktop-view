@@ -16,7 +16,43 @@ import type {
 // Common FTS5 tokens broad enough to surface most observations (same as reference implementation)
 const BROAD_TERMS = ["the", "is", "to", "in", "a", "of", "and", "project", "agent", "bugfix", "decision", "architecture", "discovery", "pattern", "config", "learning"];
 
-function mapObservation(apiObs: any): Observation {
+// API response shapes (snake_case from the Engram REST API)
+interface ApiObservation {
+	id: number;
+	session_id: string;
+	project: string;
+	type: Observation["type"];
+	title: string;
+	content: string;
+	created_at: string;
+	updated_at: string;
+	scope?: Observation["scope"];
+	topic_key?: string | null;
+}
+
+interface ApiSession {
+	id: string;
+	project: string;
+	started_at: string;
+	observation_count: number;
+}
+
+interface ApiPrompt {
+	id: number;
+	session_id: string;
+	content: string;
+	project: string;
+	created_at: string;
+}
+
+interface ApiStats {
+	projects?: string[];
+	total_sessions?: number;
+	total_observations?: number;
+	total_prompts?: number;
+}
+
+function mapObservation(apiObs: ApiObservation): Observation {
 	return {
 		id: apiObs.id,
 		sessionId: apiObs.session_id,
@@ -26,8 +62,8 @@ function mapObservation(apiObs: any): Observation {
 		content: apiObs.content,
 		createdAt: apiObs.created_at,
 		updatedAt: apiObs.updated_at,
-		scope: apiObs.scope,
-		topicKey: apiObs.topic_key,
+		scope: apiObs.scope ?? "project",
+		topicKey: apiObs.topic_key ?? null,
 	};
 }
 
@@ -35,7 +71,7 @@ function mapObservation(apiObs: any): Observation {
 export const getAllObservations = async (): Promise<Observation[]> => {
 	const results = await Promise.allSettled(
 		BROAD_TERMS.map((q) =>
-			engramGet<any[]>(`/search?q=${encodeURIComponent(q)}&limit=1000`).then((r) => r ?? [])
+			engramGet<ApiObservation[]>(`/search?q=${encodeURIComponent(q)}&limit=1000`).then((r) => r ?? [])
 		)
 	);
 
@@ -218,19 +254,19 @@ export const getSession = async (
 export const getEmptySessions = async (
 	search?: string,
 ): Promise<{ sessions: Session[] }> => {
-	const data = await engramGet<any[]>("/sessions/recent?limit=500");
+	const data = await engramGet<ApiSession[]>("/sessions/recent?limit=500");
 
-	const emptySessions = ((data as any[]) || []).filter(
-		(s: any) => s.observation_count === 0,
+	const emptySessions = (data ?? []).filter(
+		(s) => s.observation_count === 0,
 	);
 
 	const filtered = search
-		? emptySessions.filter((s: any) =>
+		? emptySessions.filter((s) =>
 				s.id.toLowerCase().includes(search.toLowerCase()),
 			)
 		: emptySessions;
 
-	const sessions: Session[] = filtered.map((s: any) => ({
+	const sessions: Session[] = filtered.map((s) => ({
 		id: s.id,
 		project: s.project,
 		agentName: s.id.startsWith("manual-save-")
@@ -325,7 +361,7 @@ export const updateObservation = async (
 		Pick<Observation, "title" | "content" | "type" | "scope" | "topicKey">
 	>,
 ): Promise<Observation> => {
-	const data = await engramPatch<any>(`/observations/${id}`, updates);
+	const data = await engramPatch<ApiObservation>(`/observations/${id}`, updates);
 	return mapObservation(data);
 };
 
@@ -333,9 +369,9 @@ export const updateObservation = async (
 export const getPrompts = async (
 	search?: string,
 ): Promise<{ prompts: Prompt[] }> => {
-	const data = await engramGet<any[]>("/prompts/recent?limit=200");
+	const data = await engramGet<ApiPrompt[]>("/prompts/recent?limit=200");
 
-	let prompts: Prompt[] = ((data as any[]) || []).map((p: any) => ({
+	let prompts: Prompt[] = (data ?? []).map((p) => ({
 		id: p.id,
 		sessionId: p.session_id,
 		content: p.content,
@@ -360,17 +396,17 @@ export const deletePrompt = async (id: number): Promise<void> => {
 // Health API
 export const getHealth = async (): Promise<HealthStatus> => {
 	const data = await engramGet<HealthStatus>("/health");
-	return data as HealthStatus;
+	return data;
 };
 
 // Stats API
 export const getStats = async (): Promise<ProjectStats> => {
-	const data = await engramGet<any>("/stats");
+	const data = await engramGet<ApiStats>("/stats");
 	return {
-		projectCount: ((data as any)?.projects || []).length,
-		sessionCount: (data as any)?.total_sessions || 0,
-		observationCount: (data as any)?.total_observations || 0,
-		promptCount: (data as any)?.total_prompts || 0,
+		projectCount: data?.projects?.length ?? 0,
+		sessionCount: data?.total_sessions ?? 0,
+		observationCount: data?.total_observations ?? 0,
+		promptCount: data?.total_prompts ?? 0,
 		emptySessionCount: 0,
 	};
 };
@@ -388,7 +424,7 @@ export const importData = async (
 	const data = await engramPost<{ imported: number }>("/import", {
 		data: jsonData,
 	});
-	return (data as { imported: number }) ?? { imported: 0 };
+	return data ?? { imported: 0 };
 };
 
 export const mergeProjects = async (
@@ -399,13 +435,13 @@ export const mergeProjects = async (
 		old_project: sourceProject,
 		new_project: targetProject,
 	});
-	return (data as { merged: number }) ?? { merged: 0 };
+	return data ?? { merged: 0 };
 };
 
 // Session compaction APIs
 export const createSession = async (name: string): Promise<{ id: string }> => {
 	const data = await engramPost<{ id: string }>("/sessions", { id: name });
-	return (data as { id: string }) ?? { id: name };
+	return data ?? { id: name };
 };
 
 export const createObservation = async (
@@ -420,7 +456,7 @@ export const createObservation = async (
 	if (obs.scope !== undefined) payload.scope = obs.scope;
 	if (obs.topicKey !== undefined) payload.topic_key = obs.topicKey;
 
-	const data = await engramPost<any>("/observations", payload);
+	const data = await engramPost<ApiObservation>("/observations", payload);
 	return mapObservation(data);
 };
 
