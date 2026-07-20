@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useStats } from "@/hooks/useEngram";
+import { version } from "../../package.json";
 
-const VERSION = "1.0.0";
+const VERSION = version;
 
 export default function HomeTab() {
 	const { t } = useTranslation();

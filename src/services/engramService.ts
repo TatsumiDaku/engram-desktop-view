@@ -53,7 +53,6 @@ export const getAllObservations = async (): Promise<Observation[]> => {
 		}
 	}
 
-	console.log("[engramService] getAllObservations: fetched", all.length, "unique observations via search");
 	return all;
 };
 

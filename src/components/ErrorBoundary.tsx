@@ -14,7 +14,6 @@ export class ErrorBoundary extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = { hasError: false };
-		console.info("[ErrorBoundary] Component mounted");
 	}
 
 	static getDerivedStateFromError(error: Error): State {

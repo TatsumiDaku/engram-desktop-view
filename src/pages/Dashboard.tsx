@@ -18,9 +18,7 @@ import { TopicsTab } from "./TopicsTab";
 import { SettingsModal } from "@/components/organisms/SettingsModal";
 
 export function Dashboard() {
-	console.info("[Dashboard] Component mounting");
 	const [activeTab, setActiveTab] = useState<TabType>("home");
-	console.info("[Dashboard] Rendering Dashboard");
 	const setShortcutsModalOpen = useUIStore((s) => s.setShortcutsModalOpen);
 	const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
 	const setCompactModalOpen = useUIStore((s) => s.setCompactModalOpen);

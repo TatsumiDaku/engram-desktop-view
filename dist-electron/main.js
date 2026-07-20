@@ -152,7 +152,7 @@ function createMenu() {
             dialog.showMessageBox({
               type: "info",
               title: "About EngramDesktopView",
-              message: "EngramDesktopView v1.0.0",
+              message: `EngramDesktopView v${"1.3.3"}`,
               detail: "Desktop dashboard to monitor and explore Engram memory events."
             });
           }

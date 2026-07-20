@@ -5,6 +5,9 @@ import log from "electron-log";
 import pkg from "electron-updater";
 const { autoUpdater } = pkg;
 
+// Injected at build time by esbuild
+declare const __APP_VERSION__: string;
+
 // ESM compatibility for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -180,11 +183,10 @@ function createMenu(): void {
 				{
 					label: "About EngramDesktopView",
 					click: () => {
-						const pkg = require("../../package.json");
 						dialog.showMessageBox({
 							type: "info",
 							title: "About EngramDesktopView",
-							message: `EngramDesktopView v${pkg.version}`,
+							message: `EngramDesktopView v${__APP_VERSION__}`,
 							detail: "Desktop dashboard to monitor and explore Engram memory events.",
 						});
 					},
