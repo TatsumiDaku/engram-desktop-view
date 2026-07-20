@@ -180,10 +180,11 @@ function createMenu(): void {
 				{
 					label: "About EngramDesktopView",
 					click: () => {
+						const pkg = require("../../package.json");
 						dialog.showMessageBox({
 							type: "info",
 							title: "About EngramDesktopView",
-							message: "EngramDesktopView v1.0.0",
+							message: `EngramDesktopView v${pkg.version}`,
 							detail: "Desktop dashboard to monitor and explore Engram memory events.",
 						});
 					},

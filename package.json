@@ -1,6 +1,6 @@
 {
   "name": "engram-desktop-view",
-  "version": "1.3.0",
+  "version": "1.3.3",
   "description": "Desktop dashboard to monitor and explore Engram memory events",
   "author": "TatsumiDaku <tatsumi@daku.dev>",
   "main": "dist-electron/main.js",
